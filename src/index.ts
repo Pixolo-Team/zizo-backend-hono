@@ -3,7 +3,7 @@ import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import { config } from '@/config';
 import { logger } from '@/utils';
-import { errorHandler, requestLogger } from '@/middlewares';
+import { requestLogger } from '@/middlewares';
 import routes from '@/routes';
 
 /**
@@ -14,12 +14,11 @@ const app = new Hono();
 /**
  * Global Middlewares
  */
-app.use('*', errorHandler);
 app.use('*', requestLogger);
 app.use(
   '*',
   cors({
-    origin: '*', // Configure this based on environment
+    origin: config.nodeEnv === 'production' ? [] : '*', // Configure allowed origins in production
     credentials: true,
   })
 );
@@ -39,6 +38,20 @@ app.notFound((c) => {
       error: 'Route not found',
     },
     404
+  );
+});
+
+/**
+ * Error Handler
+ */
+app.onError((err, c) => {
+  logger.error('Unhandled error:', err);
+  return c.json(
+    {
+      success: false,
+      error: err.message || 'Internal server error',
+    },
+    500
   );
 });
 

@@ -2,7 +2,7 @@ import { Context } from 'hono';
 import { userService } from '@/services';
 import { successResponse, errorResponse } from '@/utils';
 import { HTTP_STATUS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
-import { createUserSchema, updateUserSchema } from '@/validators';
+import { createUserSchema, updateUserSchema, userIdSchema } from '@/validators';
 
 /**
  * User Controller - Handles HTTP requests for user operations
@@ -22,14 +22,23 @@ export class UserController {
    * GET /users/:id
    */
   async getUserById(c: Context) {
-    const id = c.req.param('id');
-    const user = await userService.getUserById(id);
+    try {
+      const id = c.req.param('id');
+      const validatedId = userIdSchema.parse({ id });
 
-    if (!user) {
-      return errorResponse(c, ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      const user = await userService.getUserById(validatedId.id);
+
+      if (!user) {
+        return errorResponse(c, ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      }
+
+      return successResponse(c, user);
+    } catch (error) {
+      if (error instanceof Error) {
+        return errorResponse(c, error.message, HTTP_STATUS.BAD_REQUEST);
+      }
+      return errorResponse(c, ERROR_MESSAGES.BAD_REQUEST, HTTP_STATUS.BAD_REQUEST);
     }
-
-    return successResponse(c, user);
   }
 
   /**
@@ -58,10 +67,12 @@ export class UserController {
   async updateUser(c: Context) {
     try {
       const id = c.req.param('id');
+      const validatedId = userIdSchema.parse({ id });
+
       const body = await c.req.json();
       const validatedData = updateUserSchema.parse(body);
 
-      const user = await userService.updateUser(id, validatedData);
+      const user = await userService.updateUser(validatedId.id, validatedData);
 
       if (!user) {
         return errorResponse(c, ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
@@ -81,14 +92,23 @@ export class UserController {
    * DELETE /users/:id
    */
   async deleteUser(c: Context) {
-    const id = c.req.param('id');
-    const deleted = await userService.deleteUser(id);
+    try {
+      const id = c.req.param('id');
+      const validatedId = userIdSchema.parse({ id });
 
-    if (!deleted) {
-      return errorResponse(c, ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      const deleted = await userService.deleteUser(validatedId.id);
+
+      if (!deleted) {
+        return errorResponse(c, ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      }
+
+      return c.body(null, HTTP_STATUS.NO_CONTENT as never);
+    } catch (error) {
+      if (error instanceof Error) {
+        return errorResponse(c, error.message, HTTP_STATUS.BAD_REQUEST);
+      }
+      return errorResponse(c, ERROR_MESSAGES.BAD_REQUEST, HTTP_STATUS.BAD_REQUEST);
     }
-
-    return successResponse(c, null, SUCCESS_MESSAGES.DELETED, HTTP_STATUS.NO_CONTENT);
   }
 }
 
