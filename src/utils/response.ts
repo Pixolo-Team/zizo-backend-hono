@@ -25,7 +25,7 @@ export const successResponse = <T = unknown>(
     ...(message && { message }),
     ...(data && { data }),
   };
-  return c.json(response, status);
+  return c.json(response, status as never);
 };
 
 /**
@@ -40,5 +40,5 @@ export const errorResponse = (
     success: false,
     error,
   };
-  return c.json(response, status);
+  return c.json(response, status as never);
 };

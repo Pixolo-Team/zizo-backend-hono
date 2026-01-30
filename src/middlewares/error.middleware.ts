@@ -6,9 +6,10 @@ import { logger } from '@/utils';
 /**
  * Global error handling middleware
  */
-export const errorHandler = async (c: Context, next: Next) => {
+export const errorHandler = async (c: Context, next: Next): Promise<Response> => {
   try {
     await next();
+    return c.res;
   } catch (error) {
     logger.error('Unhandled error:', error);
 
