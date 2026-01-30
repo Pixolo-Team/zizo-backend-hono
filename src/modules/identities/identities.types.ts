@@ -6,9 +6,3 @@ export type Identity = {
   first_seen_at: string
   last_seen_at: string
 }
-
-// DEFINITION OF RESPONSE DATA //
-export type QueryResponseData<T> = {
-  data: T | null
-  error: Error | null
-}

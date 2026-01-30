@@ -1,18 +1,18 @@
 // TYPE FILES //
-import type { Identity } from '@/modules/identities/identities.types.js';
 import { QueryResponseData } from '@/common/types/query.response.type.js';
+import { Tournament } from './tournaments.types.js';
 
 // OTHERS //
 import { supabase } from '@/config/supabase.js';
 
 
-// GET ALL IDENTITIES //
-export const getIdentitiesService = async (): Promise<
-  QueryResponseData<Identity[]>
+// GET ALL TOURNAMENTS //
+export const getTournamentsService = async (): Promise<
+  QueryResponseData<Tournament[]>
 > => {
   try {
     const { data, error } = await supabase
-      .from('identities')
+      .from('tournaments')
       .select('*')
 
     if (error) {
@@ -20,7 +20,7 @@ export const getIdentitiesService = async (): Promise<
     }
 
     return {
-      data: data as Identity[],
+      data: data as Tournament[],
       error: null
     }
   } catch (error) {
