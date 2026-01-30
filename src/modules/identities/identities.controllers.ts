@@ -1,6 +1,10 @@
+// OTHER //
 import type { Context } from 'hono'
+
+// IDENTITY SERVICE FILE //
 import { getIdentitiesService } from '@/modules/identities/identities.services.js'
 
+// GET IDENTITIES CONTROLLER //
 export const getIdentitiesController = async (c: Context) => {
   const result = await getIdentitiesService()
 

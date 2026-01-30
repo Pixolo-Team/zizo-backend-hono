@@ -1,12 +1,10 @@
-// MODULES //
+// IDENTITY TYPE FILE //
 import type { Identity, QueryResponseData } from '@/modules/identities/identities.types.js';
 
 // OTHERS //
 import { supabase } from '@/config/supabase.js';
 
-/**
- * Get all identities
- */
+// GET ALL IDENTITIES //
 export const getIdentitiesService = async (): Promise<
   QueryResponseData<Identity[]>
 > => {
