@@ -1,17 +1,16 @@
 // OTHERS //
-import { Hono } from 'hono';
-// ROUTE FILES //
-import { identityRoute } from '@/modules/identities/identities.routes.js';
-import { tournamentRoute } from './modules/tournaments/tournaments.routes.js';
+import { Hono } from "hono";
 
-// HONO INSTANCE //
-export const app = new Hono()
+// ROUTES //
+import { identityRoute } from "@/modules/identities/identities.routes.js";
+import { tournamentRoute } from "@/modules/tournaments/tournaments.routes.js";
 
-// TESTING ROUTE //
-app.get('/', (c) => c.text('Hello World!'));
+// Init Hono
+export const app = new Hono();
 
-// ROUTE:getAllIdentities //
-app.route('/identities', identityRoute)
+// Testing Route
+app.get("/", (c) => c.text("Hello World!"));
 
-// ROUTE:getAllTournaments //
-app.route('/getAllTournaments', tournamentRoute)
+// Init Routes
+app.route("/identities", identityRoute);
+app.route("/tournaments", tournamentRoute);

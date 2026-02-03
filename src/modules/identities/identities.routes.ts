@@ -1,11 +1,13 @@
 // OTHERS //
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-// IDENTITY CONTROLLER FILE //
-import { getIdentitiesController } from '@/modules/identities/identities.controllers.js'
+// CONTROLLERS //
+import { getIdentities } from "@/modules/identities/identities.controllers.js";
 
-// MAKING HONO INSTANCE FOR ROUTES //
-export const identityRoute = new Hono()
+// Create Hono Instance for ROutes
+export const identityRoute = new Hono();
 
-// GET IDENTITIES ROUTE //
-identityRoute.get('/', getIdentitiesController);
+// Define Routes
+
+// GET: /identities/
+identityRoute.get("/", getIdentities);
