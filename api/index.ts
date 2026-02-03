@@ -1,5 +1,5 @@
-import { handle } from "@hono/node-server/vercel";
-import { app } from "../src/app.js";
+import { handle } from "hono/vercel";
+import { app } from "../src/app";
 
 /**
  * Vercel Serverless Handler

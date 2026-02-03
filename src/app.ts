@@ -1,5 +1,6 @@
 // OTHERS //
 import { Hono } from "hono";
+import { logger } from "hono/logger";
 
 // UTILS //
 import { sendResponse } from "./common/utils/api.util.js";
@@ -10,6 +11,9 @@ import { tournamentRoute } from "./modules/tournaments/tournaments.routes.js";
 
 // Init Hono
 export const app = new Hono();
+
+// Middleware
+app.use(logger());
 
 /**
  * Global Error Handler
