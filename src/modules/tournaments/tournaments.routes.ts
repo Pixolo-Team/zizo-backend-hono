@@ -1,11 +1,11 @@
 // OTHERS //
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-// TOURNAMENT CONTROLLER FILE //
-import { getTournamentsController } from './tournaments.controllers.js';
+// CONTROLLERS //
+import { getTournaments } from "@/modules/tournaments/tournaments.controllers.js";
 
-// MAKING HONO INSTANCE FOR ROUTES //
-export const tournamentRoute = new Hono()
+// Init Hono
+export const tournamentRoute = new Hono();
 
-// GET IDENTITIES ROUTE //
-tournamentRoute.get('/', getTournamentsController);
+// GET: /tournaments/
+tournamentRoute.get("/", getTournaments);

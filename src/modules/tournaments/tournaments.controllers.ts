@@ -1,19 +1,30 @@
-// OTHER //
-import type { Context } from 'hono'
+// OTHERS //
+import type { Context } from "hono";
 
-// TOURNAMENT SERVICE FILE //
-import { getTournamentsService } from '@/modules/tournaments/tournaments.services.js'
+// UTILS //
+import { sendResponse } from "@/common/utils/api.util.js";
 
-// GET IDENTITIES CONTROLLER //
-export const getTournamentsController = async (c: Context) => {
-  const result = await getTournamentsService()
+// SERVICES //
+import { getTournamentsService } from "@/modules/tournaments/tournaments.services.js";
+
+/**
+ * Controller to get all tournaments
+ * @param c - Hono Context
+ * @returns Promise with JSON response
+ */
+export const getTournaments = async (c: Context): Promise<Response> => {
+  // Get the tournaments from the Service
+  const result = await getTournamentsService();
 
   if (result.error) {
-    return c.json(
-      { error: result.error.message },
-      500
-    )
+    return sendResponse(
+      c,
+      null,
+      500,
+      "Failed to fetch tournaments",
+      result.error.message,
+    );
   }
 
-  return c.json(result.data)
-}
+  return sendResponse(c, result.data, 200, "Tournaments fetched successfully");
+};

@@ -1,32 +1,32 @@
-// TYPE FILES //
-import { QueryResponseData } from '@/common/types/query.response.type.js';
-import { Tournament } from './tournaments.types.js';
+// TYPES //
+import { QueryResponseData } from "@/common/types/query.response.type.js";
+import { Tournament } from "@/modules/tournaments/tournaments.types.js";
 
 // OTHERS //
-import { supabase } from '@/config/supabase.js';
+import { supabase } from "@/config/supabase.js";
 
-
-// GET ALL TOURNAMENTS //
+/**
+ * Fetch all tournaments from the database
+ * @returns Promise with QueryResponseData
+ */
 export const getTournamentsService = async (): Promise<
   QueryResponseData<Tournament[]>
 > => {
   try {
-    const { data, error } = await supabase
-      .from('tournaments')
-      .select('*')
+    const { data, error } = await supabase.from("tournaments").select("*");
 
     if (error) {
-      throw error
+      throw error;
     }
 
     return {
       data: data as Tournament[],
-      error: null
-    }
+      error: null,
+    };
   } catch (error) {
     return {
       data: null,
-      error: error as Error
-    }
+      error: error as Error,
+    };
   }
-}
+};

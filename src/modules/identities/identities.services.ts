@@ -5,7 +5,10 @@ import { QueryResponseData } from "@/common/types/query.response.type.js";
 // OTHERS //
 import { supabase } from "@/config/supabase.js";
 
-/** Get all the Identities from the Databae */
+/**
+ * Get all the Identities from the Databae
+ * @returns Promise with QueryResponseData
+ */
 export const getIdentitiesService = async (): Promise<
   QueryResponseData<Identity[]>
 > => {
