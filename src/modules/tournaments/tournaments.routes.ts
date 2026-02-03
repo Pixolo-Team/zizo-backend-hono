@@ -2,7 +2,7 @@
 import { Hono } from "hono";
 
 // CONTROLLERS //
-import { getTournaments } from "@/modules/tournaments/tournaments.controllers.js";
+import { getTournaments } from "./tournaments.controllers.js";
 
 // Init Hono
 export const tournamentRoute = new Hono();

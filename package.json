@@ -3,6 +3,8 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "lint": "eslint .",
+    "build": "tsc",
+    "start": "node dist/main.js",
     "prepare": "husky"
   },
   "dependencies": {

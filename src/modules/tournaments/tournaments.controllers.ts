@@ -2,10 +2,10 @@
 import type { Context } from "hono";
 
 // UTILS //
-import { sendResponse } from "@/common/utils/api.util.js";
+import { sendResponse } from "../../common/utils/api.util.js";
 
 // SERVICES //
-import { getTournamentsService } from "@/modules/tournaments/tournaments.services.js";
+import { getTournamentsService } from "./tournaments.services.js";
 
 /**
  * Controller to get all tournaments

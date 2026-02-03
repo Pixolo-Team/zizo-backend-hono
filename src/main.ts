@@ -3,7 +3,7 @@ import "dotenv/config";
 import { serve } from "@hono/node-server";
 
 // Hono Instance File
-import { app } from "@/app.js";
+import { app } from "./app.js";
 
 // Starting the Server at Port 3000
 serve(

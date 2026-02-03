@@ -2,11 +2,11 @@
 import { Hono } from "hono";
 
 // UTILS //
-import { sendResponse } from "@/common/utils/api.util.js";
+import { sendResponse } from "./common/utils/api.util.js";
 
 // ROUTES //
-import { identityRoute } from "@/modules/identities/identities.routes.js";
-import { tournamentRoute } from "@/modules/tournaments/tournaments.routes.js";
+import { identityRoute } from "./modules/identities/identities.routes.js";
+import { tournamentRoute } from "./modules/tournaments/tournaments.routes.js";
 
 // Init Hono
 export const app = new Hono();

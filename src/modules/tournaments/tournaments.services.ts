@@ -1,9 +1,9 @@
 // TYPES //
-import { QueryResponseData } from "@/common/types/query.response.type.js";
-import { Tournament } from "@/modules/tournaments/tournaments.types.js";
+import { QueryResponseData } from "../../common/types/query.response.type.js";
+import { Tournament } from "./tournaments.types.js";
 
 // OTHERS //
-import { supabase } from "@/config/supabase.js";
+import { supabase } from "../../config/supabase.js";
 
 /**
  * Fetch all tournaments from the database

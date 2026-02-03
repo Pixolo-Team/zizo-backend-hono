@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import type { ApiResponse } from "@/common/types/api.response.type.js";
+import type { ApiResponse } from "../types/api.response.type.js";
 
 /**
  * Sends a standardized API response.

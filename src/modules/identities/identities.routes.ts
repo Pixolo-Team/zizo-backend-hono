@@ -2,7 +2,7 @@
 import { Hono } from "hono";
 
 // CONTROLLERS //
-import { getIdentities } from "@/modules/identities/identities.controllers.js";
+import { getIdentities } from "./identities.controllers.js";
 
 // Create Hono Instance for ROutes
 export const identityRoute = new Hono();

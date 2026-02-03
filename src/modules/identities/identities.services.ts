@@ -1,9 +1,9 @@
 // TYPES //
-import type { Identity } from "@/modules/identities/identities.types.js";
-import { QueryResponseData } from "@/common/types/query.response.type.js";
+import type { Identity } from "./identities.types.js";
+import { QueryResponseData } from "../../common/types/query.response.type.js";
 
 // OTHERS //
-import { supabase } from "@/config/supabase.js";
+import { supabase } from "../../config/supabase.js";
 
 /**
  * Get all the Identities from the Databae

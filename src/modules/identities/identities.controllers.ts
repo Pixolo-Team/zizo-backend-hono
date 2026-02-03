@@ -1,9 +1,9 @@
 // OTHERS //
 import type { Context } from "hono";
-import { sendResponse } from "@/common/utils/api.util.js";
+import { sendResponse } from "../../common/utils/api.util.js";
 
 // SERVICES //
-import { getIdentitiesService } from "@/modules/identities/identities.services.js";
+import { getIdentitiesService } from "./identities.services.js";
 
 /**
  * Get all the Identities
