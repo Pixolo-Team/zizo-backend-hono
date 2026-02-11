@@ -2,14 +2,13 @@
   "packageManager": "npm@10.2.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
+    "dev": "",
     "lint": "eslint .",
     "build": "tsc",
-    "start": "node dist/main.js",
+    "start": "",
     "prepare": "husky || true"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.9",
     "@supabase/supabase-js": "^2.93.3",
     "dotenv": "^17.2.3",
     "hono": "^4.11.7"
