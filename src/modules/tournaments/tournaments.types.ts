@@ -52,6 +52,31 @@ export interface TournamentListingItemData {
   organizer_name: string | null;
 }
 
+// Raw Supabase join result shape
+export interface RawTournamentSeriesRow {
+  id: string;
+  name: string;
+  city: string;
+  area: string;
+  ground_type: string;
+  poster_url: string;
+  organizers: { name: string }[];
+}
+
+export interface RawTournamentRow {
+  id: string;
+  age_category: string;
+  format: string;
+  gender: string;
+  tournament_format: string;
+  entry_fee: number;
+  cash_prize_total: number;
+  slot_status: string;
+  start_date: string;
+  end_date: string;
+  tournament_series: RawTournamentSeriesRow[];
+}
+
 // Filters
 export interface TournamentFiltersData {
   city?: string;
