@@ -1,0 +1,37 @@
+{
+  "packageManager": "npm@10.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "lint": "eslint .",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "prepare": "husky || true"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.9",
+    "@supabase/supabase-js": "^2.93.3",
+    "dotenv": "^17.2.3",
+    "hono": "^4.11.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^25.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsdoc": "^62.5.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.2.0",
+    "husky": "^9.1.7",
+    "jiti": "^2.6.1",
+    "prettier": "^3.8.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
