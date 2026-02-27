@@ -3,14 +3,19 @@ description: Create a new API endpoint following project architecture
 title: "feat: <module> - <short description>"
 labels: ["feature"]
 body:
+  - type: markdown
+    id: copilot_rules
+    attributes:
+    value: |
+      ## ⚠️ IMPORTANT
+      You MUST read and follow `copilot-instructions.md` before implementing.
+
   - type: textarea
     id: copilot_rules
     attributes:
     label: ⚠️ Copilot Mandatory Rules
     description: These rules MUST be followed
     value: |
-      ## ⚠️ IMPORTANT — READ BEFORE IMPLEMENTING
-
       You MUST read and strictly follow copilot-instructions.md before writing any code.
 
       The following rules are mandatory:
