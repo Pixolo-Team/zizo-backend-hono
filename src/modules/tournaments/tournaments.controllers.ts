@@ -4,20 +4,10 @@ import type { TournamentFiltersData } from "./tournaments.types.js";
 
 // UTILS //
 import { sendResponse } from "../../common/utils/api.util.js";
+import { toNumber } from "../../common/utils/string.util.js";
 
 // SERVICES //
 import { getTournamentsService } from "./tournaments.services.js";
-
-/**
- * Safely converts a query string value to a number, returning undefined for invalid input.
- * @param value - Raw query string value
- * @returns Parsed number or undefined
- */
-const toNumber = (value: string | undefined): number | undefined => {
-  if (!value) return undefined;
-  const n = Number(value);
-  return isNaN(n) ? undefined : n;
-};
 
 /**
  * Controller to get filtered and paginated tournaments.

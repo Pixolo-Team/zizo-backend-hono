@@ -6,16 +6,11 @@ import type {
   RawTournamentRow,
 } from "./tournaments.types.js";
 
+// UTILS //
+import { toSnakeCase } from "../../common/utils/string.util.js";
+
 // OTHERS //
 import { supabase } from "../../config/supabase.js";
-
-/**
- * Converts a string to snake_case.
- * @param str - Input string
- * @returns snake_case string
- */
-const toSnakeCase = (str: string): string =>
-  str.trim().toLowerCase().replace(/\s+/g, "_");
 
 /**
  * Fetch filtered and paginated tournaments grouped by tournament_series.
