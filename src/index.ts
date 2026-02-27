@@ -1,7 +1,7 @@
 // UTILS //
 import { sendResponse } from "./common/utils/api.util.js";
 
-// OTHERS //
+// LIBRARIES //
 import { Hono } from "hono";
 import { handle } from "@hono/node-server/vercel";
 import { logger } from "hono/logger";
