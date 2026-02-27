@@ -1,4 +1,4 @@
-// OTHERS //
+// LIBRARIES //
 import { createClient } from "@supabase/supabase-js";
 
 // SUPABASE URL //
