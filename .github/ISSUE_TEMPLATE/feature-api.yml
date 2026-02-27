@@ -10,29 +10,6 @@ body:
       ## ⚠️ IMPORTANT
       You MUST read and follow `copilot-instructions.md` before implementing.
 
-  - type: textarea
-    id: copilot_rules
-    attributes:
-    label: ⚠️ Copilot Mandatory Rules
-    description: These rules MUST be followed
-    value: |
-      You MUST read and strictly follow copilot-instructions.md before writing any code.
-
-      The following rules are mandatory:
-
-      - Follow defined Architecture pattern
-      - Maintain correct Import order
-      - Extract reusable logic into utilities
-      - Extract constants properly
-      - Use QueryResponseData<T> pattern
-      - Use sendResponse helper for ALL responses
-      - Add proper JSDoc above functions
-      - Use explicit return types (NO implicit returns)
-      - Do NOT break folder structure
-      - Do NOT inline business logic inside controllers
-    validations:
-    required: true
-
   - type: input
     id: module_name
     attributes:
