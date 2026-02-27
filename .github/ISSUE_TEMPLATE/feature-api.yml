@@ -7,7 +7,6 @@ body:
     attributes:
       value: |
         ## ⚠️ IMPORTANT
-
         You MUST read and follow `copilot-instructions.md` before implementing.
 
   - type: input
