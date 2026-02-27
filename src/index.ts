@@ -1,6 +1,9 @@
 // UTILS //
 import { sendResponse } from "./common/utils/api.util.js";
 
+// ROUTES //
+import { coachesRoutes } from "./modules/coaches/coaches.routes.js";
+
 // OTHERS //
 import { Hono } from "hono";
 import { handle } from "@hono/node-server/vercel";
@@ -33,5 +36,6 @@ app.get("/", (c) => {
 });
 
 // Init Routes
+app.route("/coaches", coachesRoutes);
 
 export default handle(app);
