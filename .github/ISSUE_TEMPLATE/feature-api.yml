@@ -1,0 +1,103 @@
+name: 🚀 API Feature
+description: Create a new API endpoint following project architecture
+title: "feat: <module> - <short description>"
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ IMPORTANT
+
+        You MUST read and follow `copilot-instructions.md` before implementing.
+
+        All rules regarding:
+        - Architecture
+        - Import order
+        - Utility extraction
+        - Constants extraction
+        - QueryResponseData pattern
+        - sendResponse usage
+        - JSDoc
+        - Explicit return types
+
+        are mandatory.
+
+  - type: input
+    id: module_name
+    attributes:
+      label: Module Name
+      description: Folder name inside src/modules
+      placeholder: coaches
+    validations:
+      required: true
+
+  - type: dropdown
+    id: http_method
+    attributes:
+      label: HTTP Method
+      options:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+    validations:
+      required: true
+
+  - type: input
+    id: route_path
+    attributes:
+      label: Route Path
+      description: Example /coaches
+      placeholder: /coaches
+    validations:
+      required: true
+
+  - type: textarea
+    id: request_body
+    attributes:
+      label: Request Body Fields (if applicable)
+      description: Define expected body structure
+      placeholder: |
+        {
+          "name": "string",
+          "email": "string"
+        }
+
+  - type: textarea
+    id: db_table
+    attributes:
+      label: Supabase Table
+      description: Table name and required columns
+      placeholder: |
+        Table: coaches
+        Columns:
+        - id (uuid, PK)
+        - name (text)
+        - email (text)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: Requirements Checklist
+      options:
+        - label: Follow Route → Controller → Service → Supabase flow
+          required: true
+        - label: No DB logic inside controller
+          required: true
+        - label: Use QueryResponseData<T> in service
+          required: true
+        - label: Use sendResponse() in controller
+          required: true
+        - label: Extract reusable logic to common/utils
+          required: true
+        - label: Extract constants to common/constants
+          required: true
+        - label: Use explicit return types
+          required: true
+        - label: Use interface (not type)
+          required: true
+        - label: Follow import grouping convention
+          required: true
