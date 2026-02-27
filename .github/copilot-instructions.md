@@ -1,13 +1,9 @@
-Here is your **fully updated Copilot Instructions file**
-(with Import Heads + Clean Code Rules integrated properly and professionally structured).
-
-You can replace your existing file completely with this.
-
----
-
 # Copilot Instructions — zizo-backend-hono
 
 This is a **Hono.js** REST API backend written in **TypeScript**, deployed on **Vercel**, and using **Supabase** as the database/auth layer.
+
+This project follows **strict layered architecture and clean code discipline**.
+Copilot must follow all rules defined in this file.
 
 ---
 
@@ -37,8 +33,8 @@ zizo-backend-hono/
 │   │   ├── types/
 │   │   │   ├── api.response.type.ts
 │   │   │   └── query.response.type.ts
-│   │   └── utils/
-│   │       └── api.util.ts
+│   │   ├── utils/
+│   │   └── constants/
 │   └── modules/
 │       ├── auth/
 │       │   ├── auth.routes.ts
@@ -69,6 +65,10 @@ Route → Controller → Service → Supabase
 
 Never break this flow.
 
+- No DB logic in controller
+- No HTTP logic in service
+- No business logic in routes
+
 ---
 
 # Module Architecture
@@ -98,9 +98,7 @@ Each module must contain exactly 4 files:
 
 # Import Head Convention (MANDATORY)
 
-Every file must follow this exact grouped structure.
-
-## Standard Import Order
+Every file must follow this grouped import format and exact order.
 
 ```ts
 // TYPES //
@@ -110,11 +108,14 @@ import type { Feature } from "./feature.types.js";
 // CONFIG //
 import { supabase } from "../../config/supabase.js";
 
+// CONSTANTS //
+import { EMAIL_REGEX } from "../../common/constants/regex.constants.js";
+
 // UTILS //
-import { sendResponse } from "../../common/utils/api.util.js";
+import { isValidEmail } from "../../common/utils/email.util.js";
 
 // SERVICES //
-import { getFeaturesService } from "./feature.service.js";
+import { createFeatureService } from "./feature.service.js";
 
 // LIBRARIES //
 import { Hono } from "hono";
@@ -128,7 +129,96 @@ import { Hono } from "hono";
 - No default exports
 - No wildcard imports
 - No unused imports
-- Do not change order of import groups
+- Do not change order of groups
+
+---
+
+# Utility & Constants Architecture (MANDATORY)
+
+## No Inline Regex, Constants, or Helper Functions
+
+Never define:
+
+- Regex
+- Validation helpers
+- Formatting helpers
+- Parsing helpers
+- Magic numbers
+- Reusable constants
+
+inside:
+
+- Routes
+- Controllers
+- Services
+
+---
+
+## Utilities Location
+
+Reusable logic must live in:
+
+```
+src/common/utils/
+```
+
+Examples:
+
+- email.util.ts
+- validation.util.ts
+- string.util.ts
+- date.util.ts
+
+---
+
+## Constants Location
+
+All constants must live in:
+
+```
+src/common/constants/
+```
+
+Examples:
+
+- regex.constants.ts
+- pagination.constants.ts
+- app.constants.ts
+
+---
+
+## Example (Correct Email Validation Pattern)
+
+### regex.constants.ts
+
+```ts
+export const EMAIL_REGEX: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+```
+
+### email.util.ts
+
+```ts
+// CONSTANTS //
+import { EMAIL_REGEX } from "../constants/regex.constants.js";
+
+/**
+ * Validates email format
+ * @param email - Email string
+ * @returns boolean
+ */
+export const isValidEmail = (email: string): boolean => {
+  return EMAIL_REGEX.test(email);
+};
+```
+
+### Service Usage
+
+```ts
+// UTILS //
+import { isValidEmail } from "../../common/utils/email.util.js";
+```
+
+Never place regex inside service.
 
 ---
 
@@ -148,15 +238,15 @@ All responses must use `sendResponse()`.
 
 Rules:
 
-- Always pass `null` data on error
-- Always pass `null` error on success
+- Pass `null` data on error
+- Pass `null` error on success
 - Never use `c.json()` directly
 
 ---
 
 # Service Return Pattern (MANDATORY)
 
-Services must always return:
+Services must return:
 
 ```
 QueryResponseData<T>
@@ -175,7 +265,8 @@ Rules:
 
 - Services NEVER throw
 - Services ALWAYS catch errors
-- Controllers decide HTTP status codes
+- Controllers decide HTTP status
+- Services must not access Context
 
 ---
 
@@ -187,7 +278,7 @@ Rules:
 - Always use `interface`
 - Always use `import type`
 - Never generate CommonJS
-- All exports must be named exports
+- Named exports only
 - All functions must include JSDoc
 
 ---
@@ -212,34 +303,15 @@ Every exported function must include:
 
 - One responsibility per function
 - Max 25–30 lines per function
-- Use early returns
-- Avoid deep nesting
-- Max 2 levels of conditional nesting
-
-Good:
-
-```ts
-if (!result.data) {
-  return sendResponse(c, null, 404, "Not found");
-}
-```
-
-Bad:
-
-```ts
-if (result) {
-  if (result.data) {
-    ...
-  }
-}
-```
+- Early returns preferred
+- Max 2 nesting levels
 
 ---
 
 ## 2. File Size Limit
 
 - Max 150 lines per file
-- If exceeded → refactor
+- Refactor if exceeded
 
 ---
 
@@ -255,17 +327,17 @@ Functions:
 Controller:
 
 ```
-getFeatures
-createFeature
-updateFeature
-deleteFeature
+getCoaches
+createCoach
+updateCoach
+deleteCoach
 ```
 
 Service:
 
 ```
-getFeaturesService
-createFeatureService
+getCoachesService
+createCoachService
 ```
 
 Constants:
@@ -278,52 +350,59 @@ UPPER_SNAKE_CASE
 
 ## 4. No Magic Values
 
-Never hardcode numbers or strings.
+Never hardcode:
 
-Use constants instead.
+- Regex
+- Numbers
+- Reused strings
+- Limits
+- Status messages
+
+Move to `common/constants`.
 
 ---
 
-## 5. Supabase Rules
+# Supabase Rules
 
-- All queries inside service only
+- Queries only inside service
 - Always destructure `{ data, error }`
 - Always check error
-- Prefer explicit column selection over `select("*")`
+- Prefer explicit column selection
 - Never create supabase client inside module
-- Use RLS for access control
+- Use RLS for security
 
 ---
 
-## 6. Architectural Discipline
+# Architectural Discipline
 
 Never:
 
 - Query DB in controller
-- Access Hono Context inside service
-- Throw errors from service
+- Access Context in service
+- Throw errors in service
+- Define regex inside service
+- Define helper functions inside controller
 - Use classes
 - Use global mutable state
-- Mix business logic inside routes
 
 ---
 
 # Error Handling
 
-- Global error handler defined in `index.ts`
-- `app.notFound()` handles 404
-- Services return error in QueryResponseData
-- Controllers map errors to HTTP codes
-- Never expose raw DB error in production
+- Global error handler in `index.ts`
+- `app.notFound()` for 404
+- Services return error via QueryResponseData
+- Controllers map error to HTTP response
+- Do not expose raw DB errors in production
 
 ---
 
 # Security Rules
 
 - Never log secrets
-- Never expose environment variables
-- Validate request body before calling service
-- Never bypass Supabase RLS
+- Never expose env variables
+- Validate input before DB call
+- Do not bypass RLS
 - No hardcoded credentials
 
 ---
@@ -332,9 +411,9 @@ Never:
 
 Defined in `.env`.
 
-Always add new ones to `.env.example`.
+Must also be added to `.env.example`.
 
-Access using:
+Access via:
 
 ```
 process.env.VARIABLE_NAME
@@ -364,12 +443,14 @@ Copilot must always:
 - Use sendResponse()
 - Use explicit return types
 - Use import grouping format
+- Extract reusable logic into common/utils
+- Extract constants into common/constants
+- Never define regex inside services
 - Keep files under 150 lines
-- Use interface, not type
-- Use .js extensions in imports
+- Use interface (not type)
+- Use .js extensions
 - Never use any
 - Never generate CommonJS
-- Prefer small focused functions
 - Prefer named exports
 - Use early returns
 - Never mix DB logic in controller
