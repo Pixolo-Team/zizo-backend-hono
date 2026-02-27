@@ -3,9 +3,9 @@ description: Create a new API endpoint following project architecture
 title: "feat: <module> - <short description>"
 labels: ["feature"]
 body:
-  - type: markdown
+  - type: textarea
     attributes:
-      value: |
+      placeholder: |
         ## ⚠️ IMPORTANT
 
         You MUST read and follow `copilot-instructions.md` before implementing.
