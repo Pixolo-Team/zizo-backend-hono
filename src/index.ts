@@ -1,7 +1,3 @@
-// MODULES //
-import { identityRoute } from "./modules/identities/identities.routes.js";
-import { tournamentRoute } from "./modules/tournaments/tournaments.routes.js";
-
 // UTILS //
 import { sendResponse } from "./common/utils/api.util.js";
 
@@ -37,7 +33,5 @@ app.get("/", (c) => {
 });
 
 // Init Routes
-app.route("/identities", identityRoute);
-app.route("/tournaments", tournamentRoute);
 
 export default handle(app);
