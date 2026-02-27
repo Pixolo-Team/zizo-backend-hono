@@ -1,12 +1,13 @@
 // UTILS //
 import { sendResponse } from "./common/utils/api.util.js";
 
-// OTHERS //
+// LIBRARIES //
 import { Hono } from "hono";
 import { handle } from "@hono/node-server/vercel";
 import { logger } from "hono/logger";
 
-const app = new Hono();
+export const app = new Hono();
+
 // Middleware
 app.use(logger());
 
