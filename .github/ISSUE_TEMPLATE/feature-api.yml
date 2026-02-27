@@ -3,24 +3,12 @@ description: Create a new API endpoint following project architecture
 title: "feat: <module> - <short description>"
 labels: ["feature"]
 body:
-  - type: markdown
+  - type: textarea
     attributes:
       value: |
         ## ⚠️ IMPORTANT
 
         You MUST read and follow `copilot-instructions.md` before implementing.
-
-        All rules regarding:
-        - Architecture
-        - Import order
-        - Utility extraction
-        - Constants extraction
-        - QueryResponseData pattern
-        - sendResponse usage
-        - JSDoc
-        - Explicit return types
-
-        are mandatory.
 
   - type: input
     id: module_name
@@ -78,26 +66,32 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: requirements
+  - type: textarea
+    id: expected_output
     attributes:
-      label: Requirements Checklist
-      options:
-        - label: Follow Route → Controller → Service → Supabase flow
-          required: true
-        - label: No DB logic inside controller
-          required: true
-        - label: Use QueryResponseData<T> in service
-          required: true
-        - label: Use sendResponse() in controller
-          required: true
-        - label: Extract reusable logic to common/utils
-          required: true
-        - label: Extract constants to common/constants
-          required: true
-        - label: Use explicit return types
-          required: true
-        - label: Use interface (not type)
-          required: true
-        - label: Follow import grouping convention
-          required: true
+      label: Expected API Output
+      description: Define response structure and success message
+      placeholder: |
+        Success Response:
+        {
+          "data": {
+            "id": "uuid",
+            "name": "John Doe",
+            "email": "john@example.com"
+          },
+          "status": "success",
+          "status_code": 201,
+          "message": "Coach created successfully",
+          "error": null
+        }
+
+        Error Response:
+        {
+          "data": null,
+          "status": "error",
+          "status_code": 400,
+          "message": "Invalid email",
+          "error": "Invalid email format"
+        }
+    validations:
+      required: true
