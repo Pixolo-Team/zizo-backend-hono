@@ -305,6 +305,7 @@ Every exported function must include:
 - Max 25–30 lines per function
 - Early returns preferred
 - Max 2 nesting levels
+- Every function should have one liner comments inside
 
 ---
 
