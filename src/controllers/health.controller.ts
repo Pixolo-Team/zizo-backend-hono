@@ -2,7 +2,7 @@
 import { Context } from 'hono';
 
 // UTILS //
-import { successResponse } from '@/utils';
+import { successResponse } from '@/common/utils/api.util';
 
 /**
  * Health Controller - Handles health check endpoints

@@ -5,8 +5,10 @@ import { cors } from 'hono/cors';
 import { config } from '@/config';
 
 // UTILS //
-import { logger } from '@/utils';
+import { logger } from '@/common/utils/logger.util';
 import { requestLogger } from '@/middlewares';
+
+// ROUTES //
 import routes from '@/routes';
 
 /**

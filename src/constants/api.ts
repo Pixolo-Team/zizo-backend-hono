@@ -1,8 +1,10 @@
+// HONO //
+import { ContentfulStatusCode } from 'hono/utils/http-status';
+
 // API Status
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
-  NO_CONTENT: 204,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
@@ -10,7 +12,7 @@ export const HTTP_STATUS = {
   CONFLICT: 409,
   UNPROCESSABLE_ENTITY: 422,
   INTERNAL_SERVER_ERROR: 500,
-} as const;
+} as const satisfies Record<string, ContentfulStatusCode>;
 
 // Error Messages
 export const ERROR_MESSAGES = {
