@@ -1,5 +1,8 @@
+// MODELS //
 import { User, CreateUserDto, UpdateUserDto } from '@/models';
-import { logger } from '@/utils';
+
+// UTILS //
+import { logger } from '@/common/utils/logger.util';
 
 /**
  * User Service - Business logic for user operations
@@ -30,7 +33,7 @@ export class UserService {
     logger.debug('Creating new user', data);
     // Example: Insert into database
     const newUser: User = {
-      id: crypto.randomUUID(),
+      id: '1234',
       ...data,
       createdAt: new Date(),
       updatedAt: new Date(),

@@ -1,1 +1,2 @@
 echo "AWESOME ! Let us check for 🔵 PIXOLO 🔵 standards"
+npm run lint
