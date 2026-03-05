@@ -1,7 +1,10 @@
+// HONO //
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import { config } from '@/config';
+
+// UTILS //
 import { logger } from '@/utils';
 import { requestLogger } from '@/middlewares';
 import routes from '@/routes';
@@ -15,6 +18,8 @@ const app = new Hono();
  * Global Middlewares
  */
 app.use('*', requestLogger);
+
+// CORS
 app.use(
   '*',
   cors({
@@ -42,7 +47,7 @@ app.notFound((c) => {
 });
 
 /**
- * Error Handler
+ * Global Error Handler
  */
 app.onError((err, c) => {
   logger.error('Unhandled error:', err);
