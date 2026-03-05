@@ -1,35 +1,56 @@
 {
+  "name": "zizo-backend-hono",
+  "version": "1.0.0",
+  "description": "Enterprise-grade Hono backend API",
+  "main": "dist/index.js",
   "packageManager": "npm@10.2.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
-    "lint": "eslint .",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/main.js",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "type-check": "tsc --noEmit",
     "prepare": "husky || true"
   },
+  "keywords": [
+    "hono",
+    "typescript",
+    "backend",
+    "api",
+    "rest"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@hono/node-server": "^1.19.9",
-    "@supabase/supabase-js": "^2.93.3",
-    "dotenv": "^17.2.3",
     "hono": "^4.11.7"
+    "dotenv": "^17.2.3",
+    "zod": "^3.24.1",
+    "@supabase/supabase-js": "^2.93.3",
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
     "@types/node": "^25.1.0",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
+    "@eslint/js": "^9.39.2",
+    "prettier": "^3.8.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0",
+    "vitest": "^2.1.8",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^62.5.0",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.2.0",
     "husky": "^9.1.7",
-    "jiti": "^2.6.1",
-    "prettier": "^3.8.1",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "jiti": "^2.6.1"
   },
   "engines": {
     "node": ">=20"

@@ -1,37 +1,87 @@
+// HONO //
+import { Hono } from 'hono';
+import { serve } from '@hono/node-server';
+import { cors } from 'hono/cors';
+import { config } from '@/config';
+
 // UTILS //
-import { sendResponse } from "./common/utils/api.util.js";
+import { logger } from '@/utils';
+import { requestLogger } from '@/middlewares';
+import routes from '@/routes';
 
-// OTHERS //
-import { Hono } from "hono";
-import { handle } from "@hono/node-server/vercel";
-import { logger } from "hono/logger";
-
+/**
+ * Initialize Hono application
+ */
 const app = new Hono();
-// Middleware
-app.use(logger());
+
+/**
+ * Global Middlewares
+ */
+app.use('*', requestLogger);
+
+// CORS
+app.use(
+  '*',
+  cors({
+    origin: config.nodeEnv === 'production' ? [] : '*', // Configure allowed origins in production
+    credentials: true,
+  })
+);
+
+/**
+ * Register routes
+ */
+app.route('/', routes);
+
+/**
+ * 404 Handler
+ */
+app.notFound((c) => {
+  return c.json(
+    {
+      success: false,
+      error: 'Route not found',
+    },
+    404
+  );
+});
 
 /**
  * Global Error Handler
  */
 app.onError((err, c) => {
-  console.error(`${err}`);
-  return sendResponse(c, null, 500, "Internal Server Error", err.message);
+  logger.error('Unhandled error:', err);
+  return c.json(
+    {
+      success: false,
+      error: err.message || 'Internal server error',
+    },
+    500
+  );
 });
 
 /**
- * Not Found Handler
+ * Start server
  */
-app.notFound((c) => {
-  return sendResponse(c, null, 404, "Route Not Found");
-});
+const startServer = () => {
+  try {
+    serve(
+      {
+        fetch: app.fetch,
+        port: config.port,
+      },
+      (info) => {
+        logger.info(`🚀 Server running on http://localhost:${info.port}`);
+        logger.info(`📝 Environment: ${config.nodeEnv}`);
+        logger.info(`📡 API Base: ${config.apiPrefix}/${config.apiVersion}`);
+      }
+    );
+  } catch (error) {
+    logger.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
-/**
- * Root Route
- */
-app.get("/", (c) => {
-  return sendResponse(c, { version: "1.0.0" }, 200, "Zizo API is running");
-});
+startServer();
 
-// Init Routes
-
-export default handle(app);
+export default app;
