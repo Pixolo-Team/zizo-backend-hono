@@ -10,17 +10,17 @@ import { logger } from '@/common/utils/logger.util';
 
 /**
  * Insert a new issue ticket into the database
- * @param data - Validated issue ticket data
+ * @param IssueTicketItem - Validated issue ticket data
  * @returns QueryResponseData containing the created issue ticket or an error
  */
 export const raiseIssueTicketService = async (
-  data: CreateIssueTicketDto
+  IssueTicketItem: CreateIssueTicketDto
 ): Promise<QueryResponseData<IssueTicket>> => {
   try {
     // Insert the issue ticket into the Supabase table
     const { data: inserted, error } = await supabase
       .from('issue_tickets')
-      .insert(data)
+      .insert(IssueTicketItem)
       .select()
       .single();
 

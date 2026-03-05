@@ -18,7 +18,11 @@ import { raiseIssueTicketService } from '@/services/issue-tickets.service';
  * @param c - Hono context
  * @returns HTTP response with created ticket or error
  */
-export const raiseIssueTicketController = async (c: Context) => {
+
+export class RaiseIssueController {
+
+  
+  async raiseTicket (c: Context) {
   try {
     // Parse and validate the request body
     const body = await c.req.json();
@@ -51,4 +55,7 @@ export const raiseIssueTicketController = async (c: Context) => {
     const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
     return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
   }
+}
 };
+
+export const raiseIssueController = new RaiseIssueController();

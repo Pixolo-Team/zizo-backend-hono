@@ -14,5 +14,3 @@ export const raiseIssueTicketSchema = z.object({
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
   description: z.string().min(1, 'Description is required'),
 });
-
-export type RaiseIssueTicketInput = z.infer<typeof raiseIssueTicketSchema>;

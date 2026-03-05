@@ -35,15 +35,7 @@ const raiseIssueTicketRoute = createRoute({
       description: 'Issue Raised Successfully',
       content: {
         'application/json': {
-          schema: apiResponseSchema(
-            z.object({
-              id: z.string(),
-              name: z.string(),
-              phone_number: z.string(),
-              description: z.string(),
-              created_at: z.string(),
-            })
-          ),
+          schema: apiResponseSchema(raiseIssueTicketSchema),
         },
       },
     },
