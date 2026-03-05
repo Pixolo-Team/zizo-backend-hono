@@ -3,6 +3,7 @@ import '@/routes/docs.routes';
 import '@/routes/health.routes';
 import '@/routes/organizer.routes';
 import '@/routes/user.routes';
+import '@/routes/issue-tickets.routes';
 
 import { openapiApp } from '@/routes/openapi.routes';
 
