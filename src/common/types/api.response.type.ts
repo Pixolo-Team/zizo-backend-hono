@@ -2,10 +2,10 @@
  * Standard API Response Interface
  * @template T - The type of the data object
  */
-export interface ApiResponse<T = unknown> {
+export interface ApiResponseData<T = unknown> {
   data: T | null;
-  status: "success" | "error";
+  status: boolean;
   status_code: number;
   message: string;
-  error: string | null;
+  error?: string | null;
 }

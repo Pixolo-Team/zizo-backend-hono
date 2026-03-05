@@ -1,2 +1,2 @@
-export * from './user.controller';
-export * from './health.controller';
+export * from '@/controllers/user.controller';
+export * from '@/controllers/health.controller';

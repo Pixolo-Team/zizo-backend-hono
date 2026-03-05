@@ -1,7 +1,16 @@
+// HONO //
 import { Context } from 'hono';
+
+// SERVICES //
 import { userService } from '@/services';
+
+// UTILS //
 import { successResponse, errorResponse } from '@/utils';
-import { HTTP_STATUS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
+
+// CONSTANTS //
+import { HTTP_STATUS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants/api';
+
+// VALIDATIONS //
 import { createUserSchema, updateUserSchema, userIdSchema } from '@/validators';
 
 /**
@@ -10,9 +19,10 @@ import { createUserSchema, updateUserSchema, userIdSchema } from '@/validators';
 export class UserController {
   /**
    * Get all users
-   * GET /users
+   * GET: /users
    */
   async getAllUsers(c: Context) {
+    // Fetch all the Users from Service
     const users = await userService.getAllUsers();
     return successResponse(c, users);
   }

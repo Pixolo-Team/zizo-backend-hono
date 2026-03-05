@@ -29,10 +29,10 @@
   "license": "ISC",
   "dependencies": {
     "@hono/node-server": "^1.19.9",
-    "hono": "^4.11.7"
+    "hono": "^4.11.7",
     "dotenv": "^17.2.3",
     "zod": "^3.24.1",
-    "@supabase/supabase-js": "^2.93.3",
+    "@supabase/supabase-js": "^2.93.3"
   },
   "devDependencies": {
     "@types/node": "^25.1.0",

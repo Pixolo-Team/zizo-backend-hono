@@ -1,30 +1,46 @@
-import type { Context } from "hono";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
-import type { ApiResponse } from "../types/api.response.type.js";
+// HONO //
+import type { Context } from 'hono';
+
+// TYPES //
+import type { ApiResponseData } from '@/common/types/api.response.type.js';
+
+// CONSTANTS //
+import { ERROR_MESSAGES, HTTP_STATUS } from '@/constants/api';
 
 /**
- * Sends a standardized API response.
- * @param c - Hono Context
- * @param data - The data to be sent in the response
- * @param statusCode - HTTP Status Code
- * @param message - Succes or Error Message
- * @param error - Detailed error message if any
- * @returns Standardized Hono JSON response
+ * Send success response
  */
-export const sendResponse = <T>(
+export const successResponse = <T = unknown>(
   c: Context,
-  data: T | null,
-  statusCode: number,
-  message: string,
-  error: string | null = null,
-): Response => {
-  const responseBody: ApiResponse<T> = {
-    data,
-    status: statusCode >= 200 && statusCode < 300 ? "success" : "error",
+  data: T | null = null,
+  message: string = 'Success',
+  statusCode: number = HTTP_STATUS.OK
+) => {
+  const response: ApiResponseData<T> = {
+    status: true,
     status_code: statusCode,
     message,
+    data,
+    error: null,
+  };
+  return c.json(response, statusCode);
+};
+
+/**
+ * Send error response
+ */
+export const errorResponse = (
+  c: Context,
+  error: string,
+  message: string = ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+  statusCode: number = HTTP_STATUS.INTERNAL_SERVER_ERROR
+) => {
+  const response: ApiResponseData<null> = {
+    status: false,
+    status_code: statusCode,
+    message,
+    data: null,
     error,
   };
-
-  return c.json(responseBody, statusCode as ContentfulStatusCode);
+  return c.json(response, statusCode);
 };

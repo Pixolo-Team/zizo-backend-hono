@@ -1,4 +1,7 @@
+// HONO //
 import { Context } from 'hono';
+
+// UTILS //
 import { successResponse } from '@/utils';
 
 /**

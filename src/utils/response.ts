@@ -1,5 +1,5 @@
 import { Context } from 'hono';
-import { HTTP_STATUS } from '@/constants';
+import { HTTP_STATUS } from '@/constants/api';
 
 /**
  * Standard API response structure

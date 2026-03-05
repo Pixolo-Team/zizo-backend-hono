@@ -1,6 +1,6 @@
 import { Context, Next } from 'hono';
 import { errorResponse } from '@/utils';
-import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants';
+import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 import { logger } from '@/utils';
 
 /**
