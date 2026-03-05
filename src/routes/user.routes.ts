@@ -1,7 +1,8 @@
-import { Hono } from 'hono';
+// CONTROLLERS //
 import { userController } from '@/controllers';
 
-const userRoutes = new Hono();
+// ROUTES //
+import { openapiApp } from '@/routes/openapi.routes';
 
 /**
  * User Routes
@@ -9,18 +10,16 @@ const userRoutes = new Hono();
  */
 
 // GET /users - Get all users
-userRoutes.get('/', (c) => userController.getAllUsers(c));
+openapiApp.get('/', (c) => userController.getAllUsers(c));
 
 // GET /users/:id - Get user by ID
-userRoutes.get('/:id', (c) => userController.getUserById(c));
+openapiApp.get('/:id', (c) => userController.getUserById(c));
 
 // POST /users - Create new user
-userRoutes.post('/', (c) => userController.createUser(c));
+openapiApp.post('/', (c) => userController.createUser(c));
 
 // PUT /users/:id - Update user
-userRoutes.put('/:id', (c) => userController.updateUser(c));
+openapiApp.put('/:id', (c) => userController.updateUser(c));
 
 // DELETE /users/:id - Delete user
-userRoutes.delete('/:id', (c) => userController.deleteUser(c));
-
-export default userRoutes;
+openapiApp.delete('/:id', (c) => userController.deleteUser(c));

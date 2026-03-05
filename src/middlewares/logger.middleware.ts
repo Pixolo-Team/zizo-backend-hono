@@ -1,5 +1,7 @@
 import { Context, Next } from 'hono';
-import { logger } from '@/utils';
+
+// UTILS //
+import { logger } from '@/common/utils/logger.util';
 
 /**
  * Request logging middleware

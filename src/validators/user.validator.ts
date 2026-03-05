@@ -14,5 +14,5 @@ export const updateUserSchema = z.object({
 
 // User ID validation
 export const userIdSchema = z.object({
-  id: z.string().uuid('Invalid user ID format'),
+  id: z.string(),
 });

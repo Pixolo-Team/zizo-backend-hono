@@ -1,14 +1,13 @@
-import { Hono } from 'hono';
-import userRoutes from './user.routes';
-import healthRoutes from './health.routes';
-import { config } from '@/config';
+// ROUTES //
+import '@/routes/docs.routes';
+import '@/routes/health.routes';
+import '@/routes/organizer.routes';
+import '@/routes/user.routes';
 
-const routes = new Hono();
+import { openapiApp } from '@/routes/openapi.routes';
 
 /**
  * Register all application routes
  */
-routes.route('/health', healthRoutes);
-routes.route(`${config.apiPrefix}/${config.apiVersion}/users`, userRoutes);
 
-export default routes;
+export default openapiApp;

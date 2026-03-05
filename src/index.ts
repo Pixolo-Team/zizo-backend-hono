@@ -1,5 +1,4 @@
 // HONO //
-import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import { config } from '@/config';
@@ -8,13 +7,7 @@ import { config } from '@/config';
 import { logger } from '@/common/utils/logger.util';
 import { requestLogger } from '@/middlewares';
 
-// ROUTES //
-import routes from '@/routes';
-
-/**
- * Initialize Hono application
- */
-const app = new Hono();
+import app from '@/routes';
 
 /**
  * Global Middlewares
@@ -29,11 +22,6 @@ app.use(
     credentials: true,
   })
 );
-
-/**
- * Register routes
- */
-app.route('/', routes);
 
 /**
  * 404 Handler
