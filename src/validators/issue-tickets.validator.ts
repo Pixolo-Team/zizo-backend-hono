@@ -4,9 +4,9 @@ import { z } from 'zod';
 import { isValidPhoneNumber } from '@/common/utils/phone.util';
 
 /**
- * Zod schema for requesting an issue ticket
+ * Zod Schema for request body of Raise Issue API Endpoint
  */
-export const raiseIssueTicketSchema = z.object({
+export const raiseIssueTicketRequestSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   phone_number: z
     .string()
@@ -16,9 +16,9 @@ export const raiseIssueTicketSchema = z.object({
 });
 
 /**
- * Zod schema for response an issue ticket
+ * Zod Schema for the response of Raise Issue Ticket API Endpoint
  */
-export const issueTicketSchema = z.object({
+export const IssueTicketSchema = z.object({
   id: z.string(),
   name: z.string(),
   phone_number: z.string(),

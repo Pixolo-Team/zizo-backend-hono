@@ -10,8 +10,6 @@ import { logger } from '@/common/utils/logger.util';
 
 /**
  * Insert a new issue ticket into the database
- * @param IssueTicketItem - Validated issue ticket data
- * @returns QueryResponseData containing the created issue ticket or an error
  */
 export const raiseIssueTicketService = async (
   IssueTicketItem: CreateIssueTicketDto

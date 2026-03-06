@@ -3,15 +3,11 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 
 // VALIDATORS //
-import { raiseIssueTicketSchema } from '@/validators/issue-tickets.validator';
-import { issueTicketSchema } from '@/validators/issue-tickets.validator';
+import { raiseIssueTicketRequestSchema, IssueTicketSchema } from '@/validators/issue-tickets.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // CONTROLLER //
-import { raiseIssueController } from '@/controllers';
-
-// CONSTANTS //
-import { ERROR_MESSAGES } from '@/constants/api';
+import { issueTicketsController } from '@/controllers';
 
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
@@ -25,7 +21,7 @@ const raiseIssueTicketRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: raiseIssueTicketSchema,
+          schema: raiseIssueTicketRequestSchema,
         },
       },
       required: true,
@@ -36,7 +32,7 @@ const raiseIssueTicketRoute = createRoute({
       description: 'Issue Raised Successfully',
       content: {
         'application/json': {
-          schema: apiResponseSchema(issueTicketSchema),
+          schema: apiResponseSchema(IssueTicketSchema),
         },
       },
     },
@@ -59,5 +55,6 @@ const raiseIssueTicketRoute = createRoute({
   },
 });
 
-openapiApp.openapi(raiseIssueTicketRoute, (c) => raiseIssueController.raiseTicket(c));
+// POST: /issue_tickets/raise
+openapiApp.openapi(raiseIssueTicketRoute, (c) => issueTicketsController.raiseTicket(c));
 
