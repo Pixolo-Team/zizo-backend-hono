@@ -13,10 +13,14 @@ import { raiseIssueTicketRequestSchema } from '@/validators/issue-tickets.valida
 // SERVICES //
 import { raiseIssueTicketService } from '@/services/issue-tickets.service';
 
-/** Handles HTTP requests for Issue Ticket and returns appropriate responses */
-export class RaiseIssueController {
-
-  /** Validates and processes an incoming Issue Ticket request */
+/**
+ * Issue Tickets Controller - Handles all Issue Tickets related endpoints
+ */
+export class IssueTicketsController {
+  /**
+   * Raise a new issue ticket
+   * POST /issue_tickets/raise
+   */
   async raiseTicket(c: Context) {
     try {
       // Parse and validate the request body
@@ -47,13 +51,12 @@ export class RaiseIssueController {
       }
 
       return successResponse(c, data, 'Issue Raised Successfully', HTTP_STATUS.CREATED);
-    } 
+    } catch (err) {
       // Any other Errors
-      catch (err) {
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
     }
   }
-};
+}
 
-export const raiseIssueController = new RaiseIssueController();
+export const issueTicketsController = new IssueTicketsController();
