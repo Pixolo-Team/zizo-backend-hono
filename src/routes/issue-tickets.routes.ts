@@ -4,10 +4,11 @@ import { z } from 'zod';
 
 // VALIDATORS //
 import { raiseIssueTicketSchema } from '@/validators/issue-tickets.validator';
+import { issueTicketSchema } from '@/validators/issue-tickets.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
-// SERVICES //
-import { raiseIssueTicketService } from '@/services/issue-tickets.service';
+// CONTROLLER //
+import { raiseIssueController } from '@/controllers';
 
 // CONSTANTS //
 import { ERROR_MESSAGES } from '@/constants/api';
@@ -35,7 +36,7 @@ const raiseIssueTicketRoute = createRoute({
       description: 'Issue Raised Successfully',
       content: {
         'application/json': {
-          schema: apiResponseSchema(raiseIssueTicketSchema),
+          schema: apiResponseSchema(issueTicketSchema),
         },
       },
     },
@@ -58,50 +59,5 @@ const raiseIssueTicketRoute = createRoute({
   },
 });
 
-openapiApp.openapi(raiseIssueTicketRoute, async (c) => {
-  // Parse and validate the request body
-  const body = await c.req.json();
-  const parsed = raiseIssueTicketSchema.safeParse(body);
-
-  if (!parsed.success) {
-    // Return 422 for validation errors
-    return c.json(
-      {
-        status: false,
-        status_code: 422,
-        message: 'Validation Error',
-        data: null,
-        error: parsed.error.message,
-      },
-      422
-    );
-  }
-
-  // Call the service layer with validated data
-  const { data, error } = await raiseIssueTicketService(parsed.data);
-
-  if (error) {
-    return c.json(
-      {
-        status: false,
-        status_code: 500,
-        message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        data: null,
-        error: error.message,
-      },
-      500
-    );
-  }
-
-  return c.json(
-    {
-      status: true,
-      status_code: 201,
-      message: 'Issue Raised Successfully',
-      data,
-      error: null,
-    },
-    201
-  );
-});
+openapiApp.openapi(raiseIssueTicketRoute, (c) => raiseIssueController.raiseTicket(c));
 
