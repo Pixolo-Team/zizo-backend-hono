@@ -8,11 +8,8 @@ import { supabase } from '@/config/supabase';
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
 
-/**
- * Insert a new issue ticket into the database
- * @param IssueTicketItem - Validated issue ticket data
- * @returns QueryResponseData containing the created issue ticket or an error
- */
+/** Insert a new issue ticket into the database */
+
 export const raiseIssueTicketService = async (
   IssueTicketItem: CreateIssueTicketDto
 ): Promise<QueryResponseData<IssueTicket>> => {

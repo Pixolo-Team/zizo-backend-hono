@@ -4,19 +4,20 @@ import { z } from 'zod';
 import { isValidPhoneNumber } from '@/common/utils/phone.util';
 
 /**
- * Zod schema for requesting an issue ticket
+ * Zod Schema for request body of Raise Issue API Endpoint
  */
-export const raiseIssueTicketSchema = z.object({
+export const raiseIssueTicketRequestSchema= z.object({
   name: z.string().min(1, 'Name is required'),
   phone_number: z
     .string()
-    .min(1, 'Phone number is required')
+    .min(8, 'Phone number is required')
+    .max(12, 'Phone number cannot exceed 12 digits')
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
   description: z.string().min(1, 'Description is required'),
 });
 
 /**
- * Zod schema for response an issue ticket
+ * Zod schema for the response of Raise Issue Ticket API Endpoint
  */
 export const issueTicketSchema = z.object({
   id: z.string(),

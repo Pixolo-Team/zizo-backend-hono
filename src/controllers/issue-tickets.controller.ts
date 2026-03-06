@@ -1,5 +1,5 @@
 // TYPES //
-// import type { Context } from 'hono';
+import type { Context } from 'hono';
 
 // UTILS //
 import { successResponse, errorResponse } from '@/common/utils/api.util';
@@ -8,27 +8,20 @@ import { successResponse, errorResponse } from '@/common/utils/api.util';
 import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 
 // VALIDATORS //
-import { raiseIssueTicketSchema } from '@/validators/issue-tickets.validator';
+import { raiseIssueTicketRequestSchema } from '@/validators/issue-tickets.validator';
 
 // SERVICES //
 import { raiseIssueTicketService } from '@/services/issue-tickets.service';
 
-/**
- * Controller for raising an issue ticket
- * @param c - Hono context
- * @returns HTTP response with created ticket or error
- */
-
+/** Handles HTTP requests for Issue Ticket and returns appropriate responses */
 export class RaiseIssueController {
 
-  /**
-   * 
-   */
-  async raiseTicket(c: any) {
+  /** Validates and processes an incoming Issue Ticket request */
+  async raiseTicket(c: Context) {
     try {
       // Parse and validate the request body
       const body = await c.req.json();
-      const parsed = raiseIssueTicketSchema.safeParse(body);
+      const parsed = raiseIssueTicketRequestSchema.safeParse(body);
 
       if (!parsed.success) {
         // Return 422 for validation errors
@@ -43,6 +36,7 @@ export class RaiseIssueController {
       // Call the service layer with validated data
       const { data, error } = await raiseIssueTicketService(parsed.data);
 
+      // Database insert failed
       if (error) {
         return errorResponse(
           c,
@@ -53,7 +47,9 @@ export class RaiseIssueController {
       }
 
       return successResponse(c, data, 'Issue Raised Successfully', HTTP_STATUS.CREATED);
-    } catch (err) {
+    } 
+      // Any other Errors
+      catch (err) {
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
     }
