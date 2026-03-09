@@ -1,6 +1,7 @@
 // ROUTES //
 import '@/routes/docs.routes';
 import '@/routes/health.routes';
+import '@/routes/auth.routes';
 import '@/routes/organizer.routes';
 import '@/routes/user.routes';
 import '@/routes/issue-tickets.routes';

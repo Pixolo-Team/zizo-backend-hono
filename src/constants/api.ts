@@ -29,3 +29,9 @@ export const SUCCESS_MESSAGES = {
   UPDATED: 'Resource updated successfully',
   DELETED: 'Resource deleted successfully',
 } as const;
+
+// Auth Constants
+export const AUTH_CONSTANTS = {
+  /** Maximum users fetched per page when querying Supabase Auth admin API */
+  ADMIN_LIST_USERS_PAGE_SIZE: 1000,
+} as const;
