@@ -19,16 +19,18 @@ import { raiseIssueTicketService } from '@/services/issue-tickets.service';
 export class IssueTicketsController {
 
   /**
-   * Raise a new issue ticket
+   * Raise a new Issue Ticket
    * POST /issue_tickets/raise
    */
   async raiseTicket(c: Context) {
     try {
+
       // Parse and validate the request body
       const body = await c.req.json();
       const parsed = raiseIssueTicketRequestSchema.safeParse(body);
 
       if (!parsed.success) {
+
         // Return 422 for validation errors
         return errorResponse(
           c,
@@ -60,4 +62,5 @@ export class IssueTicketsController {
   }
 }
 
+// Controller instance for handling Issue Ticket related API requests
 export const issueTicketsController = new IssueTicketsController();
