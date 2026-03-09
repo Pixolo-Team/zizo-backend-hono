@@ -10,8 +10,6 @@ import { logger } from '@/common/utils/logger.util';
 
 /**
  * Check whether a user exists in the Users table by phone number
- * @param phoneNumber - The phone number to look up in the users table
- * @returns QueryResponseData containing the check result or an error
  */
 export const checkUserByPhoneService = async (
   phoneNumber: string
