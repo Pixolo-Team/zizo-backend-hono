@@ -19,9 +19,6 @@ import { checkUserByPhoneService } from '@/services/auth.service';
 export class AuthController {
   /**
    * Check whether a user exists in Supabase Auth by phone number
-   * POST /auth/check-by-phone
-   * @param c - Hono context
-   * @returns JSON response with user existence details
    */
   async checkUserByPhone(c: Context) {
     try {

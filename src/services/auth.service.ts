@@ -3,59 +3,64 @@ import type { QueryResponseData } from '@/common/types/query.response.type';
 import type { CheckUserByPhoneResult } from '@/models/auth.model';
 
 // CONFIG //
-import { supabaseAdmin } from '@/config/supabase';
-
-// CONSTANTS //
-import { AUTH_CONSTANTS } from '@/constants/api';
+import { supabase } from '@/config/supabase';
 
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Check whether a user exists in Supabase Auth by phone number
- * @param phoneNumber - The phone number to look up in auth.users
+ * Check whether a user exists in the Users table by phone number
+ * @param phoneNumber - The phone number to look up in the users table
  * @returns QueryResponseData containing the check result or an error
  */
 export const checkUserByPhoneService = async (
   phoneNumber: string
 ): Promise<QueryResponseData<CheckUserByPhoneResult>> => {
   try {
-    // Fetch users from Supabase Auth admin API (paginated)
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers({
-      perPage: AUTH_CONSTANTS.ADMIN_LIST_USERS_PAGE_SIZE,
-    });
 
-    // Supabase admin query failed
+    // Query the Users table for a record matching the provided phone number
+    const { data, error } = await supabase
+      .from('users')
+      .select('auth_id, first_name, last_name')
+      .eq('phone_number', phoneNumber)
+      .maybeSingle();
+
+    // Database query failed
     if (error) {
-      logger.error('Failed to list users from Supabase Auth:', error);
+      logger.error('Failed to query users table:', error);
       return { data: null, error: new Error(error.message) };
     }
 
-    // Filter to find the user whose phone matches
-    const foundUser = data.users.find((user) => user.phone === phoneNumber);
-
-    // User does not exist
-    if (!foundUser) {
-      return { data: { exists: false }, error: null };
+    // User does not exist in the users table
+    if (!data) {
+      return {
+        data: { exists: false },
+        error: null,
+      };
     }
 
-    // User found — extract name from user_metadata
-    const meta = foundUser.user_metadata as Record<string, unknown>;
+    // User found — return relevant user details
     return {
       data: {
         exists: true,
-        id: foundUser.id,
-        first_name: typeof meta?.first_name === 'string' ? meta.first_name : '',
-        last_name: typeof meta?.last_name === 'string' ? meta.last_name : '',
+        id: data.auth_id,
+        first_name: data.first_name ?? '',
+        last_name: data.last_name ?? '',
       },
       error: null,
     };
+
   } catch (err) {
+
     // Unexpected runtime error
     logger.error('Unexpected error in checkUserByPhoneService:', err);
+
     return {
       data: null,
-      error: err instanceof Error ? err : new Error('Unexpected error occurred while checking user'),
+      error:
+        err instanceof Error
+          ? err
+          : new Error('Unexpected error occurred while checking user'),
     };
   }
 };
