@@ -11,11 +11,11 @@ import { ContentfulStatusCode } from 'hono/utils/http-status';
 /**
  * Send success response
  */
-export const successResponse = <T = unknown>(
+export const successResponse = <T = unknown, S extends ContentfulStatusCode = typeof HTTP_STATUS.OK>(
   c: Context,
   data: T | null = null,
   message: string = 'Success',
-  statusCode: ContentfulStatusCode = HTTP_STATUS.OK
+  statusCode: S = HTTP_STATUS.OK as S
 ) => {
   const response: ApiResponseData<T> = {
     status: true,
@@ -30,11 +30,11 @@ export const successResponse = <T = unknown>(
 /**
  * Send error response
  */
-export const errorResponse = (
+export const errorResponse = <S extends ContentfulStatusCode = typeof HTTP_STATUS.INTERNAL_SERVER_ERROR>(
   c: Context,
   error: string,
   message: string = ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-  statusCode: ContentfulStatusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR
+  statusCode: S = HTTP_STATUS.INTERNAL_SERVER_ERROR as S
 ) => {
   const response: ApiResponseData<null> = {
     status: false,
