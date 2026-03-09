@@ -17,6 +17,7 @@ import { raiseIssueTicketService } from '@/services/issue-tickets.service';
  * Issue Tickets Controller - Handles all Issue Tickets related endpoints
  */
 export class IssueTicketsController {
+
   /**
    * Raise a new issue ticket
    * POST /issue_tickets/raise

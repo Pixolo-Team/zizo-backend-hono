@@ -22,6 +22,7 @@ export const raiseIssueTicketService = async (
       .select()
       .single();
 
+    // Database error
     if (error) {
       logger.error('Failed to insert issue ticket:', error);
       return { data: null, error: new Error(error.message) };
@@ -29,6 +30,7 @@ export const raiseIssueTicketService = async (
 
     return { data: inserted as IssueTicket, error: null };
   } catch (err) {
+    // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in raiseIssueTicketService:', err);
     return {
       data: null,

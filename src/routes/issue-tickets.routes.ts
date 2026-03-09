@@ -12,7 +12,8 @@ import { issueTicketsController } from '@/controllers';
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
 
-const raiseIssueTicketRoute = createRoute({
+// Route definition for raising a new issue ticket
+const RaiseIssueTicketRoute = createRoute({
   method: 'post',
   path: '/issue_tickets/raise',
   tags: ['Issue Tickets'],
@@ -56,5 +57,5 @@ const raiseIssueTicketRoute = createRoute({
 });
 
 // POST: /issue_tickets/raise
-openapiApp.openapi(raiseIssueTicketRoute, (c) => issueTicketsController.raiseTicket(c));
+openapiApp.openapi(RaiseIssueTicketRoute, (c) => issueTicketsController.raiseTicket(c));
 
