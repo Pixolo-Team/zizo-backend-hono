@@ -9,8 +9,9 @@ import { isValidPhoneNumber } from '@/common/utils/phone.util';
 export const checkUserByPhoneSchema = z.object({
   phone_number: z
     .string()
-    .min(1, 'phone_number is required')
-    .refine(isValidPhoneNumber, 'phone_number must be a valid phone number'),
+    .min(8, 'Phone number is required')
+    .max(12, 'Phone number cannot exceed 12 digits')
+    .refine(isValidPhoneNumber, 'Invalid phone number format'),
 });
 
 /**
