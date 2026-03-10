@@ -17,6 +17,7 @@ import { checkUserByPhoneService } from '@/services/auth.service';
  * Auth Controller — handles authentication-related endpoints
  */
 export class AuthController {
+
   /**
    * Check whether a user exists in Supabase Auth by phone number
    */
@@ -66,4 +67,5 @@ export class AuthController {
   }
 }
 
+// Controller instance for handling Auth related API requests
 export const authController = new AuthController();
