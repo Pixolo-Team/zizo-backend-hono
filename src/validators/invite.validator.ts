@@ -14,7 +14,7 @@ export const createInviteRequestSchema = z.object({
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
   organization_id: z.string().min(1, 'Organization ID is required'),
   membership_role_id: z.string().min(1, 'Membership role ID is required'),
-  auth_id: z.string().nullable().optional(),
+  auth_id: z.preprocess((val) => (val === '' ? null : val), z.string().nullable().optional()),
 });
 
 /**

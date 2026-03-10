@@ -19,9 +19,6 @@ import { createInviteService } from '@/services/invite.service';
 export class InviteController {
   /**
    * Create a new Invite
-   * POST /invites/create
-   * @param c - Hono context
-   * @returns API response with invite data or error
    */
   async createInvite(c: Context) {
     try {
@@ -39,18 +36,18 @@ export class InviteController {
         );
       }
 
-      // Retrieve authenticated user ID from the request header set by Supabase auth
-      const invitedBy = c.req.header('x-user-id') ?? '';
+    //  // Retrieve authenticated user ID from the request header set by Supabase auth
+    //   const invitedBy = c.req.header('x-user-id') ?? '';
 
-      if (!invitedBy) {
-        // Return 422 if the user identity header is missing
-        return errorResponse(
-          c,
-          'Missing x-user-id header',
-          'Validation failed',
-          HTTP_STATUS.UNPROCESSABLE_ENTITY
-        );
-      }
+    //   if (!invitedBy) {
+    //     // Return 422 if the user identity header is missing
+    //     return errorResponse(
+    //       c,
+    //       'Missing x-user-id header',
+    //       'Validation failed',
+    //       HTTP_STATUS.UNPROCESSABLE_ENTITY
+    //     );
+    //   }
 
       const { phone_number, organization_id, membership_role_id, auth_id } = parsed.data;
 
@@ -60,7 +57,7 @@ export class InviteController {
         phone_number,
         invite_fields: { organization_id, membership_role_id },
         is_pending: true,
-        invited_by: invitedBy,
+        invited_by: null,
         organization_id,
         created_on: new Date().toISOString(),
       });
