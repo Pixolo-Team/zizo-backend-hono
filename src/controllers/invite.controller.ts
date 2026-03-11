@@ -14,16 +14,14 @@ import { getUserInvitesRequestSchema } from '@/validators/invite.validator';
 import { getUserInvitesService } from '@/services/invite.service';
 
 /**
- * Invite Controller - Handles all Invite related endpoints
+ * Invite Controller - Handles all Invites related endpoints
  */
 export class InviteController {
   /**
-   * Fetch all pending invites for a user
    * POST /invites/get-user-invites
-   * @param c - Hono context
-   * @returns JSON response with pending invites or appropriate error
+   * Fetch all pending Invites for a User
    */
-  async getUserInvites(c: Context) {
+  async getPendingInvites(c: Context) {
     try {
       // Parse and validate the request body
       const body = await c.req.json();

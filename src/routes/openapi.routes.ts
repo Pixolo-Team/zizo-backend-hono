@@ -1,13 +1,18 @@
+// LIBRARIES //
 import { OpenAPIHono } from '@hono/zod-openapi';
+
+// UTILS //
 import { errorResponse } from '@/common/utils/api.util';
+
+// CONSTANTS //
 import { HTTP_STATUS } from '@/constants/api';
 
 export const openapiApp = new OpenAPIHono({
     defaultHook: (result, c) => {
         if (!result.success) {
-            const firstIssue = result.error.issues[0];
-            const fieldName = firstIssue?.path.join('.') ?? 'unknown';
-            const issueMessage = firstIssue?.message ?? 'Validation failed';
+            const parseError = result.error.issues[0];
+            const fieldName = parseError?.path.join('.') ?? 'unknown';
+            const issueMessage = parseError?.message ?? 'Validation failed';
             return errorResponse(
                 c,
                `Invalid field '${fieldName}': ${issueMessage}`,

@@ -12,7 +12,7 @@ import { inviteController } from '@/controllers';
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
 
-// Route definition for fetching pending invites for a user
+// Route definition for fetching pending Invites for a User
 const GetUserInvitesRoute = createRoute({
   method: 'post',
   path: '/invites/get-user-invites',
@@ -65,4 +65,4 @@ const GetUserInvitesRoute = createRoute({
 });
 
 // POST: /invites/get-user-invites
-openapiApp.openapi(GetUserInvitesRoute, (c) => inviteController.getUserInvites(c));
+openapiApp.openapi(GetUserInvitesRoute, (c) => inviteController.getPendingInvites(c));
