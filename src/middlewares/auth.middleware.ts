@@ -28,7 +28,6 @@ export const authMiddleware = createMiddleware<EnvData>(async (c, next) => {
   const authHeader = c.req.header('Authorization');
   // Get access_token from header
   const token = authHeader?.replace('Bearer ', '');
-  console.log(authHeader);
   
   // Check if token exists
   if (!authHeader) {
