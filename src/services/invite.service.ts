@@ -10,8 +10,6 @@ import { logger } from '@/common/utils/logger.util';
 
 /**
  * Insert a new Invite into the database
- * @param inviteDto - Data transfer object containing invite insert data
- * @returns Inserted invite response or error
  */
 export const createInviteService = async (
   inviteDto: CreateInviteDto

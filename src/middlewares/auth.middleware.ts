@@ -1,19 +1,29 @@
+// MODULES //
 import { createMiddleware } from 'hono/factory';
 import { getCookie } from 'hono/cookie';
-import type { User } from '@supabase/supabase-js';
 
+// SUPABASE //
+import type { User } from '@supabase/supabase-js';
 import { supabase } from '@/config/supabase';
+
+// UTILS //
 import { errorResponse } from '@/common/utils/api.util';
+
+// CONSTANTS //
 import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 
 // Define the custom variables for the context to ensure type safety
-type Env = {
+type EnvData = {
   Variables: {
     user: User;
   };
 };
 
-export const authMiddleware = createMiddleware<Env>(async (c, next) => {
+/**
+ * Authentication Middleware
+ * Validates the access_token cookie and attaches the authenticated User to context
+ */
+export const authMiddleware = createMiddleware<EnvData>(async (c, next) => {
   // Get access_token from cookies
   const token = getCookie(c, 'access_token');
 

@@ -17,11 +17,9 @@ import { createInviteService } from '@/services/invite.service';
  * Invite Controller - Handles all Invite related endpoints
  */
 export class InviteController {
-  // POST /invites/create
   /**
+   * POST /invites/create
    * Create a new Invite
-   * @param c - Hono context
-   * @returns API response with invite data or error
    */
   async createInvite(c: Context) {
     try {
