@@ -1,6 +1,3 @@
-// TYPES //
-
-
 /**
  * Invite entity returned from the database
  */
@@ -16,7 +13,7 @@ export interface Invite {
 }
 
 /**
- * Enriched invite response returned to the client
+ * Invite response returned to the client
  */
 export interface InviteResponse {
   invite_id: string;
@@ -32,7 +29,7 @@ export interface InviteResponse {
 }
 
 /**
- * JSON object stored in the invite_fields column
+ * JSON object stored in the Invite_fields column
  */ 
 export interface InviteFields {
   organization_id?: string | null;
@@ -40,7 +37,7 @@ export interface InviteFields {
 }
 
 /**
- * Data required to insert a new invite row
+ * Data required to insert a new Invite row
  */
 export interface CreateInviteDto {
   auth_id: string | null;

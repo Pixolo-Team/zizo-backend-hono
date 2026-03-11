@@ -9,34 +9,32 @@ import { supabase } from '@/config/supabase';
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Fetch all pending invites for a user by phone_number.
- * Also enriches each invite with organization name and role name.
- * @param phoneNumber - Phone number of the authenticated user
- * @returns QueryResponseData containing an array of enriched invite responses
+ * Fetch all pending Invites for a User by phone_number.
  */
 export const getUserInvitesService = async (
   phoneNumber: string
 ): Promise<QueryResponseData<InviteResponse[]>> => {
   try {
-    // Fetch pending invites for the user by phone_number
+
+    // Fetch pending Invites for the User by phone_number
     const { data: invites, error: invitesError } = await supabase
       .from('invites')
       .select('*')
       .eq('phone_number', phoneNumber)
       .eq('is_pending', true);
 
-    // Database error while fetching invites
+    // Database error while fetching Invites
     if (invitesError) {
       logger.error('Failed to fetch invites:', invitesError);
       return { data: null, error: new Error(invitesError.message) };
     }
 
-    // No pending invites found
+    // No pending Invites found
     if (!invites || invites.length === 0) {
       return { data: [], error: null };
     }
 
-    // Enrich each invite with organization and role information
+    // Enrich each Invite with organization and role information
     const enrichedInvites: InviteResponse[] = await Promise.all(
       (invites as Invite[]).map(async (invite) => {
         const organizationId = invite.invite_fields?.organization_id ?? invite.organization_id;
@@ -90,7 +88,7 @@ export const createInviteService = async (
   inviteDto: CreateInviteDto
 ): Promise<QueryResponseData<CreateInviteResponse>> => {
   try {
-    // Insert the invite record into the Supabase table
+    // Insert the Invite record into the Supabase table
     const { data: inserted, error } = await supabase
       .from('invites')
       .insert(inviteDto)

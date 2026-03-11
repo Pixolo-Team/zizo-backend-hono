@@ -20,17 +20,18 @@ import { createInviteRequestSchema } from '@/validators/invite.validator';
  * Invite Controller - Handles all Invites related endpoints
  */
 export class InviteController {
+
   /**
    * POST /invites/get-user-invites
    * Fetch all pending Invites for a User
    */
   async getUserPendingInvites(c: Context) {
     try {
-      // Get the authenticated user from context (set by auth middleware)
+      // Get the authenticated User from context (set by auth middleware)
       const user = c.get('user') as { phone_number: string } | undefined;
       const phoneNumber = user?.phone_number;
 
-      // Return 401 if user is not authenticated or phone_number is missing
+      // Return 401 if User is not authenticated or phone_number is missing
       if (!phoneNumber) {
         return errorResponse(
           c,
@@ -53,7 +54,7 @@ export class InviteController {
         );
       }
 
-      // No pending invites found
+      // No pending Invites found
       if (!data || data.length === 0) {
         return errorResponse(
           c,
@@ -70,7 +71,6 @@ export class InviteController {
       return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
     }
   }
-
 
   /**
    * POST /invites/create
@@ -107,7 +107,7 @@ export class InviteController {
 
       const { phone_number, organization_id, membership_role_id, auth_id } = parsed.data;
 
-      // Call the service layer with the constructed invite DTO
+      // Call the service layer with the constructed Invite DTO
       const { data, error } = await createInviteService({
         auth_id: auth_id ?? null,
         phone_number,

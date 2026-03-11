@@ -12,7 +12,7 @@ export const getUserInvitesRequestSchema = z.object({
 });
 
 /**
- * Zod schema for a single invite item in the response
+ * Zod schema for a single Invite item in the response
  */
 export const InviteResponseSchema = z.object({
   invite_id: z.string(),

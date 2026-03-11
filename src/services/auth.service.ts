@@ -12,7 +12,7 @@ import { ERROR_MESSAGES } from '@/constants/api';
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Checks if a phone number exists in the users or invites table, then sends OTP
+ * Checks if a phone number exists in the Users or Invites table, then sends OTP
  */
 export const loginService = async (
   loginDto: LoginRequest
@@ -20,7 +20,7 @@ export const loginService = async (
   try {
     const { phone_number: phoneNumber } = loginDto;
 
-    // Check if phone number exists in the users table
+    // Check if phone number exists in the Users table
     const { data: userRecord, error: userError } = await supabase
       .from('users')
       .select('phone_number')
@@ -29,12 +29,12 @@ export const loginService = async (
       .maybeSingle();
 
     if (userError) {
-      // Unexpected database error querying users table
+      // Unexpected database error querying Users table
       logger.error('Error querying users table:', userError);
       return { data: null, error: new Error(userError.message) };
     }
 
-    // If not found in users, check the invites table
+    // If not found in Users, check the Invites table
     if (!userRecord) {
       const { data: inviteRecord, error: inviteError } = await supabase
         .from('invites')
@@ -43,7 +43,7 @@ export const loginService = async (
         .limit(1)
         .maybeSingle();
 
-      // Unexpected database error querying invites table
+      // Unexpected database error querying Invites table
       if (inviteError) {
         logger.error('Error querying invites table:', inviteError);
         return { data: null, error: new Error(inviteError.message) };
