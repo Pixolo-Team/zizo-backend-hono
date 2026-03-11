@@ -12,12 +12,16 @@ import { inviteController } from '@/controllers';
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
 
+// MIDDLEWARES //
+import { authMiddleware } from '@/middlewares/auth.middleware';
+
 // Route definition for creating a new Invite
 const createInviteRoute = createRoute({
   method: 'post',
   path: '/invites/create',
   tags: ['Invites'],
   summary: 'Create a new Invite for a User to join an Organization',
+  middleware: [authMiddleware] as const,
   request: {
     body: {
       content: {

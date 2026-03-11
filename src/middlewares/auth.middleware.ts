@@ -40,7 +40,7 @@ export const authMiddleware = createMiddleware<Env>(async (c, next) => {
     );
   }
 
-  // Attach authenticated user to request context
+  // Attach authenticated User to request context
   c.set('user', data.user);
 
   // Proceed to next middleware or route handler and return its result
