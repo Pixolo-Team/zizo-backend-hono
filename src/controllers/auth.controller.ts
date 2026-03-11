@@ -20,8 +20,6 @@ export class AuthController {
   /**
    * POST /auth/login
    * Initiate OTP login for the provided phone number
-   * @param c - Hono context
-   * @returns HTTP response
    */
   async login(c: Context) {
     try {

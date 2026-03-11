@@ -13,20 +13,18 @@ import { logger } from '@/common/utils/logger.util';
 
 /**
  * Checks if a phone number exists in the users or invites table, then sends OTP
- * @param loginDto - Login request data containing phone_number
- * @returns QueryResponseData with LoginResponse on success or error
  */
 export const loginService = async (
   loginDto: LoginRequest
 ): Promise<QueryResponseData<LoginResponse>> => {
   try {
-    const { phone_number } = loginDto;
+    const { phone_number: phoneNumber } = loginDto;
 
     // Check if phone number exists in the users table
     const { data: userRecord, error: userError } = await supabase
       .from('users')
       .select('phone_number')
-      .eq('phone_number', phone_number)
+      .eq('phone_number', phoneNumber)
       .limit(1)
       .maybeSingle();
 
@@ -41,12 +39,12 @@ export const loginService = async (
       const { data: inviteRecord, error: inviteError } = await supabase
         .from('invites')
         .select('phone_number')
-        .eq('phone_number', phone_number)
+        .eq('phone_number', phoneNumber)
         .limit(1)
         .maybeSingle();
 
+      // Unexpected database error querying invites table
       if (inviteError) {
-        // Unexpected database error querying invites table
         logger.error('Error querying invites table:', inviteError);
         return { data: null, error: new Error(inviteError.message) };
       }
@@ -59,7 +57,7 @@ export const loginService = async (
 
     // Phone number found — send OTP via Supabase Auth
     const { error: otpError } = await supabase.auth.signInWithOtp({
-      phone: phone_number,
+      phone: phoneNumber,
       options: {
         shouldCreateUser: true,
       },
