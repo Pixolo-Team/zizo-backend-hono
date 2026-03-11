@@ -1,6 +1,6 @@
 // TYPES //
 import type { QueryResponseData } from '@/common/types/query.response.type';
-import type { Invite, InviteResponse } from '@/models/invite.model';
+import type { Invite, CreateInviteDto, InviteResponse, CreateInviteResponse } from '@/models/invite.model';
 
 // CONFIG //
 import { supabase } from '@/config/supabase';
@@ -75,6 +75,48 @@ export const getUserInvitesService = async (
   } catch (err) {
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in getUserInvitesService:', err);
+    return {
+      data: null,
+      error: err instanceof Error ? err : new Error('Unexpected error'),
+    };
+  }
+};
+
+ 
+/**
+*  Insert a new Invite into the database
+*/   
+export const createInviteService = async (
+  inviteDto: CreateInviteDto
+): Promise<QueryResponseData<CreateInviteResponse>> => {
+  try {
+    // Insert the invite record into the Supabase table
+    const { data: inserted, error } = await supabase
+      .from('invites')
+      .insert(inviteDto)
+      .select()
+      .single();
+
+    // Database insert failed
+    if (error) {
+      logger.error('Failed to insert Invite:', error);
+      return { data: null, error: new Error(error.message) };
+    }
+
+    const invite = inserted as Invite;
+
+    // Return only the fields required by the response shape
+    return {
+      data: {
+        invite_id: invite.id,
+        auth_id: invite.auth_id,
+        phone_number: invite.phone_number,
+      },
+      error: null,
+    };
+  } catch (err) {
+    // Unexpected service error - request did not reach the database
+    logger.error('Unexpected error in createInviteService:', err);
     return {
       data: null,
       error: err instanceof Error ? err : new Error('Unexpected error'),

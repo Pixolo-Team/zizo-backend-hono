@@ -1,4 +1,4 @@
-// LIBRARIES //
+// MODULES //
 import { OpenAPIHono } from '@hono/zod-openapi';
 
 // UTILS //
@@ -20,5 +20,6 @@ export const openapiApp = new OpenAPIHono({
                 HTTP_STATUS.UNPROCESSABLE_ENTITY
             );
         }
+        return;
     },
 });
