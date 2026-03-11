@@ -1,6 +1,6 @@
 // MODULES //
 import { createMiddleware } from 'hono/factory';
-import { getCookie } from 'hono/cookie';
+
 
 // SUPABASE //
 import type { User } from '@supabase/supabase-js';
@@ -24,10 +24,23 @@ type EnvData = {
  * Validates the access_token cookie and attaches the authenticated User to context
  */
 export const authMiddleware = createMiddleware<EnvData>(async (c, next) => {
-  // Get access_token from cookies
-  const token = getCookie(c, 'access_token');
-
+  
+  const authHeader = c.req.header('Authorization');
+  // Get access_token from header
+  const token = authHeader?.replace('Bearer ', '');
+  console.log(authHeader);
+  
   // Check if token exists
+  if (!authHeader) {
+    return errorResponse(
+      c,
+      'Access token missing',
+      ERROR_MESSAGES.UNAUTHORIZED,
+      HTTP_STATUS.UNAUTHORIZED
+    );
+  }
+  
+
   if (!token) {
     return errorResponse(
       c,
@@ -39,7 +52,7 @@ export const authMiddleware = createMiddleware<EnvData>(async (c, next) => {
 
   // Validate token with Supabase auth
   const { data, error } = await supabase.auth.getUser(token);
-
+  
   // Handle invalid or expired token
   if (error || !data?.user) {
     return errorResponse(
