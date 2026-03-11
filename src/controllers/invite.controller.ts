@@ -54,7 +54,7 @@ export class InviteController {
       if (!data || data.length === 0) {
         return errorResponse(
           c,
-          '',
+          'No pending invites found for this user',
           'No pending invites found for this user',
           HTTP_STATUS.NOT_FOUND
         );
