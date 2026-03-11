@@ -7,9 +7,6 @@ import { successResponse, errorResponse } from '@/common/utils/api.util';
 // CONSTANTS //
 import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 
-// VALIDATORS //
-import { getUserInvitesRequestSchema } from '@/validators/invite.validator';
-
 // SERVICES //
 import { getUserInvitesService } from '@/services/invite.service';
 
@@ -21,24 +18,24 @@ export class InviteController {
    * POST /invites/get-user-invites
    * Fetch all pending Invites for a User
    */
-  async getPendingInvites(c: Context) {
+  async getUserPendingInvites(c: Context) {
     try {
-      // Parse and validate the request body
-      const body = await c.req.json();
-      const parsed = getUserInvitesRequestSchema.safeParse(body);
+      // Get the authenticated user from context (set by auth middleware)
+      const user = c.get('user') as { phone_number: string } | undefined;
+      const phoneNumber = user?.phone_number;
 
-      if (!parsed.success) {
-        // Return 422 for validation errors
+      // Return 401 if user is not authenticated or phone_number is missing
+      if (!phoneNumber) {
         return errorResponse(
           c,
-          parsed.error.message,
-          'Validation failed',
-          HTTP_STATUS.UNPROCESSABLE_ENTITY
+          ERROR_MESSAGES.UNAUTHORIZED,
+          ERROR_MESSAGES.UNAUTHORIZED,
+          HTTP_STATUS.UNAUTHORIZED
         );
       }
 
-      // Call the service layer with validated auth_id
-      const { data, error } = await getUserInvitesService(parsed.data.auth_id);
+      // Call the service layer with phone_number from auth context
+      const { data, error } = await getUserInvitesService(phoneNumber);
 
       // Database or unexpected error
       if (error) {

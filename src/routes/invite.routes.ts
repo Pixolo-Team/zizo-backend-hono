@@ -3,7 +3,7 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 
 // VALIDATORS //
-import { getUserInvitesRequestSchema, InviteResponseSchema } from '@/validators/invite.validator';
+import { InviteResponseSchema } from '@/validators/invite.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // CONTROLLER //
@@ -18,16 +18,6 @@ const GetUserInvitesRoute = createRoute({
   path: '/invites/get-user-invites',
   tags: ['Invites'],
   summary: 'Fetch all pending invites for a user',
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: getUserInvitesRequestSchema,
-        },
-      },
-      required: true,
-    },
-  },
   responses: {
     200: {
       description: 'Pending invites fetched successfully',
@@ -65,4 +55,4 @@ const GetUserInvitesRoute = createRoute({
 });
 
 // POST: /invites/get-user-invites
-openapiApp.openapi(GetUserInvitesRoute, (c) => inviteController.getPendingInvites(c));
+openapiApp.openapi(GetUserInvitesRoute, (c) => inviteController.getUserPendingInvites(c));

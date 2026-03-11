@@ -9,20 +9,20 @@ import { supabase } from '@/config/supabase';
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Fetch all pending invites for a user by auth_id.
+ * Fetch all pending invites for a user by phone_number.
  * Also enriches each invite with organization name and role name.
- * @param authId - Supabase Auth ID of the user
+ * @param phoneNumber - Phone number of the authenticated user
  * @returns QueryResponseData containing an array of enriched invite responses
  */
 export const getUserInvitesService = async (
-  authId: string
+  phoneNumber: string
 ): Promise<QueryResponseData<InviteResponse[]>> => {
   try {
-    // Fetch pending invites for the user
+    // Fetch pending invites for the user by phone_number
     const { data: invites, error: invitesError } = await supabase
       .from('invites')
       .select('*')
-      .eq('auth_id', authId)
+      .eq('phone_number', phoneNumber)
       .eq('is_pending', true);
 
     // Database error while fetching invites
