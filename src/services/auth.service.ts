@@ -27,6 +27,7 @@ export const loginService = async (
       .from('users')
       .select('phone_number')
       .eq('phone_number', phone_number)
+      .limit(1)
       .maybeSingle();
 
     if (userError) {
@@ -41,6 +42,7 @@ export const loginService = async (
         .from('invites')
         .select('phone_number')
         .eq('phone_number', phone_number)
+        .limit(1)
         .maybeSingle();
 
       if (inviteError) {
