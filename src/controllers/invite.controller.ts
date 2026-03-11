@@ -22,32 +22,47 @@ export class InviteController {
    */
   async createInvite(c: Context) {
     try {
-      // Parse and validate the request body
-      const body = await c.req.json();
+      // Parse the raw request body — throws if JSON is malformed
+      let body: unknown;
+      try {
+        body = await c.req.json();
+      } catch {
+        return errorResponse(
+          c,
+          'Malformed JSON in request body',
+          ERROR_MESSAGES.BAD_REQUEST,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
+
+      // Validate the parsed body against the schema
       const parsed = createInviteRequestSchema.safeParse(body);
 
       if (!parsed.success) {
-        // Return 422 for validation errors
+        const firstIssue = parsed.error.issues[0];
+        const fieldName = firstIssue?.path.join('.') ?? 'unknown';
+        const issueMessage = firstIssue?.message ?? 'Validation failed';
+
         return errorResponse(
           c,
-          parsed.error.message,
+          `Invalid field '${fieldName}': ${issueMessage}`,
           'Validation failed',
           HTTP_STATUS.UNPROCESSABLE_ENTITY
         );
       }
 
-    //  // Retrieve authenticated user ID from the request header set by Supabase auth
-    //   const invitedBy = c.req.header('x-user-id') ?? '';
+      //  // Retrieve authenticated user ID from the request header set by Supabase auth
+      //   const invitedBy = c.req.header('x-user-id') ?? '';
 
-    //   if (!invitedBy) {
-    //     // Return 422 if the user identity header is missing
-    //     return errorResponse(
-    //       c,
-    //       'Missing x-user-id header',
-    //       'Validation failed',
-    //       HTTP_STATUS.UNPROCESSABLE_ENTITY
-    //     );
-    //   }
+      //   if (!invitedBy) {
+      //     // Return 422 if the user identity header is missing
+      //     return errorResponse(
+      //       c,
+      //       'Missing x-user-id header',
+      //       'Validation failed',
+      //       HTTP_STATUS.UNPROCESSABLE_ENTITY
+      //     );
+      //   }
 
       const { phone_number, organization_id, membership_role_id, auth_id } = parsed.data;
 

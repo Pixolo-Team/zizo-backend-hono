@@ -37,6 +37,14 @@ const CreateInviteRoute = createRoute({
         },
       },
     },
+    400: {                                   // 👈 add this block
+      description: 'Bad Request - Malformed JSON',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
     422: {
       description: 'Validation Error',
       content: {
