@@ -16,8 +16,8 @@ export interface Invite {
  * JSON object stored in the invite_fields column
  */
 export interface InviteFields {
-  organization_id: string | null;
-  membership_role_id: string | null;
+  organization_id?: string | null;
+  membership_role_id?: string | null;
 }
 
 /**
@@ -27,10 +27,8 @@ export interface CreateInviteDto {
   auth_id: string | null;
   phone_number: string;
   invite_fields: InviteFields;
-  is_pending: boolean;
   invited_by: string | null;
   organization_id: string;
-  created_on: string;
 }
 
 /**

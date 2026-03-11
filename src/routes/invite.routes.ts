@@ -13,11 +13,11 @@ import { inviteController } from '@/controllers';
 import { openapiApp } from '@/routes/openapi.routes';
 
 // Route definition for creating a new Invite
-const CreateInviteRoute = createRoute({
+const createInviteRoute = createRoute({
   method: 'post',
   path: '/invites/create',
   tags: ['Invites'],
-  summary: 'Create a new Invite for a user to join an organization',
+  summary: 'Create a new Invite for a User to join an Organization',
   request: {
     body: {
       content: {
@@ -37,7 +37,7 @@ const CreateInviteRoute = createRoute({
         },
       },
     },
-    400: {                                   // 👈 add this block
+    400: {
       description: 'Bad Request - Malformed JSON',
       content: {
         'application/json': {
@@ -65,4 +65,4 @@ const CreateInviteRoute = createRoute({
 });
 
 // POST: /invites/create
-openapiApp.openapi(CreateInviteRoute, (c) => inviteController.createInvite(c));
+openapiApp.openapi(createInviteRoute, (c) => inviteController.createInvite(c));

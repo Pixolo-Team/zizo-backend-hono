@@ -17,8 +17,11 @@ import { createInviteService } from '@/services/invite.service';
  * Invite Controller - Handles all Invite related endpoints
  */
 export class InviteController {
+  // POST /invites/create
   /**
    * Create a new Invite
+   * @param c - Hono context
+   * @returns API response with invite data or error
    */
   async createInvite(c: Context) {
     try {
@@ -39,30 +42,15 @@ export class InviteController {
       const parsed = createInviteRequestSchema.safeParse(body);
 
       if (!parsed.success) {
-        const firstIssue = parsed.error.issues[0];
-        const fieldName = firstIssue?.path.join('.') ?? 'unknown';
-        const issueMessage = firstIssue?.message ?? 'Validation failed';
+        const errorMessage = parsed.error.issues[0]?.message ?? 'Validation failed';
 
         return errorResponse(
           c,
-          `Invalid field '${fieldName}': ${issueMessage}`,
+          errorMessage,
           'Validation failed',
           HTTP_STATUS.UNPROCESSABLE_ENTITY
         );
       }
-
-      //  // Retrieve authenticated user ID from the request header set by Supabase auth
-      //   const invitedBy = c.req.header('x-user-id') ?? '';
-
-      //   if (!invitedBy) {
-      //     // Return 422 if the user identity header is missing
-      //     return errorResponse(
-      //       c,
-      //       'Missing x-user-id header',
-      //       'Validation failed',
-      //       HTTP_STATUS.UNPROCESSABLE_ENTITY
-      //     );
-      //   }
 
       const { phone_number, organization_id, membership_role_id, auth_id } = parsed.data;
 
@@ -71,10 +59,8 @@ export class InviteController {
         auth_id: auth_id ?? null,
         phone_number,
         invite_fields: { organization_id, membership_role_id },
-        is_pending: true,
         invited_by: null,
         organization_id,
-        created_on: new Date().toISOString(),
       });
 
       // Database insert failed
