@@ -1,5 +1,10 @@
+// MODULES //
 import { OpenAPIHono } from '@hono/zod-openapi';
+
+// UTILS //
 import { errorResponse } from '@/common/utils/api.util';
+
+// CONSTANTS //
 import { HTTP_STATUS } from '@/constants/api';
 
 /**
