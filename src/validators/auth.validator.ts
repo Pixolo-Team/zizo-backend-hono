@@ -16,6 +16,17 @@ export const verifyOtpRequestSchema = z.object({
 });
 
 /**
+ * Zod Schema for request body of Login API Endpoint
+ */
+export const loginRequestSchema = z.object({
+  phone_number: z
+    .string()
+    .min(8, 'Phone number must be at least 8 digits')
+    .max(15, 'Phone number cannot exceed 15 digits')
+    .refine(isValidPhoneNumber, 'Invalid phone number format'),
+});
+
+/**
  * Zod Schema for user object in Verify OTP response
  */
 export const verifyOtpUserSchema = z.record(z.string(), z.unknown());
@@ -31,4 +42,11 @@ export const verifyOtpSessionSchema = z.record(z.string(), z.unknown());
 export const verifyOtpResponseSchema = z.object({
   user: verifyOtpUserSchema.nullable(),
   session: verifyOtpSessionSchema.nullable(),
+});
+
+/**
+ * Zod Schema for the response of Login API Endpoint
+ */
+export const loginResponseSchema = z.object({
+  message: z.string(),
 });

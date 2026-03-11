@@ -1,6 +1,8 @@
 // SUPABASE //
 import type { Session, User } from '@supabase/supabase-js';
 
+// --- VERIFY OTP ---
+
 /**
  * Request body for the Verify OTP endpoint
  */
@@ -15,4 +17,20 @@ export interface VerifyOtpRequest {
 export interface VerifyOtpResponse {
   user: User | null;
   session: Session | null;
+}
+
+// --- LOGIN ---
+
+/**
+ * Login request data
+ */
+export interface LoginRequest {
+  phone_number: string;
+}
+
+/**
+ * Login response data
+ */
+export interface LoginResponse {
+  message: string;
 }
