@@ -19,7 +19,8 @@ import { checkUserByPhoneService } from '@/services/auth.service';
 export class AuthController {
 
   /**
-   * Check whether a user exists in Supabase Auth by phone number
+   * Check whether a user exists in the Users table by phone number
+   * POST: /users/check-by-phone
    */
   async checkUserByPhone(c: Context) {
     try {
@@ -29,10 +30,10 @@ export class AuthController {
 
       // Return 422 if validation fails
       if (!parsed.success) {
-        const firstError = parsed.error.issues[0]?.message ?? 'Validation failed';
+        const parseError = parsed.error.issues[0]?.message ?? 'Validation failed';
         return errorResponse(
           c,
-          firstError,
+          parseError,
           'Validation failed',
           HTTP_STATUS.UNPROCESSABLE_ENTITY
         );

@@ -25,11 +25,11 @@ export const checkUserByPhoneService = async (
 
     // Database query failed
     if (error) {
-      logger.error('Failed to query users table:', error);
+      logger.error('Failed to query Users table:', error);
       return { data: null, error: new Error(error.message) };
     }
 
-    // User does not exist in the users table
+    // User does not exist in the Users table
     if (!data) {
       return {
         data: { exists: false },
