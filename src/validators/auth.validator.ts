@@ -10,7 +10,7 @@ export const verifyOtpRequestSchema = z.object({
   phone_number: z
     .string()
     .min(8, 'Phone number must be at least 8 digits')
-    .max(15, 'Phone number cannot exceed 15 digits')
+    .max(12, 'Phone number cannot exceed 12 digits')
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
   otp: z.string().length(6, 'OTP must be exactly 6 digits'),
 });
@@ -22,7 +22,7 @@ export const loginRequestSchema = z.object({
   phone_number: z
     .string()
     .min(8, 'Phone number must be at least 8 digits')
-    .max(15, 'Phone number cannot exceed 15 digits')
+    .max(12, 'Phone number cannot exceed 12 digits')
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
 });
 
