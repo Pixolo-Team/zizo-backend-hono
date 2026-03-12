@@ -28,11 +28,11 @@ export class InviteController {
   async getUserPendingInvites(c: Context) {
     try {
       // Get the authenticated User from context (set by auth middleware)
-      const user = c.get('user') as { phone_number: string } | undefined;
-      const phoneNumber = user?.phone_number;
-
+      const user = c.get('user') as { id: string } | undefined;
+      const auth_id = user?.id;
+      
       // Return 401 if User is not authenticated or phone_number is missing
-      if (!phoneNumber) {
+      if (!auth_id) {
         return errorResponse(
           c,
           ERROR_MESSAGES.UNAUTHORIZED,
@@ -42,7 +42,7 @@ export class InviteController {
       }
 
       // Call the service layer with phone_number from auth context
-      const { data, error } = await getUserInvitesService(phoneNumber);
+      const { data, error } = await getUserInvitesService(auth_id);
 
       // Database or unexpected error
       if (error) {

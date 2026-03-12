@@ -3,7 +3,7 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 
 // VALIDATORS //
-import { InviteResponseSchema, createInviteRequestSchema, InviteSchema } from '@/validators/invite.validator';
+import { InviteResponseSchema, createInviteRequestSchema, InviteSchema, getUserInvitesRequestSchema } from '@/validators/invite.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // CONTROLLER //
@@ -21,6 +21,17 @@ const GetUserInvitesRoute = createRoute({
   path: '/invites/get-user-invites',
   tags: ['Invites'],
   summary: 'Fetch all pending invites for a user',
+  middleware: [authMiddleware] as const,
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: getUserInvitesRequestSchema,
+        },
+      },
+      required: true,
+    },
+  },
   responses: {
     200: {
       description: 'Pending invites fetched successfully',
