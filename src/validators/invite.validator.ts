@@ -15,6 +15,7 @@ export const createInviteRequestSchema = z.object({
   organization_id: z.string().min(1, 'Organization ID is required'),
   membership_role_id: z.string().min(1, 'Membership role ID is required'),
   auth_id: z.preprocess((val) => (val === '' ? null : val), z.string().nullable().optional()),
+  
 });
 
 /**
