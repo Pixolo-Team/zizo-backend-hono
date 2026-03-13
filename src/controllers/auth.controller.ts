@@ -8,21 +8,22 @@ import { successResponse, errorResponse } from '@/common/utils/api.util';
 import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 
 // VALIDATORS //
-import { loginRequestSchema } from '@/validators/auth.validator';
+import { verifyOtpRequestSchema, loginRequestSchema } from '@/validators/auth.validator';
 
 // SERVICES //
-import { loginService } from '@/services/auth.service';
+import { verifyOtpService, loginService } from '@/services/auth.service';
 
 /**
- * Auth Controller - Handles authentication related endpoints
+ * Auth Controller - Handles all Auth related endpoints
  */
 export class AuthController {
-  /**
-   * POST /auth/login
-   * Initiate OTP login for the provided phone number
+  
+  /** POST /auth/verify-otp
+   * Verify a User's OTP using Supabase Auth
    */
-  async login(c: Context) {
+  async verifyOtp(c: Context) {
     try {
+
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
@@ -37,6 +38,70 @@ export class AuthController {
       }
 
       // Validate the parsed body against the schema
+      const parsed = verifyOtpRequestSchema.safeParse(body);
+
+      if (!parsed.success) {
+        
+        // Extract first validation error message
+        const errorMessage = parsed.error.issues[0]?.message ?? 'Validation failed';
+
+        return errorResponse(
+          c,
+          errorMessage,
+          'Validation failed',
+          HTTP_STATUS.UNPROCESSABLE_ENTITY
+        );
+      }
+
+      const { phone_number: phoneNumber, otp } = parsed.data;
+
+      // Call the service layer to verify OTP
+      const { data, error } = await verifyOtpService(phoneNumber, otp);
+
+      // OTP verification failed — invalid or expired OTP
+      if (error) {
+        return errorResponse(
+          c,
+          'OTP verification failed',
+          'Invalid or expired OTP',
+          HTTP_STATUS.UNAUTHORIZED
+        );
+      }
+
+      return successResponse(c, data, 'OTP verified successfully', HTTP_STATUS.OK);
+    } catch (err) {
+
+      // Any other unexpected errors
+      const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
+      return errorResponse(
+        c,
+        message,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  /**
+   * POST /auth/login
+   * Initiate OTP login for the provided phone number
+   */
+  async login(c: Context) {
+    try {
+
+      // Parse the raw request body — throws if JSON is malformed
+      let body: unknown;
+      try {
+        body = await c.req.json();
+      } catch {
+        return errorResponse(
+          c,
+          'Malformed JSON in request body',
+          ERROR_MESSAGES.BAD_REQUEST,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
+
       const parsed = loginRequestSchema.safeParse(body);
 
       if (!parsed.success) {
