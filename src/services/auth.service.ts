@@ -12,16 +12,14 @@ import { ERROR_MESSAGES } from '@/constants/api';
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Verify a user's OTP using Supabase Auth
- * @param phone_number - The phone number used for OTP authentication
- * @param otp - The OTP received by the user
- * @returns QueryResponseData containing user and session on success, or an error
+ * Verify a User's OTP using Supabase Auth
  */
 export const verifyOtpService = async (
   phone_number: string,
   otp: string
 ): Promise<QueryResponseData<VerifyOtpResponse>> => {
   try {
+
     // Call Supabase OTP verification
     const { data, error } = await supabase.auth.verifyOtp({
       phone: phone_number,
@@ -44,6 +42,7 @@ export const verifyOtpService = async (
       error: null,
     };
   } catch (err) {
+
     // Unexpected service error
     logger.error('Unexpected error in verifyOtpService:', err);
     return {
@@ -54,7 +53,7 @@ export const verifyOtpService = async (
 };
 
 /**
- * Checks if a phone number exists in the users or invites table, then sends OTP
+ * Checks if a phone number exists in the Users or Invites table, then sends OTP
  */
 export const loginService = async (
   loginDto: LoginRequest
@@ -71,12 +70,13 @@ export const loginService = async (
       .maybeSingle();
 
     if (userError) {
-      // Unexpected database error querying users table
+
+      // Unexpected database error querying Users table
       logger.error('Error querying users table:', userError);
       return { data: null, error: new Error(userError.message) };
     }
 
-    // If not found in users, check the invites table
+    // If not found in users, check the Invites table
     if (!userRecord) {
       const { data: inviteRecord, error: inviteError } = await supabase
         .from('invites')
@@ -85,7 +85,7 @@ export const loginService = async (
         .limit(1)
         .maybeSingle();
 
-      // Unexpected database error querying invites table
+      // Unexpected database error querying Invites table
       if (inviteError) {
         logger.error('Error querying invites table:', inviteError);
         return { data: null, error: new Error(inviteError.message) };
@@ -106,6 +106,7 @@ export const loginService = async (
     });
 
     if (otpError) {
+
       // OTP dispatch failed
       logger.error('Error sending OTP:', otpError);
       return { data: null, error: new Error(otpError.message) };
@@ -113,6 +114,7 @@ export const loginService = async (
 
     return { data: { message: 'OTP sent successfully' }, error: null };
   } catch (err) {
+    
     // Unexpected service error — request did not reach the database
     logger.error('Unexpected error in loginService:', err);
     return {

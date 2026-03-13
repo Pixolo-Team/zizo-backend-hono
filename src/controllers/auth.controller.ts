@@ -17,14 +17,13 @@ import { verifyOtpService, loginService } from '@/services/auth.service';
  * Auth Controller - Handles all Auth related endpoints
  */
 export class AuthController {
-  /**
-   * POST /auth/verify-otp
+  
+  /** POST /auth/verify-otp
    * Verify a user's OTP using Supabase Auth
-   * @param c - Hono context
-   * @returns JSON response with user and session on success
    */
   async verifyOtp(c: Context) {
     try {
+
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
@@ -42,6 +41,7 @@ export class AuthController {
       const parsed = verifyOtpRequestSchema.safeParse(body);
 
       if (!parsed.success) {
+        
         // Extract first validation error message
         const errorMessage = parsed.error.issues[0]?.message ?? 'Validation failed';
 
@@ -70,6 +70,7 @@ export class AuthController {
 
       return successResponse(c, data, 'OTP verified successfully', HTTP_STATUS.OK);
     } catch (err) {
+
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(
@@ -87,6 +88,7 @@ export class AuthController {
    */
   async login(c: Context) {
     try {
+
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
