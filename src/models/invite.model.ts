@@ -13,19 +13,18 @@ export interface Invite {
 }
 
 /**
- * Invite response returned to the client
+ * Invite response returned to the client (with joined organization and role data)
  */
 export interface InviteResponse {
-  invite_id: string;
+  id: string;
   phone_number: string;
-  organization_id: string;
-  organization_name: string;
-  role_id: string;
-  role_name: string;
-  invite_fields: InviteFields;
+  invite_fields: InviteFields | null;
   is_pending: boolean;
   invited_by: string;
+  organization_id: string;
   created_on: string;
+  organizations: { name: string } | null;
+  membership_roles: { role_name: string } | null;
 }
 
 /**

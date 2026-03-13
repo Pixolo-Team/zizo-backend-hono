@@ -1,6 +1,6 @@
 // TYPES //
 import type { QueryResponseData } from '@/common/types/query.response.type';
-import type { InviteFields, CreateInviteDto, InviteResponse, CreateInviteResponse } from '@/models/invite.model';
+import type { Invite, InviteFields, CreateInviteDto, InviteResponse, CreateInviteResponse } from '@/models/invite.model';
 
 // CONFIG //
 import { supabase } from '@/config/supabase';
@@ -44,31 +44,8 @@ export const getUserInvitesService = async (
       return { data: [], error: null };
     }
 
-    // Map each Invite to the response shape
-    const enrichedInvites: InviteResponse[] = invites.map((invite) => {
-      const inviteFields = invite.invite_fields as InviteFields | null;
-      const organizationId = inviteFields?.organization_id ?? invite.organization_id;
-      const roleId = inviteFields?.membership_role_id ?? '';
-
-      // Extract joined organization and role names
-      const orgName = (invite.organizations as { name: string } | null)?.name ?? '';
-      const roleName = (invite.membership_roles as { role_name: string } | null)?.role_name ?? '';
-
-      return {
-        invite_id: invite.id,
-        phone_number: invite.phone_number,
-        organization_id: organizationId,
-        organization_name: orgName,
-        role_id: roleId,
-        role_name: roleName,
-        invite_fields: inviteFields ?? {},
-        is_pending: invite.is_pending,
-        invited_by: invite.invited_by ?? '',
-        created_on: invite.created_on,
-      };
-    });
-
-    return { data: enrichedInvites, error: null };
+    // Return enriched Invites directly from the join query
+    return { data: invites as unknown as InviteResponse[], error: null };
   } catch (err) {
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in getUserInvitesService:', err);

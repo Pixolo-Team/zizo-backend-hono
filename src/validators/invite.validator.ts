@@ -8,22 +8,21 @@ import { isValidPhoneNumber } from '@/common/utils/phone.util';
  * Zod schema for a single Invite item in the response
  */
 export const InviteResponseSchema = z.object({
-  invite_id: z.string(),
+  id: z.string(),
   phone_number: z.string(),
-  organization_id: z.string(),
-  organization_name: z.string(),
-  role_id: z.string(),
-  role_name: z.string(),
   invite_fields: z
     .object({
-      organization_id: z.string(),
-      membership_role_id: z.string(),
+      organization_id: z.string().nullable().optional(),
+      membership_role_id: z.string().nullable().optional(),
     })
     .nullable()
     .optional(),
   is_pending: z.boolean(),
   invited_by: z.string(),
+  organization_id: z.string(),
   created_on: z.string(),
+  organizations: z.object({ name: z.string() }).nullable().optional(),
+  membership_roles: z.object({ role_name: z.string() }).nullable().optional(),
 })
 
 /**
