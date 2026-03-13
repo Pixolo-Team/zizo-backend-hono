@@ -77,6 +77,10 @@ export class InviteController {
    */
   async createInvite(c: Context) {
     try {
+      
+      // Get the authenticated user from middleware context
+      const user = c.get('user');
+      
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
@@ -106,12 +110,12 @@ export class InviteController {
 
       const { phone_number, organization_id, membership_role_id, auth_id } = parsed.data;
 
-      // Call the service layer with the constructed Invite DTO
+      // Call the service layer with the constructed invite DTO
       const { data, error } = await createInviteService({
         auth_id: auth_id ?? null,
         phone_number,
         invite_fields: { organization_id, membership_role_id },
-        invited_by: null,
+        invited_by: user.id,
         organization_id,
       });
 
