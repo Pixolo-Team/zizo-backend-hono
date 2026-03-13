@@ -21,10 +21,13 @@ export const InviteResponseSchema = z.object({
   organization_name: z.string(),
   role_id: z.string(),
   role_name: z.string(),
-  invite_fields: z.object({
-    organization_id: z.string().nullable().optional(),
-    membership_role_id: z.string().nullable().optional(),
-  }),
+  invite_fields: z
+    .object({
+      organization_id: z.string(),
+      membership_role_id: z.string(),
+    })
+    .nullable()
+    .optional(),
   is_pending: z.boolean(),
   invited_by: z.string().nullable(),
   created_on: z.string(),
