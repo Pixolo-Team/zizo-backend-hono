@@ -54,7 +54,6 @@ export class InviteController {
 
       // Get the authenticated user from middleware context
       const user = c.get('user');
-      console.log(user.id);
 
       // Call the service layer with the constructed invite DTO
       const { data, error } = await createInviteService({
