@@ -5,13 +5,6 @@ import { z } from 'zod';
 import { isValidPhoneNumber } from '@/common/utils/phone.util';
 
 /**
- * Zod schema for the POST /invites/get-user-invites request body
- */
-export const getUserInvitesRequestSchema = z.object({
-  auth_id: z.string().min(1, 'auth_id is required'),
-});
-
-/**
  * Zod schema for a single Invite item in the response
  */
 export const InviteResponseSchema = z.object({
@@ -29,7 +22,7 @@ export const InviteResponseSchema = z.object({
     .nullable()
     .optional(),
   is_pending: z.boolean(),
-  invited_by: z.string().nullable(),
+  invited_by: z.string(),
   created_on: z.string(),
 })
 

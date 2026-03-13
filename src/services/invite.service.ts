@@ -1,6 +1,6 @@
 // TYPES //
 import type { QueryResponseData } from '@/common/types/query.response.type';
-import type { Invite, CreateInviteDto, InviteResponse, CreateInviteResponse } from '@/models/invite.model';
+import type { InviteFields, CreateInviteDto, InviteResponse, CreateInviteResponse } from '@/models/invite.model';
 
 // CONFIG //
 import { supabase } from '@/config/supabase';
@@ -16,10 +16,20 @@ export const getUserInvitesService = async (
 ): Promise<QueryResponseData<InviteResponse[]>> => {
   try {
 
-    // Fetch pending Invites for the User by phone_number
+    // Fetch pending Invites with organization and role data in a single query
     const { data: invites, error: invitesError } = await supabase
       .from('invites')
-      .select('*')
+      .select(`
+        id,
+        phone_number,
+        invite_fields,
+        is_pending,
+        invited_by,
+        organization_id,
+        created_on,
+        organizations ( name ),
+        membership_roles ( role_name )
+      `)
       .eq('phone_number', phoneNumber)
       .eq('is_pending', true);
 
@@ -34,40 +44,29 @@ export const getUserInvitesService = async (
       return { data: [], error: null };
     }
 
-    // Enrich each Invite with organization and role information
-    const enrichedInvites: InviteResponse[] = await Promise.all(
-      (invites as Invite[]).map(async (invite) => {
-        const organizationId = invite.invite_fields?.organization_id ?? invite.organization_id;
-        const roleId = invite.invite_fields?.membership_role_id ?? '';
+    // Map each Invite to the response shape
+    const enrichedInvites: InviteResponse[] = invites.map((invite) => {
+      const inviteFields = invite.invite_fields as InviteFields | null;
+      const organizationId = inviteFields?.organization_id ?? invite.organization_id;
+      const roleId = inviteFields?.membership_role_id ?? '';
 
-        // Fetch organization name
-        const { data: orgData } = await supabase
-          .from('organizations')
-          .select('name')
-          .eq('id', organizationId)
-          .single();
+      // Extract joined organization and role names
+      const orgName = (invite.organizations as { name: string } | null)?.name ?? '';
+      const roleName = (invite.membership_roles as { role_name: string } | null)?.role_name ?? '';
 
-        // Fetch role name
-        const { data: roleData } = await supabase
-          .from('membership_roles')
-          .select('role_name')
-          .eq('id', roleId)
-          .single();
-
-        return {
-          invite_id: invite.id,
-          phone_number: invite.phone_number,
-          organization_id: organizationId,
-          organization_name: orgData?.name ?? '',
-          role_id: roleId,
-          role_name: roleData?.role_name ?? '',
-          invite_fields: invite.invite_fields,
-          is_pending: invite.is_pending,
-          invited_by: invite.invited_by,
-          created_on: invite.created_on,
-        };
-      })
-    );
+      return {
+        invite_id: invite.id,
+        phone_number: invite.phone_number,
+        organization_id: organizationId,
+        organization_name: orgName,
+        role_id: roleId,
+        role_name: roleName,
+        invite_fields: inviteFields ?? {},
+        is_pending: invite.is_pending,
+        invited_by: invite.invited_by ?? '',
+        created_on: invite.created_on,
+      };
+    });
 
     return { data: enrichedInvites, error: null };
   } catch (err) {

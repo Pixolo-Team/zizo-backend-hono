@@ -24,7 +24,7 @@ export interface InviteResponse {
   role_name: string;
   invite_fields: InviteFields;
   is_pending: boolean;
-  invited_by: string | null;
+  invited_by: string;
   created_on: string;
 }
 
