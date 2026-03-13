@@ -22,7 +22,7 @@ const verifyOtpRoute = createRoute({
   method: 'post',
   path: '/auth/verify-otp',
   tags: ['Auth'],
-  summary: 'Verify OTP and authenticate user',
+  summary: 'Verify OTP and authenticate User',
   request: {
     body: {
       content: {

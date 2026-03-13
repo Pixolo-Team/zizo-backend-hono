@@ -15,14 +15,14 @@ import { logger } from '@/common/utils/logger.util';
  * Verify a User's OTP using Supabase Auth
  */
 export const verifyOtpService = async (
-  phone_number: string,
+  phoneNumber: string,
   otp: string
 ): Promise<QueryResponseData<VerifyOtpResponse>> => {
   try {
 
     // Call Supabase OTP verification
     const { data, error } = await supabase.auth.verifyOtp({
-      phone: phone_number,
+      phone: phoneNumber,
       token: otp,
       type: 'sms',
     });
@@ -76,7 +76,7 @@ export const loginService = async (
       return { data: null, error: new Error(userError.message) };
     }
 
-    // If not found in users, check the Invites table
+    // If not found in Users, check the Invites table
     if (!userRecord) {
       const { data: inviteRecord, error: inviteError } = await supabase
         .from('invites')

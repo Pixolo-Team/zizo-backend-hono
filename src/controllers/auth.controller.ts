@@ -19,7 +19,7 @@ import { verifyOtpService, loginService } from '@/services/auth.service';
 export class AuthController {
   
   /** POST /auth/verify-otp
-   * Verify a user's OTP using Supabase Auth
+   * Verify a User's OTP using Supabase Auth
    */
   async verifyOtp(c: Context) {
     try {
@@ -53,10 +53,10 @@ export class AuthController {
         );
       }
 
-      const { phone_number, otp } = parsed.data;
+      const { phone_number: phoneNumber, otp } = parsed.data;
 
       // Call the service layer to verify OTP
-      const { data, error } = await verifyOtpService(phone_number, otp);
+      const { data, error } = await verifyOtpService(phoneNumber, otp);
 
       // OTP verification failed — invalid or expired OTP
       if (error) {
