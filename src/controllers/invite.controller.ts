@@ -8,8 +8,7 @@ import { successResponse, errorResponse } from '@/common/utils/api.util';
 import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 
 // SERVICES //
-import { getUserInvitesService } from '@/services/invite.service';
-import { createInviteService } from '@/services/invite.service';
+import { getUserInvitesService, createInviteService } from '@/services/invite.service';
 
 
 // VALIDATORS //
@@ -28,11 +27,11 @@ export class InviteController {
   async getUserPendingInvites(c: Context) {
     try {
       // Get the authenticated User from context (set by auth middleware)
-      const user = c.get('user') as { id: string } | undefined;
-      const auth_id = user?.id;
+      const user = c.get('user');
+      const phoneNumber = user?.phone_number;
       
       // Return 401 if User is not authenticated or phone_number is missing
-      if (!auth_id) {
+      if (!phoneNumber) {
         return errorResponse(
           c,
           ERROR_MESSAGES.UNAUTHORIZED,
@@ -42,13 +41,13 @@ export class InviteController {
       }
 
       // Call the service layer with phone_number from auth context
-      const { data, error } = await getUserInvitesService(auth_id);
+      const { data, error } = await getUserInvitesService(phoneNumber);
 
       // Database or unexpected error
       if (error) {
         return errorResponse(
           c,
-          'Failed to fetch invites',
+          'Failed to fetch Invites',
           ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
           HTTP_STATUS.INTERNAL_SERVER_ERROR
         );
@@ -58,13 +57,13 @@ export class InviteController {
       if (!data || data.length === 0) {
         return errorResponse(
           c,
-          'No pending invites found for this user',
-          'No pending invites found for this user',
+          'No pending Invites found for this User',
+          'No pending Invites found for this User',
           HTTP_STATUS.NOT_FOUND
         );
       }
 
-      return successResponse(c, data, 'Pending invites fetched successfully', HTTP_STATUS.OK);
+      return successResponse(c, data, 'Pending Invites fetched successfully', HTTP_STATUS.OK);
     } catch (err) {
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
