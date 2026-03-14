@@ -1,6 +1,7 @@
 // TYPES //
 import type { QueryResponseData } from '@/common/types/query.response.type';
-import type { Invite, InviteFields, CreateInviteDto, InviteResponse, CreateInviteResponse } from '@/models/invite.model';
+import type { Invite, InviteFields, CreateInviteDto, CreateInviteResponse } from '@/models/invite.model';
+import type { InviteResponse } from '@/validators/invite.validator';
 
 // CONFIG //
 import { supabase } from '@/config/supabase';
@@ -27,8 +28,8 @@ export const getUserInvitesService = async (
         invited_by,
         organization_id,
         created_on,
-        organizations ( name ),
-        membership_roles ( role_name )
+        organization:organizations ( name ),
+        membership_role:membership_roles ( role_name )
       `)
       .eq('phone_number', phoneNumber)
       .eq('is_pending', true);

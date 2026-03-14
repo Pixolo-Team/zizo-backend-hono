@@ -13,21 +13,6 @@ export interface Invite {
 }
 
 /**
- * Invite response returned to the client (with joined organization and role data)
- */
-export interface InviteResponse {
-  id: string;
-  phone_number: string;
-  invite_fields: InviteFields | null;
-  is_pending: boolean;
-  invited_by: string;
-  organization_id: string;
-  created_on: string;
-  organizations: { name: string } | null;
-  membership_roles: { role_name: string } | null;
-}
-
-/**
  * JSON object stored in the Invite_fields column
  */ 
 export interface InviteFields {

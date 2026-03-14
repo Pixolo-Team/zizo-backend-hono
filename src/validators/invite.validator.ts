@@ -21,9 +21,14 @@ export const InviteResponseSchema = z.object({
   invited_by: z.string(),
   organization_id: z.string(),
   created_on: z.string(),
-  organizations: z.object({ name: z.string() }).nullable().optional(),
-  membership_roles: z.object({ role_name: z.string() }).nullable().optional(),
+  organization: z.object({ name: z.string() }).nullable().optional(),
+  membership_role: z.object({ role_name: z.string() }).nullable().optional(),
 })
+
+/**
+ * TypeScript type inferred from the InviteResponseSchema
+ */
+export type InviteResponse = z.infer<typeof InviteResponseSchema>;
 
 /**
  * Zod Schema for request body of Create Invite API Endpoint
