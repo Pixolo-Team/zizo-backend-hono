@@ -55,7 +55,7 @@ export const getUserInvitesService = async (
     // Fetch role names for the extracted role IDs
     let roles: { id: number; role_name: string }[] = [];
     if (roleIds.length > 0) {
-      const { data: rolesData, error: rolesError } = await supabase
+      const { data: roleItems, error: rolesError } = await supabase
         .from('member_roles')
         .select('id, name')
         .in('id', roleIds);
@@ -67,7 +67,7 @@ export const getUserInvitesService = async (
       }
 
       // Default to empty array if no roles found, to safely use .find() during merge
-      roles = rolesData ?? [];
+      roles = roleItems ?? [];
     }
 
     // Merge role data into each Invite
