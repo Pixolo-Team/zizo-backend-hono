@@ -7,9 +7,6 @@ import { errorResponse } from '@/common/utils/api.util';
 // CONSTANTS //
 import { HTTP_STATUS } from '@/constants/api';
 
-/**
- * OpenAPI Hono application instance with a global defaultHook for validation errors
- */
 export const openapiApp = new OpenAPIHono({
   defaultHook: (result, c) => {
     if (!result.success) {

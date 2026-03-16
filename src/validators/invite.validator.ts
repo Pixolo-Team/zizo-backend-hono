@@ -1,7 +1,34 @@
+// ZOD
 import { z } from 'zod';
 
 // UTILS //
 import { isValidPhoneNumber } from '@/common/utils/phone.util';
+
+/**
+ * Zod schema for a single Invite item in the response
+ */
+export const InviteResponseSchema = z.object({
+  id: z.string(),
+  phone_number: z.string(),
+  invite_fields: z
+    .object({
+      organization_id: z.string().nullable().optional(),
+      member_role_id: z.string().nullable().optional(),
+    })
+    .nullable()
+    .optional(),
+  is_pending: z.boolean(),
+  invited_by: z.string(),
+  organization_id: z.string(),
+  created_on: z.string(),
+  organization: z.object({ name: z.string() }).nullable().optional(),
+  member_role: z.object({ role_name: z.string() }).nullable().optional(),
+})
+
+/**
+ * TypeScript type inferred from the InviteResponseSchema
+ */
+export type InviteResponse = z.infer<typeof InviteResponseSchema>;
 
 /**
  * Zod Schema for request body of Create Invite API Endpoint

@@ -61,7 +61,7 @@ export const loginService = async (
   try {
     const { phone_number: phoneNumber } = loginDto;
 
-    // Check if phone number exists in the users table
+    // Check if phone number exists in the Users table
     const { data: userRecord, error: userError } = await supabase
       .from('users')
       .select('phone_number')

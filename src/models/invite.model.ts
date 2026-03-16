@@ -13,15 +13,15 @@ export interface Invite {
 }
 
 /**
- * JSON object stored in the invite_fields column
- */
+ * JSON object stored in the Invite_fields column
+ */ 
 export interface InviteFields {
   organization_id?: string | null;
   membership_role_id?: string | null;
 }
 
 /**
- * Data required to insert a new invite row
+ * Data required to insert a new Invite row
  */
 export interface CreateInviteDto {
   auth_id: string | null;
@@ -32,9 +32,9 @@ export interface CreateInviteDto {
 }
 
 /**
- * Subset of Invite data returned in the API response
+ * Subset of Invite data returned in the API response on creation
  */
-export interface InviteResponse {
+export interface CreateInviteResponse {
   invite_id: string;
   auth_id: string | null;
   phone_number: string;
