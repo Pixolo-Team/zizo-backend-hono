@@ -1,6 +1,6 @@
 // TYPES //
 import type { QueryResponseData } from '@/common/types/query.response.type';
-import type { Invite, InviteFields, CreateInviteDto, CreateInviteResponse } from '@/models/invite.model';
+import type { Invite, CreateInviteDto, CreateInviteResponse } from '@/models/invite.model';
 import type { InviteResponse } from '@/validators/invite.validator';
 
 // CONFIG //
@@ -66,6 +66,7 @@ export const getUserInvitesService = async (
         return { data: null, error: new Error(rolesError.message) };
       }
 
+      // Default to empty array if no roles found, to safely use .find() during merge
       roles = rolesData ?? [];
     }
 
