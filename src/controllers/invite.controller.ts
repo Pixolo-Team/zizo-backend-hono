@@ -28,7 +28,8 @@ export class InviteController {
     try {
       // Get the authenticated User from context (set by auth middleware)
       const user = c.get('user');
-      const phoneNumber = user?.phone_number;
+      const phoneNumber = user?.phone;
+      
       
       // Return 401 if User is not authenticated or phone_number is missing
       if (!phoneNumber) {
@@ -42,6 +43,7 @@ export class InviteController {
 
       // Call the service layer with phone_number from auth context
       const { data, error } = await getUserInvitesService(phoneNumber);
+      
 
       // Database or unexpected error
       if (error) {

@@ -16,8 +16,7 @@ export const getUserInvitesService = async (
   phoneNumber: string
 ): Promise<QueryResponseData<InviteResponse[]>> => {
   try {
-
-    // Fetch pending Invites with organization and role data in a single query
+    // Fetch pending Invites with Organization data
     const { data: invites, error: invitesError } = await supabase
       .from('invites')
       .select(`
@@ -28,15 +27,14 @@ export const getUserInvitesService = async (
         invited_by,
         organization_id,
         created_on,
-        organization:organizations ( name ),
-        membership_role:membership_roles ( role_name )
+        organization:organizations ( name )
       `)
       .eq('phone_number', phoneNumber)
       .eq('is_pending', true);
 
     // Database error while fetching Invites
     if (invitesError) {
-      logger.error('Failed to fetch invites:', invitesError);
+      logger.error('Failed to fetch Invites:', invitesError);
       return { data: null, error: new Error(invitesError.message) };
     }
 
@@ -45,8 +43,41 @@ export const getUserInvitesService = async (
       return { data: [], error: null };
     }
 
-    // Return enriched Invites directly from the join query
-    return { data: invites as unknown as InviteResponse[], error: null };
+    // Extract unique role IDs from Invite_fields JSONB
+    const roleIds = [
+      ...new Set(
+        invites
+          .map((i) => i.invite_fields?.membership_role_id)
+          .filter(Boolean)
+      ),
+    ];
+
+    // Fetch role names for the extracted role IDs
+    let roles: { id: number; role_name: string }[] = [];
+    if (roleIds.length > 0) {
+      const { data: rolesData, error: rolesError } = await supabase
+        .from('member_roles')
+        .select('id, name')
+        .in('id', roleIds);
+
+      // Database error while fetching roles
+      if (rolesError) {
+        logger.error('Failed to fetch member roles:', rolesError);
+        return { data: null, error: new Error(rolesError.message) };
+      }
+
+      roles = rolesData ?? [];
+    }
+
+    // Merge role data into each Invite
+    const enrichedInvites = invites.map((invite) => ({
+      ...invite,
+      member_role: roles.find(
+        (r) => r.id === invite.invite_fields?.membership_role_id
+      ) ?? null,
+    }));
+
+    return { data: enrichedInvites as unknown as InviteResponse[], error: null };
   } catch (err) {
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in getUserInvitesService:', err);

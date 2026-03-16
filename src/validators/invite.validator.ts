@@ -13,7 +13,7 @@ export const InviteResponseSchema = z.object({
   invite_fields: z
     .object({
       organization_id: z.string().nullable().optional(),
-      membership_role_id: z.string().nullable().optional(),
+      member_role_id: z.string().nullable().optional(),
     })
     .nullable()
     .optional(),
@@ -22,7 +22,7 @@ export const InviteResponseSchema = z.object({
   organization_id: z.string(),
   created_on: z.string(),
   organization: z.object({ name: z.string() }).nullable().optional(),
-  membership_role: z.object({ role_name: z.string() }).nullable().optional(),
+  member_role: z.object({ role_name: z.string() }).nullable().optional(),
 })
 
 /**
