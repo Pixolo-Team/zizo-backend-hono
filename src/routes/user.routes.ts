@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { userController } from '@/controllers';
 
 // VALIDATORS //
-import { checkUserByPhoneSchema } from '@/validators/user.validator';
+import { checkUserByPhoneSchema, checkByPhoneDataSchema } from '@/validators/user.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // ROUTES //
@@ -35,21 +35,6 @@ openapiApp.put('/:id', (c) => userController.updateUser(c));
 // DELETE /users/:id - Delete User
 openapiApp.delete('/:id', (c) => userController.deleteUser(c));
 
-// Schema for a found-user response body
-const checkByPhoneFoundSchema = z.object({
-  exists: z.literal(true),
-  id: z.string(),
-  first_name: z.string(),
-  last_name: z.string(),
-});
-
-// Schema for a not-found response body
-const checkByPhoneNotFoundSchema = z.object({
-  exists: z.literal(false),
-});
-
-// Union response data schema
-const checkByPhoneDataSchema = z.union([checkByPhoneFoundSchema, checkByPhoneNotFoundSchema]);
 
 // Route definition for POST /users/check-by-phone
 const checkUserByPhoneRoute = createRoute({
