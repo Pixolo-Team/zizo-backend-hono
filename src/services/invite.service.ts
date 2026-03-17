@@ -57,7 +57,7 @@ export const getUserInvitesService = async (
     if (roleIds.length > 0) {
       const { data: roleItems, error: rolesError } = await supabase
         .from('member_roles')
-        .select('id, name')
+        .select('id, role_name')
         .in('id', roleIds);
 
       // Database error while fetching roles

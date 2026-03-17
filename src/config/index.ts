@@ -1,4 +1,3 @@
-import 'dotenv/config';
 
 // Data type for the Project Config
 interface ConfigData {
