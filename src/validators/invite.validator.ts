@@ -32,11 +32,11 @@ export type InviteResponse = z.infer<typeof InviteResponseSchema>;
 export const createInviteRequestSchema = z.object({
   phone_number: z
     .string()
-    .min(8)
-    .max(12)
-    .refine(isValidPhoneNumber),
-  organization_id: z.string().min(1),
-  member_role_id: z.string().min(1),
+    .min(8, { message: 'Phone number must be at least 8 digits long' })
+    .max(12, { message: 'Phone number must be at most 12 digits long' })
+    .refine(isValidPhoneNumber, { message: 'Phone number format is invalid' }),
+  organization_id: z.string().min(1, { message: 'Organization ID is required' }),
+  member_role_id: z.string().min(1, { message: 'Member role ID is required' }),
   auth_id: z.preprocess((val) => (val === '' ? null : val), z.string().nullable().optional()),
 });
 

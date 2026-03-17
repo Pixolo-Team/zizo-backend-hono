@@ -18,22 +18,22 @@ export const getUserInvitesService = async (
   try {
     // Fetch pending Organization_invites with Organization data
     const { data: invites, error: invitesError } = await supabase
-  .from('organization_invites')
-  .select(`
-    id,
-    phone_number,
-    member_role_id,
-    is_pending,
-    invited_by,
-    organization_id,
-    organization_type,
-    created_on,
-    updated_on,
-    organization:organizations ( name ),
-    member_role:member_roles ( id, name )
-  `)
-  .eq('phone_number', phoneNumber)
-  .eq('is_pending', true);
+      .from('organization_invites')
+      .select(`
+        id,
+        phone_number,
+        member_role_id,
+        is_pending,
+        invited_by,
+        organization_id,
+        organization_type,
+        created_on,
+        updated_on,
+        organization:organizations ( name ),
+        member_role:member_roles ( id, name )
+      `)
+      .eq('phone_number', phoneNumber)
+      .eq('is_pending', true);
 
     // Database error while fetching Organization_invites
     if (invitesError) {
