@@ -15,16 +15,16 @@ import { openapiApp } from '@/routes/openapi.routes';
 // MIDDLEWARES //
 import { authMiddleware } from '@/middlewares/auth.middleware';
 
-// Route definition for fetching pending Invites for a User
+// Route definition for fetching pending Organization Invites for a User
 const GetUserInvitesRoute = createRoute({
   method: 'post',
   path: '/invites/get-user-invites',
-  tags: ['Invites'],
-  summary: 'Fetch all pending Invites for a User',
+  tags: ['Organization Invites'],
+  summary: 'Fetch all pending Organization Invites for a User',
   middleware: [authMiddleware] as const,
   responses: {
     200: {
-      description: 'Pending Invites fetched successfully',
+      description: 'Pending Organization Invites fetched successfully',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.array(InviteResponseSchema)),
@@ -40,7 +40,7 @@ const GetUserInvitesRoute = createRoute({
       },
     },
     404: {
-      description: 'No pending invites found for this User',
+      description: 'No pending Organization Invites found for this User',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.null()),
@@ -69,11 +69,11 @@ const GetUserInvitesRoute = createRoute({
 // POST: /invites/get-user-invites
 openapiApp.openapi(GetUserInvitesRoute, (c) => inviteController.getUserPendingInvites(c));
 
-// Route definition for creating a new Invite
+// Route definition for creating a new Organization_Invite
 const createInviteRoute = createRoute({
   method: 'post',
   path: '/invites/create',
-  tags: ['Invites'],
+  tags: ['Organization Invites'],
   summary: 'Create a new Invite for a User to join an Organization',
   middleware: [authMiddleware] as const,
   request: {

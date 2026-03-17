@@ -10,75 +10,43 @@ import { supabase } from '@/config/supabase';
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Fetch all pending Invites for a User by phone_number.
+ * Fetch all pending Organization_invites for a User by phone_number.
  */
 export const getUserInvitesService = async (
   phoneNumber: string
 ): Promise<QueryResponseData<InviteResponse[]>> => {
   try {
-    // Fetch pending Invites with Organization data
+    // Fetch pending Organization_invites with Organization data
     const { data: invites, error: invitesError } = await supabase
-      .from('invites')
+      .from('organization_invites')
       .select(`
         id,
         phone_number,
-        invite_fields,
+        member_role_id,
         is_pending,
         invited_by,
         organization_id,
+        organization_type,
         created_on,
-        organization:organizations ( name )
+        updated_on,
+        organization:organizations ( name ),
+        member_role:member_roles ( id, name )
       `)
       .eq('phone_number', phoneNumber)
       .eq('is_pending', true);
 
-    // Database error while fetching Invites
+    // Database error while fetching Organization_invites
     if (invitesError) {
-      logger.error('Failed to fetch Invites:', invitesError);
+      logger.error('Failed to fetch Organization_Invites:', invitesError);
       return { data: null, error: new Error(invitesError.message) };
     }
 
-    // No pending Invites found
+    // No pending Organization_invites found
     if (!invites || invites.length === 0) {
       return { data: [], error: null };
     }
 
-    // Extract unique role IDs from Invite_fields JSONB
-    const roleIds = [
-      ...new Set(
-        invites
-          .map((i) => i.invite_fields?.membership_role_id)
-          .filter(Boolean)
-      ),
-    ];
-
-    // Fetch role names for the extracted role IDs
-    let roles: { id: number; role_name: string }[] = [];
-    if (roleIds.length > 0) {
-      const { data: roleItems, error: rolesError } = await supabase
-        .from('member_roles')
-        .select('id, name')
-        .in('id', roleIds);
-
-      // Database error while fetching roles
-      if (rolesError) {
-        logger.error('Failed to fetch member roles:', rolesError);
-        return { data: null, error: new Error(rolesError.message) };
-      }
-
-      // Default to empty array if no roles found, to safely use .find() during merge
-      roles = roleItems ?? [];
-    }
-
-    // Merge role data into each Invite
-    const enrichedInvites = invites.map((invite) => ({
-      ...invite,
-      member_role: roles.find(
-        (r) => r.id === invite.invite_fields?.membership_role_id
-      ) ?? null,
-    }));
-
-    return { data: enrichedInvites as unknown as InviteResponse[], error: null };
+    return { data: invites as InviteResponse[], error: null };
   } catch (err) {
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in getUserInvitesService:', err);
@@ -99,14 +67,14 @@ export const createInviteService = async (
   try {
     // Insert the Invite record into the Supabase table
     const { data: inserted, error } = await supabase
-      .from('invites')
+      .from('organization_invites')
       .insert(inviteDto)
       .select()
       .single();
 
     // Database insert failed
     if (error) {
-      logger.error('Failed to insert Invite:', error);
+      logger.error('Failed to insert Organization_Invite:', error);
       return { data: null, error: new Error(error.message) };
     }
 
