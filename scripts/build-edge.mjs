@@ -31,5 +31,3 @@ await build({
   // Minify for smaller bundle size
   minify: true,
 });
-
-console.log('Edge function bundled → api/index.js');

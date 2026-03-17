@@ -73,17 +73,20 @@ zizo-backend-hono/
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd zizo-backend-hono
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
@@ -92,6 +95,7 @@ cp .env.example .env
 ### Development
 
 Start the development server with hot reload:
+
 ```bash
 npm run dev
 ```
@@ -101,6 +105,7 @@ The server will start at `http://localhost:3000`
 ### Building
 
 Build the project for production:
+
 ```bash
 npm run build
 ```
@@ -108,6 +113,7 @@ npm run build
 ### Production
 
 Run the production build:
+
 ```bash
 npm start
 ```
@@ -115,11 +121,13 @@ npm start
 ## 🧪 Testing
 
 Run tests:
+
 ```bash
 npm test
 ```
 
 Run tests with coverage:
+
 ```bash
 npm run test:coverage
 ```
@@ -129,11 +137,13 @@ npm run test:coverage
 ### Linting
 
 Check for linting errors:
+
 ```bash
 npm run lint
 ```
 
 Fix linting errors automatically:
+
 ```bash
 npm run lint:fix
 ```
@@ -141,11 +151,13 @@ npm run lint:fix
 ### Formatting
 
 Check code formatting:
+
 ```bash
 npm run format:check
 ```
 
 Format code:
+
 ```bash
 npm run format
 ```
@@ -153,6 +165,7 @@ npm run format
 ### Type Checking
 
 Run TypeScript type checking:
+
 ```bash
 npm run type-check
 ```
@@ -160,9 +173,11 @@ npm run type-check
 ## 📡 API Endpoints
 
 ### Health Check
+
 - `GET /health` - Check API health status
 
 ### Users
+
 - `GET /api/v1/users` - Get all users
 - `GET /api/v1/users/:id` - Get user by ID
 - `POST /api/v1/users` - Create new user
@@ -172,6 +187,7 @@ npm run type-check
 ## 🏛️ Architecture Patterns
 
 ### Layered Architecture
+
 1. **Routes** - Define API endpoints
 2. **Controllers** - Handle HTTP requests/responses
 3. **Services** - Contain business logic
@@ -180,6 +196,7 @@ npm run type-check
 6. **Middlewares** - Cross-cutting concerns
 
 ### Best Practices Implemented
+
 - ✅ Separation of concerns
 - ✅ Dependency injection ready
 - ✅ Error handling middleware

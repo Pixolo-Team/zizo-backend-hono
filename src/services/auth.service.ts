@@ -19,7 +19,6 @@ export const verifyOtpService = async (
   otp: string
 ): Promise<QueryResponseData<VerifyOtpResponse>> => {
   try {
-
     // Call Supabase OTP verification
     const { data, error } = await supabase.auth.verifyOtp({
       phone: phoneNumber,
@@ -42,7 +41,6 @@ export const verifyOtpService = async (
       error: null,
     };
   } catch (err) {
-
     // Unexpected service error
     logger.error('Unexpected error in verifyOtpService:', err);
     return {
@@ -70,7 +68,6 @@ export const loginService = async (
       .maybeSingle();
 
     if (userError) {
-
       // Unexpected database error querying Users table
       logger.error('Error querying Users table:', userError);
       return { data: null, error: new Error(userError.message) };
@@ -106,7 +103,6 @@ export const loginService = async (
     });
 
     if (otpError) {
-
       // OTP dispatch failed
       logger.error('Error sending OTP:', otpError);
       return { data: null, error: new Error(otpError.message) };
@@ -114,7 +110,6 @@ export const loginService = async (
 
     return { data: { message: 'OTP sent successfully' }, error: null };
   } catch (err) {
-    
     // Unexpected service error — request did not reach the database
     logger.error('Unexpected error in loginService:', err);
     return {

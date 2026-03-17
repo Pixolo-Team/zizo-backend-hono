@@ -10,16 +10,13 @@ import { HTTP_STATUS, ERROR_MESSAGES } from '@/constants/api';
 // SERVICES //
 import { getUserInvitesService, createInviteService } from '@/services/invite.service';
 
-
 // VALIDATORS //
 import { createInviteRequestSchema } from '@/validators/invite.validator';
-
 
 /**
  * Invite Controller - Handles all Invites related endpoints
  */
 export class InviteController {
-
   /**
    * POST /invites/get-user-invites
    * Fetch all pending Organization_Invites for a User
@@ -29,8 +26,7 @@ export class InviteController {
       // Get the authenticated User from context (set by auth middleware)
       const user = c.get('user');
       const phoneNumber = user?.phone;
-      
-      
+
       // Return 401 if User is not authenticated or phone_number is missing
       if (!phoneNumber) {
         return errorResponse(
@@ -43,7 +39,6 @@ export class InviteController {
 
       // Call the service layer with phone_number from Auth context
       const { data, error } = await getUserInvitesService(phoneNumber);
-      
 
       // Database or unexpected error
       if (error) {
@@ -65,11 +60,21 @@ export class InviteController {
         );
       }
 
-      return successResponse(c, data, 'Pending Organization Invites fetched successfully', HTTP_STATUS.OK);
+      return successResponse(
+        c,
+        data,
+        'Pending Organization Invites fetched successfully',
+        HTTP_STATUS.OK
+      );
     } catch (err) {
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
-      return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
+      return errorResponse(
+        c,
+        message,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -79,10 +84,9 @@ export class InviteController {
    */
   async createInvite(c: Context) {
     try {
-      
       // Get the authenticated User from middleware context
       const user = c.get('user');
-      
+
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
@@ -111,7 +115,7 @@ export class InviteController {
       }
 
       const { phone_number, organization_id, member_role_id, auth_id } = parsed.data;
-      
+
       // Call the service layer with the constructed Invite DTO
       const { data, error } = await createInviteService({
         auth_id: auth_id ?? null,
@@ -131,9 +135,13 @@ export class InviteController {
         );
       }
 
-      return successResponse(c, data, 'Organization Invite created successfully', HTTP_STATUS.CREATED);
+      return successResponse(
+        c,
+        data,
+        'Organization Invite created successfully',
+        HTTP_STATUS.CREATED
+      );
     } catch (err) {
-
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(

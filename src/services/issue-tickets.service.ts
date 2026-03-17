@@ -15,7 +15,6 @@ export const raiseIssueTicketService = async (
   IssueTicketItem: CreateIssueTicketDto
 ): Promise<QueryResponseData<IssueTicket>> => {
   try {
-
     // Insert the Issue Ticket into the Supabase table
     const { data: inserted, error } = await supabase
       .from('issue_tickets')
@@ -31,7 +30,6 @@ export const raiseIssueTicketService = async (
 
     return { data: inserted as IssueTicket, error: null };
   } catch (err) {
-
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in raiseIssueTicketService:', err);
     return {

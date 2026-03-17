@@ -3,7 +3,11 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 
 // VALIDATORS //
-import { InviteResponseSchema, createInviteRequestSchema, InviteSchema } from '@/validators/invite.validator';
+import {
+  InviteResponseSchema,
+  createInviteRequestSchema,
+  InviteSchema,
+} from '@/validators/invite.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // CONTROLLER //

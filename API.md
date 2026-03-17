@@ -1,6 +1,7 @@
 # API Documentation
 
 ## Base URL
+
 ```
 http://localhost:3000
 ```
@@ -10,6 +11,7 @@ http://localhost:3000
 All API responses follow a consistent format:
 
 ### Success Response
+
 ```json
 {
   "success": true,
@@ -19,6 +21,7 @@ All API responses follow a consistent format:
 ```
 
 ### Error Response
+
 ```json
 {
   "success": false,
@@ -31,11 +34,13 @@ All API responses follow a consistent format:
 ### Health Check
 
 #### Get Health Status
+
 ```
 GET /health
 ```
 
 **Response**: 200 OK
+
 ```json
 {
   "success": true,
@@ -52,11 +57,13 @@ GET /health
 ### Users
 
 #### Get All Users
+
 ```
 GET /api/v1/users
 ```
 
 **Response**: 200 OK
+
 ```json
 {
   "success": true,
@@ -73,14 +80,17 @@ GET /api/v1/users
 ```
 
 #### Get User by ID
+
 ```
 GET /api/v1/users/:id
 ```
 
 **Parameters**:
+
 - `id` (path): User UUID
 
 **Response**: 200 OK
+
 ```json
 {
   "success": true,
@@ -95,6 +105,7 @@ GET /api/v1/users/:id
 ```
 
 **Error Response**: 404 Not Found
+
 ```json
 {
   "success": false,
@@ -103,11 +114,13 @@ GET /api/v1/users/:id
 ```
 
 #### Create User
+
 ```
 POST /api/v1/users
 ```
 
 **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
@@ -116,10 +129,12 @@ POST /api/v1/users
 ```
 
 **Validation Rules**:
+
 - `email`: Must be valid email format (required)
 - `name`: 2-100 characters (required)
 
 **Response**: 201 Created
+
 ```json
 {
   "success": true,
@@ -135,6 +150,7 @@ POST /api/v1/users
 ```
 
 **Error Response**: 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -143,14 +159,17 @@ POST /api/v1/users
 ```
 
 #### Update User
+
 ```
 PUT /api/v1/users/:id
 ```
 
 **Parameters**:
+
 - `id` (path): User UUID
 
 **Request Body**:
+
 ```json
 {
   "email": "newemail@example.com",
@@ -159,10 +178,12 @@ PUT /api/v1/users/:id
 ```
 
 **Validation Rules**:
+
 - `email`: Must be valid email format (optional)
 - `name`: 2-100 characters (optional)
 
 **Response**: 200 OK
+
 ```json
 {
   "success": true,
@@ -178,14 +199,17 @@ PUT /api/v1/users/:id
 ```
 
 #### Delete User
+
 ```
 DELETE /api/v1/users/:id
 ```
 
 **Parameters**:
+
 - `id` (path): User UUID
 
 **Response**: 204 No Content
+
 ```json
 {
   "success": true,
@@ -196,17 +220,17 @@ DELETE /api/v1/users/:id
 
 ## Error Codes
 
-| Status Code | Description |
-|-------------|-------------|
-| 200 | OK - Request successful |
-| 201 | Created - Resource created |
-| 204 | No Content - Successful deletion |
-| 400 | Bad Request - Invalid input |
-| 401 | Unauthorized - Authentication required |
-| 403 | Forbidden - Insufficient permissions |
-| 404 | Not Found - Resource not found |
-| 422 | Unprocessable Entity - Validation failed |
-| 500 | Internal Server Error - Server error |
+| Status Code | Description                              |
+| ----------- | ---------------------------------------- |
+| 200         | OK - Request successful                  |
+| 201         | Created - Resource created               |
+| 204         | No Content - Successful deletion         |
+| 400         | Bad Request - Invalid input              |
+| 401         | Unauthorized - Authentication required   |
+| 403         | Forbidden - Insufficient permissions     |
+| 404         | Not Found - Resource not found           |
+| 422         | Unprocessable Entity - Validation failed |
+| 500         | Internal Server Error - Server error     |
 
 ## Rate Limiting
 

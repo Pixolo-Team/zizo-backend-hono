@@ -17,13 +17,11 @@ import { verifyOtpService, loginService } from '@/services/auth.service';
  * Auth Controller - Handles all Auth related endpoints
  */
 export class AuthController {
-  
   /** POST /auth/verify-otp
    * Verify a User's OTP using Supabase Auth
    */
   async verifyOtp(c: Context) {
     try {
-
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
@@ -41,7 +39,6 @@ export class AuthController {
       const parsed = verifyOtpRequestSchema.safeParse(body);
 
       if (!parsed.success) {
-        
         // Extract first validation error message
         const errorMessage = parsed.error.issues[0]?.message ?? 'Validation failed';
 
@@ -70,7 +67,6 @@ export class AuthController {
 
       return successResponse(c, data, 'OTP verified successfully', HTTP_STATUS.OK);
     } catch (err) {
-
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(
@@ -88,7 +84,6 @@ export class AuthController {
    */
   async login(c: Context) {
     try {
-
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
       try {
@@ -106,7 +101,12 @@ export class AuthController {
 
       if (!parsed.success) {
         const errorMessage = parsed.error.issues[0]?.message ?? ERROR_MESSAGES.VALIDATION_FAILED;
-        return errorResponse(c, errorMessage, ERROR_MESSAGES.VALIDATION_FAILED, HTTP_STATUS.UNPROCESSABLE_ENTITY);
+        return errorResponse(
+          c,
+          errorMessage,
+          ERROR_MESSAGES.VALIDATION_FAILED,
+          HTTP_STATUS.UNPROCESSABLE_ENTITY
+        );
       }
 
       const { phone_number } = parsed.data;
@@ -116,12 +116,22 @@ export class AuthController {
 
       // Phone number not found in either table
       if (error?.message === ERROR_MESSAGES.PHONE_NOT_FOUND) {
-        return errorResponse(c, 'Phone number not found', ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+        return errorResponse(
+          c,
+          'Phone number not found',
+          ERROR_MESSAGES.NOT_FOUND,
+          HTTP_STATUS.NOT_FOUND
+        );
       }
 
       // Other service error
       if (error) {
-        return errorResponse(c, error.message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
+        return errorResponse(
+          c,
+          error.message,
+          ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+          HTTP_STATUS.INTERNAL_SERVER_ERROR
+        );
       }
 
       // OTP sent successfully
@@ -129,7 +139,12 @@ export class AuthController {
     } catch (err) {
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
-      return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
+      return errorResponse(
+        c,
+        message,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

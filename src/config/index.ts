@@ -1,4 +1,3 @@
-
 // Data type for the Project Config
 interface ConfigData {
   nodeEnv: string;
