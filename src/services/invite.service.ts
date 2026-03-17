@@ -46,7 +46,23 @@ export const getUserInvitesService = async (
       return { data: [], error: null };
     }
 
-    return { data: invites as InviteResponse[], error: null };
+    // Transform Supabase joined arrays to single objects
+    const transformedInvites: InviteResponse[] = invites.map((invite) => ({
+      id: invite.id,
+      phone_number: invite.phone_number,
+      member_role_id: invite.member_role_id,
+      is_pending: invite.is_pending,
+      invited_by: invite.invited_by,
+      organization_id: invite.organization_id,
+      organization_type: invite.organization_type,
+      created_on: invite.created_on,
+      updated_on: invite.updated_on,
+      // Supabase returns joined relations as arrays, extract first element
+      organization: Array.isArray(invite.organization) ? invite.organization[0] ?? null : invite.organization,
+      member_role: Array.isArray(invite.member_role) ? invite.member_role[0] ?? null : invite.member_role,
+    }));
+
+    return { data: transformedInvites, error: null };
     
   } catch (err) {
     // Unexpected service error - request did not reach the database
