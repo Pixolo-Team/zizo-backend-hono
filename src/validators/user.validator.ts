@@ -15,7 +15,7 @@ export const updateUserSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100).optional(),
 });
 
-// Schema for a found-user response body
+// Schema for a found- User response body
 const checkByPhoneFoundSchema = z.object({
   exists: z.literal(true),
   id: z.string(),

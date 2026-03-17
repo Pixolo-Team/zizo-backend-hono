@@ -20,19 +20,19 @@ import { authMiddleware } from '@/middlewares/auth.middleware';
  * Base path: /users
  */
 
-// GET /users - Get all users
+// GET /users - Get all Users
 openapiApp.get('/', (c) => userController.getAllUsers(c));
 
-// GET /users/:id - Get user by ID
+// GET /users/:id - Get User by ID
 openapiApp.get('/:id', (c) => userController.getUserById(c));
 
-// POST /users - Create new user
+// POST /users - Create new User
 openapiApp.post('/', (c) => userController.createUser(c));
 
-// PUT /users/:id - Update user
+// PUT /users/:id - Update User
 openapiApp.put('/:id', (c) => userController.updateUser(c));
 
-// DELETE /users/:id - Delete user
+// DELETE /users/:id - Delete User
 openapiApp.delete('/:id', (c) => userController.deleteUser(c));
 
 // Schema for a found-user response body

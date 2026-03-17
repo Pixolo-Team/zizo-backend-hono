@@ -27,7 +27,7 @@ export const loginRequestSchema = z.object({
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
 });
 /** 
- * Zod Schema for user object in Verify OTP response
+ * Zod Schema for User object in Verify OTP response
 */
 export const verifyOtpUserSchema = z.record(z.string(), z.unknown());
 

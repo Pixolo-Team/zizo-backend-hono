@@ -40,7 +40,7 @@ const GetUserInvitesRoute = createRoute({
       },
     },
     404: {
-      description: 'No pending invites found for this user',
+      description: 'No pending invites found for this User',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.null()),

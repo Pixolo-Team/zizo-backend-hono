@@ -15,11 +15,11 @@ import { createUserSchema, updateUserSchema, userIdSchema, checkUserByPhoneSchem
 
 
 /**
- * User Controller - Handles HTTP requests for user operations
+ * User Controller - Handles HTTP requests for User operations
  */
 export class UserController {
   /**
-   * Get all users
+   * Get all Users
    * GET: /users
    */
   async getAllUsers(c: Context) {

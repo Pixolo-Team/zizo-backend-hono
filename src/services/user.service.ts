@@ -7,11 +7,11 @@ import type { QueryResponseData } from '@/common/types/query.response.type';
 import { supabase } from '@/config/supabase';
 
 /**
- * User Service - Business logic for user operations
+ * User Service - Business logic for User operations
  */
 export class UserService {
   /**
-   * Get all users
+   * Get all Users
    */
   async getAllUsers(): Promise<User[]> {
     // Example: In real application, this would query the database
@@ -20,7 +20,7 @@ export class UserService {
   }
 
   /**
-   * Get user by ID
+   * Get User by ID
    */
   async getUserById(id: string): Promise<User | null> {
     logger.debug(`Fetching user with ID: ${id}`);
@@ -29,7 +29,7 @@ export class UserService {
   }
 
   /**
-   * Create new user
+   * Create new User
    */
   async createUser(data: CreateUserDto): Promise<User> {
     logger.debug('Creating new user', data);
@@ -44,7 +44,7 @@ export class UserService {
   }
 
   /**
-   * Update user
+   * Update User
    */
   async updateUser(id: string, data: UpdateUserDto): Promise<User | null> {
     logger.debug(`Updating user ${id}`, data);
@@ -53,7 +53,7 @@ export class UserService {
   }
 
   /**
-   * Delete user
+   * Delete User
    */
   async deleteUser(id: string): Promise<boolean> {
     logger.debug(`Deleting user ${id}`);
@@ -63,7 +63,7 @@ export class UserService {
 }
 
 /**
- * Check whether a user exists in the Users table by phone number
+ * Check whether a User exists in the Users table by phone number
  */
 export const checkUserByPhoneService = async (
   phoneNumber: string): Promise<QueryResponseData<CheckUserByPhoneResult>> => {
@@ -90,7 +90,7 @@ export const checkUserByPhoneService = async (
       };
     }
 
-    // User found — return relevant user details
+    // User found — return relevant User details
     return {
       data: {
         exists: true,
