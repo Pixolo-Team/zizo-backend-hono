@@ -3,107 +3,36 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 
 // VALIDATORS //
-import {
-  verifyOtpRequestSchema,
-  verifyOtpResponseSchema,
-  loginRequestSchema,
-  loginResponseSchema,
-} from '@/validators/auth.validator';
+import { InviteResponseSchema, createInviteRequestSchema, InviteSchema } from '@/validators/invite.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // CONTROLLER //
-import { authController } from '@/controllers';
+import { inviteController } from '@/controllers';
 
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
 
-// Route definition for verifying a user's OTP
-const verifyOtpRoute = createRoute({
+// MIDDLEWARES //
+import { authMiddleware } from '@/middlewares/auth.middleware';
+
+// Route definition for fetching pending Invites for a User
+const GetUserInvitesRoute = createRoute({
   method: 'post',
-  path: '/auth/verify-otp',
-  tags: ['Auth'],
-  summary: 'Verify OTP and authenticate User',
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: verifyOtpRequestSchema,
-        },
-      },
-      required: true,
-    },
-  },
+  path: '/invites/get-user-invites',
+  tags: ['Invites'],
+  summary: 'Fetch all pending Invites for a User',
+  middleware: [authMiddleware] as const,
   responses: {
     200: {
-      description: 'OTP verified successfully',
+      description: 'Pending Invites fetched successfully',
       content: {
         'application/json': {
-          schema: apiResponseSchema(verifyOtpResponseSchema),
-        },
-      },
-    },
-    400: {
-      description: 'Bad Request - Malformed JSON',
-      content: {
-        'application/json': {
-          schema: apiResponseSchema(z.null()),
+          schema: apiResponseSchema(z.array(InviteResponseSchema)),
         },
       },
     },
     401: {
-      description: 'Invalid or expired OTP',
-      content: {
-        'application/json': {
-          schema: apiResponseSchema(z.null()),
-        },
-      },
-    },
-    422: {
-      description: 'Validation Error',
-      content: {
-        'application/json': {
-          schema: apiResponseSchema(z.null()),
-        },
-      },
-    },
-    500: {
-      description: 'Internal Server Error',
-      content: {
-        'application/json': {
-          schema: apiResponseSchema(z.null()),
-        },
-      },
-    },
-  },
-});
-
-// Route definition for POST /auth/login
-const loginRoute = createRoute({
-  method: 'post',
-  path: '/auth/login',
-  tags: ['Auth'],
-  summary: 'Initiate OTP login using phone number',
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: loginRequestSchema,
-        },
-      },
-      required: true,
-    },
-  },
-  responses: {
-    200: {
-      description: 'OTP sent successfully',
-      content: {
-        'application/json': {
-          schema: apiResponseSchema(loginResponseSchema),
-        },
-      },
-    },
-    400: {
-      description: 'Bad Request - Malformed JSON',
+      description: 'Unauthorized',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.null()),
@@ -111,7 +40,7 @@ const loginRoute = createRoute({
       },
     },
     404: {
-      description: 'Phone number not found',
+      description: 'No pending invites found for this user',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.null()),
@@ -137,8 +66,61 @@ const loginRoute = createRoute({
   },
 });
 
-// POST: /auth/verify-otp
-openapiApp.openapi(verifyOtpRoute, (c) => authController.verifyOtp(c));
+// POST: /invites/get-user-invites
+openapiApp.openapi(GetUserInvitesRoute, (c) => inviteController.getUserPendingInvites(c));
 
-// POST: /auth/login
-openapiApp.openapi(loginRoute, (c) => authController.login(c));
+// Route definition for creating a new Invite
+const createInviteRoute = createRoute({
+  method: 'post',
+  path: '/invites/create',
+  tags: ['Invites'],
+  summary: 'Create a new Invite for a User to join an Organization',
+  middleware: [authMiddleware] as const,
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: createInviteRequestSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      description: 'Invite created successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(InviteSchema),
+        },
+      },
+    },
+    400: {
+      description: 'Bad Request - Malformed JSON',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    422: {
+      description: 'Validation Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
+
+// POST: /invites/create
+openapiApp.openapi(createInviteRoute, (c) => inviteController.createInvite(c));

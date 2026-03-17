@@ -21,6 +21,8 @@ export const ERROR_MESSAGES = {
   BAD_REQUEST: 'Bad request',
   UNAUTHORIZED: 'Unauthorized',
   FORBIDDEN: 'Forbidden',
+  VALIDATION_FAILED: 'Validation failed',
+  PHONE_NOT_FOUND: 'PHONE_NOT_FOUND',
 } as const;
 
 // Success Messages

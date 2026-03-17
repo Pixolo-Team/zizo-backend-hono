@@ -1,4 +1,4 @@
-// LIBRARIES //
+// MODULES //
 import { OpenAPIHono } from '@hono/zod-openapi';
 
 // UTILS //
@@ -8,17 +8,18 @@ import { errorResponse } from '@/common/utils/api.util';
 import { HTTP_STATUS } from '@/constants/api';
 
 export const openapiApp = new OpenAPIHono({
-    defaultHook: (result, c) => {
-        if (!result.success) {
-            const validationError =
-                result.error.issues[0]?.message ?? 'Validation failed';
-            return errorResponse(
-                c,
-                validationError,
-                'Validation failed',
-                HTTP_STATUS.UNPROCESSABLE_ENTITY
-            );
-        }
-        return undefined;
-    },
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      const firstIssue = result.error.issues[0];
+      const fieldName = firstIssue?.path.join('.') ?? 'unknown';
+      const issueMessage = firstIssue?.message ?? 'Validation failed';
+      return errorResponse(
+        c,
+        `Invalid field '${fieldName}': ${issueMessage}`,
+        'Validation failed',
+        HTTP_STATUS.UNPROCESSABLE_ENTITY
+      );
+    }
+    return;
+  },
 });
