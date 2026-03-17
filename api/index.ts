@@ -1,4 +1,5 @@
 // HONO //
+import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
 
 // APP //
@@ -12,4 +13,4 @@ export const config = { runtime: 'edge' };
 /**
  * Edge Function handler — wraps the Hono app for Vercel's v8 isolate runtime
  */
-export default handle(app);
+export default handle(app as Hono);
