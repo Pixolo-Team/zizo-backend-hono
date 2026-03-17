@@ -7,7 +7,7 @@ export interface Invite {
   phone_number: string;
   member_role_id: string;
   is_pending: boolean;
-  invited_by: string ;
+  invited_by: string;
   organization_id: string;
   organization_type: string;
   created_on: string;

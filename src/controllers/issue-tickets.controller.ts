@@ -17,20 +17,17 @@ import { raiseIssueTicketService } from '@/services/issue-tickets.service';
  * Issue Tickets Controller - Handles all Issue Tickets related endpoints
  */
 export class IssueTicketsController {
-
   /**
    * Raise a new Issue Ticket
    * POST /issue_tickets/raise
    */
   async raiseTicket(c: Context) {
     try {
-
       // Parse and validate the request body
       const body = await c.req.json();
       const parsed = raiseIssueTicketRequestSchema.safeParse(body);
 
       if (!parsed.success) {
-
         // Return 422 for validation errors
         return errorResponse(
           c,
@@ -57,7 +54,12 @@ export class IssueTicketsController {
     } catch (err) {
       // Any other Errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
-      return errorResponse(c, message, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, HTTP_STATUS.INTERNAL_SERVER_ERROR);
+      return errorResponse(
+        c,
+        message,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

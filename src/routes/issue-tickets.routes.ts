@@ -3,7 +3,10 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 
 // VALIDATORS //
-import { raiseIssueTicketRequestSchema, IssueTicketSchema } from '@/validators/issue-tickets.validator';
+import {
+  raiseIssueTicketRequestSchema,
+  IssueTicketSchema,
+} from '@/validators/issue-tickets.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // CONTROLLER //
@@ -58,5 +61,3 @@ const RaiseIssueTicketRoute = createRoute({
 
 // POST: /issue_tickets/raise
 openapiApp.openapi(RaiseIssueTicketRoute, (c) => issueTicketsController.raiseTicket(c));
-
-

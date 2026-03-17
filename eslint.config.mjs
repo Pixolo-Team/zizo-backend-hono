@@ -32,6 +32,6 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/', 'dist/', '*.config.mjs', '*.config.js'],
+    ignores: ['node_modules/', 'dist/', 'api/', '*.config.mjs', '*.config.js'],
   },
 ];

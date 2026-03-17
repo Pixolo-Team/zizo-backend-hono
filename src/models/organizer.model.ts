@@ -1,5 +1,8 @@
-// HONO //
-import { JSONObject } from 'hono/utils/types';
+// JSON object type (compatible with Hono's JSONObject)
+type JSONPrimitive = string | number | boolean | null;
+type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+type JSONArray = JSONValue[];
+type JSONObject = { [key: string]: JSONValue };
 
 export interface Organizer {
   id: string;
