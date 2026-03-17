@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
 
 // APP //
-import app from '../dist/app.js';
+import app from '../src/app.js';
 
 /**
  * Vercel Edge Function runtime configuration
