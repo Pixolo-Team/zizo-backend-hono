@@ -5,17 +5,17 @@ import type { Context } from 'hono';
 import type { ApiResponseData } from '@/common/types/api.response.type.js';
 
 // CONSTANTS //
-import { ERROR_MESSAGES, HTTP_STATUS, type ContentfulStatusCode } from '@/constants/api';
+import { ERROR_MESSAGES, HTTP_STATUS, type HttpStatusCode } from '@/constants/api';
 
 /**
  * Send success response
  */
-export const successResponse = <T = unknown, S extends ContentfulStatusCode = typeof HTTP_STATUS.OK>(
+export function successResponse<T = unknown>(
   c: Context,
   data: T | null = null,
   message: string = 'Success',
-  statusCode: S = HTTP_STATUS.OK as S
-) => {
+  statusCode: HttpStatusCode = HTTP_STATUS.OK
+) {
   const response: ApiResponseData<T> = {
     status: true,
     status_code: statusCode,
@@ -24,17 +24,17 @@ export const successResponse = <T = unknown, S extends ContentfulStatusCode = ty
     error: null,
   };
   return c.json(response, statusCode);
-};
+}
 
 /**
  * Send error response
  */
-export const errorResponse = <S extends ContentfulStatusCode = typeof HTTP_STATUS.INTERNAL_SERVER_ERROR>(
+export function errorResponse(
   c: Context,
   error: string,
   message: string = ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-  statusCode: S = HTTP_STATUS.INTERNAL_SERVER_ERROR as S
-) => {
+  statusCode: HttpStatusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR
+) {
   const response: ApiResponseData<null> = {
     status: false,
     status_code: statusCode,
@@ -43,4 +43,4 @@ export const errorResponse = <S extends ContentfulStatusCode = typeof HTTP_STATU
     error,
   };
   return c.json(response, statusCode);
-};
+}
