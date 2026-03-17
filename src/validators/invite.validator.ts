@@ -16,7 +16,7 @@ export const InviteResponseSchema = z.object({
   organization_id: z.string(),
   organization_type: z.string(),
   created_on: z.string(),
-  updated_on: z.string(),
+  updated_on: z.string().nullable(),
   organization: z.object({ name: z.string() }).nullable().optional(),
   member_role: z.object({ name: z.string() }).nullable().optional(),
 });
