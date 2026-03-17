@@ -9,12 +9,13 @@ import { ERROR_MESSAGES, HTTP_STATUS, type HttpStatusCode } from '@/constants/ap
 
 /**
  * Send success response
+ * Generic S preserves the literal status code type for OpenAPI compatibility
  */
-export function successResponse<T = unknown>(
+export function successResponse<T = unknown, S extends HttpStatusCode = 200>(
   c: Context,
   data: T | null = null,
   message: string = 'Success',
-  statusCode: HttpStatusCode = HTTP_STATUS.OK
+  statusCode: S = HTTP_STATUS.OK as S
 ) {
   const response: ApiResponseData<T> = {
     status: true,
@@ -28,12 +29,13 @@ export function successResponse<T = unknown>(
 
 /**
  * Send error response
+ * Generic S preserves the literal status code type for OpenAPI compatibility
  */
-export function errorResponse(
+export function errorResponse<S extends HttpStatusCode = 500>(
   c: Context,
   error: string,
   message: string = ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-  statusCode: HttpStatusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR
+  statusCode: S = HTTP_STATUS.INTERNAL_SERVER_ERROR as S
 ) {
   const response: ApiResponseData<null> = {
     status: false,
