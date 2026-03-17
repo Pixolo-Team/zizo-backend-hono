@@ -41,7 +41,7 @@ export class InviteController {
         );
       }
 
-      // Call the service layer with phone_number from auth context
+      // Call the service layer with phone_number from Auth context
       const { data, error } = await getUserInvitesService(phoneNumber);
       
 
@@ -80,7 +80,7 @@ export class InviteController {
   async createInvite(c: Context) {
     try {
       
-      // Get the authenticated user from middleware context
+      // Get the authenticated User from middleware context
       const user = c.get('user');
       
       // Parse the raw request body — throws if JSON is malformed
@@ -111,7 +111,8 @@ export class InviteController {
       }
 
       const { phone_number, organization_id, member_role_id, auth_id } = parsed.data;
-      // Call the service layer with the constructed invite DTO
+      
+      // Call the service layer with the constructed Invite DTO
       const { data, error } = await createInviteService({
       auth_id: auth_id ?? null,
       phone_number,
@@ -132,6 +133,7 @@ export class InviteController {
 
       return successResponse(c, data, 'Invite created successfully', HTTP_STATUS.CREATED);
     } catch (err) {
+      
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(
