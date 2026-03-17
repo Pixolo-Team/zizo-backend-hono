@@ -15,13 +15,13 @@ export interface Invite {
 }
 
 /**
- * Data required to insert a new Invite row
+ * Data required to insert a new Organization_invite row
  */
 export interface CreateInviteDto {
   auth_id: string | null;
   phone_number: string;
   member_role_id: string;
-  invited_by: string ;
+  invited_by: string;
   organization_id: string;
 }
 
