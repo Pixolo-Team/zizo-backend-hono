@@ -5,8 +5,7 @@ import type { Context } from 'hono';
 import type { ApiResponseData } from '@/common/types/api.response.type.js';
 
 // CONSTANTS //
-import { ERROR_MESSAGES, HTTP_STATUS } from '@/constants/api';
-import { ContentfulStatusCode } from 'hono/utils/http-status';
+import { ERROR_MESSAGES, HTTP_STATUS, type ContentfulStatusCode } from '@/constants/api';
 
 /**
  * Send success response
