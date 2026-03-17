@@ -4,14 +4,16 @@ import { z } from 'zod';
 
 // CONTROLLERS //
 import { userController } from '@/controllers';
-import { authController } from '@/controllers/auth.controller';
 
 // VALIDATORS //
-import { checkUserByPhoneSchema } from '@/validators/auth.validator';
+import { checkUserByPhoneSchema } from '@/validators/user.validator';
 import { apiResponseSchema } from '@/validators/api-response.schema';
 
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
+
+// MIDDLEWARES //
+import { authMiddleware } from '@/middlewares/auth.middleware';
 
 /**
  * User Routes
@@ -55,6 +57,7 @@ const checkUserByPhoneRoute = createRoute({
   path: '/users/check-by-phone',
   tags: ['Users'],
   summary: 'Check if a user exists by phone number',
+  middleware: [authMiddleware] as const,
   request: {
     body: {
       content: {
@@ -94,5 +97,5 @@ const checkUserByPhoneRoute = createRoute({
 });
 
 // POST /users/check-by-phone
-openapiApp.openapi(checkUserByPhoneRoute, (c) => authController.checkUserByPhone(c));
+openapiApp.openapi(checkUserByPhoneRoute, (c) => userController.checkUserByPhone(c));
 
