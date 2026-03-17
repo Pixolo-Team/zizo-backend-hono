@@ -110,15 +110,14 @@ export class InviteController {
         );
       }
 
-      const { phone_number, organization_id, membership_role_id, auth_id } = parsed.data;
-
+      const { phone_number, organization_id, member_role_id, auth_id } = parsed.data;
       // Call the service layer with the constructed invite DTO
       const { data, error } = await createInviteService({
-        auth_id: auth_id ?? null,
-        phone_number,
-        invite_fields: { organization_id, membership_role_id },
-        invited_by: user.id,
-        organization_id,
+      auth_id: auth_id ?? null,
+      phone_number,
+      member_role_id,
+      invited_by: user.id,
+      organization_id,
       });
 
       // Database insert failed
