@@ -10,13 +10,13 @@ import { supabase } from '@/config/supabase';
 import { logger } from '@/common/utils/logger.util';
 
 /**
- * Fetch all pending Invites for a User by phone_number.
+ * Fetch all pending Organization_invites for a User by phone_number.
  */
 export const getUserInvitesService = async (
   phoneNumber: string
 ): Promise<QueryResponseData<InviteResponse[]>> => {
   try {
-    // Fetch pending Invites with Organization data
+    // Fetch pending Organization_invites with Organization data
     const { data: invites, error: invitesError } = await supabase
   .from('organization_invites')
   .select(`
@@ -35,13 +35,13 @@ export const getUserInvitesService = async (
   .eq('phone_number', phoneNumber)
   .eq('is_pending', true);
 
-    // Database error while fetching Invites
+    // Database error while fetching Organization_invites
     if (invitesError) {
-      logger.error('Failed to fetch Invites:', invitesError);
+      logger.error('Failed to fetch Organization_Invites:', invitesError);
       return { data: null, error: new Error(invitesError.message) };
     }
 
-    // No pending Invites found
+    // No pending Organization_invites found
     if (!invites || invites.length === 0) {
       return { data: [], error: null };
     }
@@ -74,7 +74,7 @@ export const createInviteService = async (
 
     // Database insert failed
     if (error) {
-      logger.error('Failed to insert Invite:', error);
+      logger.error('Failed to insert Organization_Invite:', error);
       return { data: null, error: new Error(error.message) };
     }
 

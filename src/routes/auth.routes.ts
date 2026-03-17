@@ -17,7 +17,7 @@ import { authController } from '@/controllers';
 // ROUTES //
 import { openapiApp } from '@/routes/openapi.routes';
 
-// Route definition for verifying a user's OTP
+// Route definition for verifying a User's OTP
 const verifyOtpRoute = createRoute({
   method: 'post',
   path: '/auth/verify-otp',

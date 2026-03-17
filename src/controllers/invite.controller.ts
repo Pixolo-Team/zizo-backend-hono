@@ -22,7 +22,7 @@ export class InviteController {
 
   /**
    * POST /invites/get-user-invites
-   * Fetch all pending Invites for a User
+   * Fetch all pending Organization_Invites for a User
    */
   async getUserPendingInvites(c: Context) {
     try {
@@ -49,23 +49,23 @@ export class InviteController {
       if (error) {
         return errorResponse(
           c,
-          'Failed to fetch Invites',
+          'Failed to fetch Organization Invites',
           ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
           HTTP_STATUS.INTERNAL_SERVER_ERROR
         );
       }
 
-      // No pending Invites found
+      // No pending Organization_Invites found
       if (!data || data.length === 0) {
         return errorResponse(
           c,
-          'No pending Invites found for this User',
-          'No pending Invites found for this User',
+          'No pending Organization Invites found for this User',
+          'No pending Organization Invites found for this User',
           HTTP_STATUS.NOT_FOUND
         );
       }
 
-      return successResponse(c, data, 'Pending Invites fetched successfully', HTTP_STATUS.OK);
+      return successResponse(c, data, 'Pending Organization Invites fetched successfully', HTTP_STATUS.OK);
     } catch (err) {
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
@@ -75,7 +75,7 @@ export class InviteController {
 
   /**
    * POST /invites/create
-   * Create a new Invite
+   * Create a new Organization_Invite
    */
   async createInvite(c: Context) {
     try {
@@ -131,9 +131,9 @@ export class InviteController {
         );
       }
 
-      return successResponse(c, data, 'Invite created successfully', HTTP_STATUS.CREATED);
+      return successResponse(c, data, 'Organization Invite created successfully', HTTP_STATUS.CREATED);
     } catch (err) {
-      
+
       // Any other unexpected errors
       const message = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
       return errorResponse(

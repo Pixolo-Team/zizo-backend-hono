@@ -72,22 +72,22 @@ export const loginService = async (
     if (userError) {
 
       // Unexpected database error querying Users table
-      logger.error('Error querying users table:', userError);
+      logger.error('Error querying Users table:', userError);
       return { data: null, error: new Error(userError.message) };
     }
 
-    // If not found in Users, check the Invites table
+    // If not found in Users, check the Organization_Invites table
     if (!userRecord) {
       const { data: inviteRecord, error: inviteError } = await supabase
-        .from('invites')
+        .from('organization_invites')
         .select('phone_number')
         .eq('phone_number', phoneNumber)
         .limit(1)
         .maybeSingle();
 
-      // Unexpected database error querying Invites table
+      // Unexpected database error querying Organization_Invites table
       if (inviteError) {
-        logger.error('Error querying invites table:', inviteError);
+        logger.error('Error querying Organization_invites table:', inviteError);
         return { data: null, error: new Error(inviteError.message) };
       }
 
