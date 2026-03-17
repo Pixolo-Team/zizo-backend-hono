@@ -6,11 +6,15 @@ import { handle } from 'hono/vercel';
 import app from '../dist/app.js';
 
 /**
- * Vercel Edge Function runtime configuration
+ * Vercel Serverless Function runtime configuration
+ * Using Node.js runtime for @hono/zod-openapi compatibility
  */
-export const config = { runtime: 'edge' };
+export const config = {
+  runtime: 'nodejs22.x',
+  maxDuration: 30,
+};
 
 /**
- * Edge Function handler — wraps the Hono app for Vercel's v8 isolate runtime
+ * Serverless Function handler — wraps the Hono app for Vercel's Node.js runtime
  */
 export default handle(app as Hono);
