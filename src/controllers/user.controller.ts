@@ -149,7 +149,7 @@ export class UserController {
       // Delete the User in the Database
       const deleted = await userService.deleteUser(validatedId.id);
 
-      // Is User delete faield
+      // Is User delete failed
       if (!deleted) {
         return errorResponse(
           c,
