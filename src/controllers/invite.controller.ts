@@ -114,11 +114,11 @@ export class InviteController {
       
       // Call the service layer with the constructed Invite DTO
       const { data, error } = await createInviteService({
-      auth_id: auth_id ?? null,
-      phone_number,
-      member_role_id,
-      invited_by: user.id,
-      organization_id,
+        auth_id: auth_id ?? null,
+        phone_number,
+        member_role_id,
+        invited_by: user.id,
+        organization_id,
       });
 
       // Database insert failed
