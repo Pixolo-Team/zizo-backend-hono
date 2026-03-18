@@ -26,6 +26,7 @@ export const loginRequestSchema = z.object({
     .max(12, 'Phone number cannot exceed 12 digits')
     .refine(isValidPhoneNumber, 'Invalid phone number format'),
 });
+
 /** 
  * Zod Schema for User object in Verify OTP response
 */

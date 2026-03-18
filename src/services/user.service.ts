@@ -1,10 +1,14 @@
+// TYPES //
+import type { QueryResponseData } from '@/common/types/query.response.type';
+
 // MODELS //
 import { User, CreateUserDto, UpdateUserDto, type CheckUserByPhoneResult } from '@/models';
 
+// CONFIG //
+import { supabase } from '@/config/supabase';
+
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
-import type { QueryResponseData } from '@/common/types/query.response.type';
-import { supabase } from '@/config/supabase';
 
 /**
  * User Service - Business logic for User operations
