@@ -5,6 +5,9 @@ import type { IssueTicket, CreateIssueTicketDto } from '@/models/issue-tickets.m
 // CONFIG //
 import { supabase } from '@/config/supabase';
 
+// CONSTANTS //
+import { tables } from '@/constants/database.constants';
+
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
 
@@ -18,7 +21,7 @@ export const raiseIssueTicketService = async (
 
     // Insert the Issue Ticket into the Supabase table
     const { data: inserted, error } = await supabase
-      .from('issue_tickets')
+      .from(tables.ISSUE_TICKETS)
       .insert(IssueTicketItem)
       .select()
       .single();

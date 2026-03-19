@@ -7,6 +7,7 @@ import { supabase } from '@/config/supabase';
 
 // CONSTANTS //
 import { ERROR_MESSAGES } from '@/constants/api';
+import { tables } from '@/constants/database.constants';
 
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
@@ -64,7 +65,7 @@ export const loginService = async (
 
     // Check if phone number exists in the Users table
     const { data: userRecord, error: userError } = await supabase
-      .from('users')
+      .from(tables.USERS)
       .select('phone_number')
       .eq('phone_number', phoneNumber)
       .limit(1)
@@ -80,7 +81,7 @@ export const loginService = async (
     // If not found in Users, check the Organization_Invites table
     if (!userRecord) {
       const { data: inviteRecord, error: inviteError } = await supabase
-        .from('organization_invites')
+        .from(tables.ORG_INVITES)
         .select('phone_number')
         .eq('phone_number', phoneNumber)
         .limit(1)
