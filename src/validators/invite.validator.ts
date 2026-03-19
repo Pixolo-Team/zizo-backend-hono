@@ -4,6 +4,9 @@ import { z } from 'zod';
 // UTILS //
 import { isValidPhoneNumber } from '@/common/utils/phone.util';
 
+// CONSTANTS //
+import { inviteResponseActions } from '@/constants/organization-invites.constants';
+
 /**
  * Zod schema for a single Invite item in the response
  */
@@ -48,3 +51,24 @@ export const InviteSchema = z.object({
   auth_id: z.string().nullable(),
   phone_number: z.string(),
 });
+
+/**
+ * Zod Schema for request body of Respond to Invite API Endpoint
+ */
+export const respondToInviteRequestSchema = z.object({
+  organization_invite_id: z.string().min(1, { message: 'Organization invite ID is required' }),
+  action: z.enum([inviteResponseActions.ACCEPT, inviteResponseActions.REJECT]),
+});
+
+/**
+ * Zod Schema for the response of Respond to Invite API Endpoint
+ */
+export const RespondToInviteResponseSchema = z.object({
+  organization_invite_id: z.string(),
+  action: z.enum([inviteResponseActions.ACCEPT, inviteResponseActions.REJECT]),
+});
+
+/**
+ * TypeScript type inferred from the RespondToInviteResponseSchema
+ */
+export type RespondToInviteResponse = z.infer<typeof RespondToInviteResponseSchema>;

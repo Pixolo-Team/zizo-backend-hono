@@ -33,3 +33,36 @@ export interface CreateInviteResponse {
   auth_id: string | null;
   phone_number: string;
 }
+
+/**
+ * Error codes returned by the respond-to-invite service
+ */
+export type InviteActionErrorCode = 'NOT_FOUND' | 'FORBIDDEN' | 'CONFLICT';
+
+/**
+ * Data transfer object for responding to an invite
+ */
+export interface RespondToInviteDto {
+  organization_invite_id: string;
+  action: 'accept' | 'reject';
+  auth_id: string;
+  phone_number: string | null;
+}
+
+/**
+ * Response shape for the respond-to-invite API
+ */
+export interface RespondToInviteResponseData {
+  organization_invite_id: string;
+  action: 'accept' | 'reject';
+}
+
+/**
+ * Service result for the respond-to-invite operation
+ * Extends QueryResponseData with an optional error code for business logic errors
+ */
+export interface RespondToInviteServiceResult {
+  data: RespondToInviteResponseData | null;
+  error: Error | null;
+  errorCode?: InviteActionErrorCode;
+}
