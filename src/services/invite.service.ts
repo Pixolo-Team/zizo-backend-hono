@@ -117,12 +117,25 @@ export const respondToInviteService = async (
       .from('organization_invites')
       .select('id, auth_id, phone_number, member_role_id, organization_id, is_pending')
       .eq('id', organization_invite_id)
-      .single();
+      .maybeSingle();
+
+    // Database error while fetching the invite
+    if (fetchError) {
+      logger.error('Error fetching invite:', fetchError);
+      return {
+        data: null,
+        error: new Error('Failed to fetch invite'),
+      };
+    }
 
     // Invite not found in the database
-    if (fetchError || !invite) {
-      logger.error('Invite not found:', fetchError);
-      return { data: null, error: new Error('No Invite found for the given organization_invite_id'), errorCode: 'NOT_FOUND' };
+    if (!invite) {
+      logger.error('Invite not found for id:', organization_invite_id);
+      return {
+        data: null,
+        error: new Error('No Invite found for the given organization_invite_id'),
+        errorCode: 'NOT_FOUND',
+      };
     }
 
     // Step 2 — Ownership validation: guard against null/empty before comparing
@@ -139,16 +152,23 @@ export const respondToInviteService = async (
       return { data: null, error: new Error('Invite is no longer pending'), errorCode: 'CONFLICT' };
     }
 
-    // Step 4 — Update invite as processed
-    const { error: updateError } = await supabase
+    // Step 4 — Update invite as processed (conditional on still pending to avoid race conditions)
+    const { data: updatedInvites, error: updateError } = await supabase
       .from('organization_invites')
       .update({ is_pending: false, updated_on: new Date().toISOString() })
-      .eq('id', organization_invite_id);
+      .eq('id', organization_invite_id)
+      .eq('is_pending', true)
+      .select('id');
 
     // Failed to update the invite record
     if (updateError) {
       logger.error('Failed to update Organization_Invite:', updateError);
       return { data: null, error: new Error(updateError.message) };
+    }
+
+    // No rows updated means invite was already processed (no longer pending)
+    if (!updatedInvites || updatedInvites.length === 0) {
+      return { data: null, error: new Error('Invite is no longer pending'), errorCode: 'CONFLICT' };
     }
 
     // Step 5 — Reject flow ends here; accept flow continues below
