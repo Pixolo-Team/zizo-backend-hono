@@ -9,6 +9,9 @@ import { supabase } from '@/config/supabase';
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
 
+// CONSTANTS //
+import { inviteResponseActions } from '@/constants/organization-invites.constants';
+
 /**
  * Fetch all pending Organization_invites for a User by phone_number.
  */
@@ -102,8 +105,6 @@ export const createInviteService = async (
 /**
  * Accept or reject an Organization Invite.
  * Validates ownership, checks pending status, then performs the appropriate DB operations.
- * @param dto - Organization invite ID, action, auth_id and phone_number from middleware
- * @returns Service result with optional error code for business logic errors
  */
 export const respondToInviteService = async (
   dto: RespondToInviteDto
@@ -151,7 +152,7 @@ export const respondToInviteService = async (
     }
 
     // Step 5 — Reject flow ends here; accept flow continues below
-    if (action === 'reject') {
+    if (action === inviteResponseActions.REJECT) {
       return { data: { organization_invite_id, action }, error: null };
     }
 

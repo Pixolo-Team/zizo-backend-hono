@@ -148,26 +148,14 @@ export class InviteController {
   /**
    * POST /organization-invites/respond
    * Accept or reject an Organization Invite
-   * @param c - Hono context with authenticated user set by auth middleware
-   * @returns Formatted API response
    */
   async respondToInvite(c: Context) {
     try {
-      // Get the authenticated user from middleware context
+      // Get the authenticated User from middleware context
       const user = c.get('user');
-      const authId = user?.id;
+      const authId = user.id;
       // phone may be absent for non-phone-based auth users
       const phoneNumber = user?.phone ?? null;
-
-      // Return 401 if auth_id is missing (should not happen after authMiddleware)
-      if (!authId) {
-        return errorResponse(
-          c,
-          ERROR_MESSAGES.UNAUTHORIZED,
-          ERROR_MESSAGES.UNAUTHORIZED,
-          HTTP_STATUS.UNAUTHORIZED
-        );
-      }
 
       // Parse the raw request body — throws if JSON is malformed
       let body: unknown;
@@ -183,10 +171,10 @@ export class InviteController {
       }
 
       // Validate the parsed body against the schema
-      const parsed = respondToInviteRequestSchema.safeParse(body);
+      const parsedBody = respondToInviteRequestSchema.safeParse(body);
 
-      if (!parsed.success) {
-        const errorMessage = parsed.error.issues[0]?.message ?? 'Validation failed';
+      if (!parsedBody.success) {
+        const errorMessage = parsedBody.error.issues[0]?.message ?? 'Validation failed';
         return errorResponse(
           c,
           errorMessage,
@@ -195,50 +183,33 @@ export class InviteController {
         );
       }
 
-      // Call the service with validated data and user context
+      // Call the service with validated data and User context
       const result = await respondToInviteService({
-        organization_invite_id: parsed.data.organization_invite_id,
-        action: parsed.data.action,
+        organization_invite_id: parsedBody.data.organization_invite_id,
+        action: parsedBody.data.action,
         auth_id: authId,
         phone_number: phoneNumber,
       });
 
       // Map business logic error codes to HTTP status codes
       if (result.error) {
-        if (result.errorCode === 'NOT_FOUND') {
-          return errorResponse(
-            c,
-            result.error.message,
-            'Invite not found',
-            HTTP_STATUS.NOT_FOUND
-          );
-        }
+        switch (result.errorCode) {
+          // Invite not found
+          case 'NOT_FOUND':
+            return errorResponse(c, result.error.message, 'Invite not found', HTTP_STATUS.NOT_FOUND);
 
-        if (result.errorCode === 'FORBIDDEN') {
-          return errorResponse(
-            c,
-            result.error.message,
-            ERROR_MESSAGES.FORBIDDEN,
-            HTTP_STATUS.FORBIDDEN
-          );
-        }
+          // Invite does not belong to the authenticated User
+          case 'FORBIDDEN':
+            return errorResponse(c, result.error.message, ERROR_MESSAGES.FORBIDDEN, HTTP_STATUS.FORBIDDEN);
 
-        if (result.errorCode === 'CONFLICT') {
-          return errorResponse(
-            c,
-            result.error.message,
-            'Invite already processed',
-            HTTP_STATUS.CONFLICT
-          );
-        }
+          // Invite has already been processed
+          case 'CONFLICT':
+            return errorResponse(c, result.error.message, 'Invite already processed', HTTP_STATUS.CONFLICT);
 
-        // Generic internal server error
-        return errorResponse(
-          c,
-          result.error.message,
-          'Failed to process Invite',
-          HTTP_STATUS.INTERNAL_SERVER_ERROR
-        );
+          // Generic internal server error
+          default:
+            return errorResponse(c, result.error.message, 'Failed to process Invite', HTTP_STATUS.INTERNAL_SERVER_ERROR);
+        }
       }
 
       return successResponse(c, result.data, 'Invitation processed successfully', HTTP_STATUS.OK);
