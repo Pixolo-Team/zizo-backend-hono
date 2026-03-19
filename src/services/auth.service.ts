@@ -11,7 +11,8 @@ import { ERROR_MESSAGES } from '@/constants/api';
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
 
-/**
+
+/*
  * Verify a User's OTP using Supabase Auth
  */
 export const verifyOtpService = async (
@@ -114,7 +115,7 @@ export const loginService = async (
 
     return { data: { message: 'OTP sent successfully' }, error: null };
   } catch (err) {
-    
+
     // Unexpected service error — request did not reach the database
     logger.error('Unexpected error in loginService:', err);
     return {

@@ -31,3 +31,4 @@ export const SUCCESS_MESSAGES = {
   UPDATED: 'Resource updated successfully',
   DELETED: 'Resource deleted successfully',
 } as const;
+
