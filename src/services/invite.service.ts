@@ -11,6 +11,7 @@ import { logger } from '@/common/utils/logger.util';
 
 // CONSTANTS //
 import { inviteResponseActions } from '@/constants/organization-invites.constants';
+import { tables } from '@/constants/database.constants';
 
 /**
  * Fetch all pending Organization_invites for a User by phone_number.
@@ -21,7 +22,7 @@ export const getUserInvitesService = async (
   try {
     // Fetch pending Organization_invites with Organization data
     const { data: invites, error: invitesError } = await supabase
-      .from('organization_invites')
+      .from(tables.ORG_INVITES)
       .select(`
         id,
         phone_number,
@@ -70,7 +71,7 @@ export const createInviteService = async (
   try {
     // Insert the Invite record into the Supabase table
     const { data: inserted, error } = await supabase
-      .from('organization_invites')
+      .from(tables.ORG_INVITES)
       .insert(inviteDto)
       .select()
       .single();
@@ -114,7 +115,7 @@ export const respondToInviteService = async (
 
     // Step 1 — Fetch the invite by its ID
     const { data: invite, error: fetchError } = await supabase
-      .from('organization_invites')
+      .from(tables.ORG_INVITES)
       .select('id, auth_id, phone_number, member_role_id, organization_id, is_pending')
       .eq('id', organization_invite_id)
       .maybeSingle();
@@ -154,7 +155,7 @@ export const respondToInviteService = async (
 
     // Step 4 — Update invite as processed (conditional on still pending to avoid race conditions)
     const { data: updatedInvites, error: updateError } = await supabase
-      .from('organization_invites')
+      .from(tables.ORG_INVITES)
       .update({ is_pending: false, updated_on: new Date().toISOString() })
       .eq('id', organization_invite_id)
       .eq('is_pending', true)
@@ -178,7 +179,7 @@ export const respondToInviteService = async (
 
     // Step 6 — Accept flow: insert into organization_members
     const { data: member, error: memberError } = await supabase
-      .from('organization_members')
+      .from(tables.ORG_MEMBERS)
       .insert({ organization_id: invite.organization_id, auth_id })
       .select('id')
       .single();
@@ -191,7 +192,7 @@ export const respondToInviteService = async (
 
     // Step 7 — Accept flow: assign role via organization_member_role
     const { error: roleError } = await supabase
-      .from('organization_member_role')
+      .from(tables.ORG_MEMBER_ROLE)
       .insert({ organization_member_id: member.id, member_role_id: invite.member_role_id });
 
     // Failed to insert member role

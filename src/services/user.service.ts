@@ -7,6 +7,9 @@ import { User, CreateUserDto, UpdateUserDto, type CheckUserByPhoneResult } from 
 // CONFIG //
 import { supabase } from '@/config/supabase';
 
+// CONSTANTS //
+import { tables } from '@/constants/database.constants';
+
 // UTILS //
 import { logger } from '@/common/utils/logger.util';
 
@@ -75,7 +78,7 @@ export const checkUserByPhoneService = async (
 
     // Query the Users table for a record matching the provided phone number
     const { data, error } = await supabase
-      .from('users')
+      .from(tables.USERS)
       .select('auth_id, first_name, last_name')
       .eq('phone_number', phoneNumber)
       .maybeSingle();
