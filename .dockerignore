@@ -1,0 +1,43 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Environment files (secrets must be passed at runtime)
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.github
+
+# Husky hooks
+.husky
+
+# Editor / OS
+.vscode
+.idea
+*.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Test & coverage
+coverage
+*.test.ts
+*.spec.ts
+vitest.config.ts
+
+# Docs
+*.md
+API.md
+ARCHITECTURE.md
+
+# Misc
+scripts
+tmp
