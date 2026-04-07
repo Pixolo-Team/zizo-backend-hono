@@ -112,6 +112,70 @@ Run the production build:
 npm start
 ```
 
+## 🐳 Docker
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) installed and running
+
+### Build the Docker Image
+
+```bash
+docker build -t zizo-backend-hono .
+```
+
+### Run the Container
+
+Pass your environment variables with `-e` flags or an env-file:
+
+```bash
+# Using individual -e flags
+docker run -d \
+  --name zizo-backend \
+  -p 3000:3000 \
+  -e NODE_ENV=production \
+  -e PORT=3000 \
+  -e LOG_LEVEL=info \
+  -e API_VERSION=v1 \
+  -e API_PREFIX=/api \
+  -e PUBLIC_SUPABASE_URL=https://your-project.supabase.co \
+  -e PUBLIC_SUPABASE_ANON_KEY=your-anon-key \
+  zizo-backend-hono
+```
+
+```bash
+# Using an env-file (recommended for servers)
+# 1. Copy the example and fill in your values
+ .env.example .env
+
+# 2. Run with the env-file
+docker run -d -p 3000:3000 --env-file .env zizo-backend-hono
+```
+
+The API will be available at `http://localhost:3000`.
+
+### Environment Variables in Docker
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `NODE_ENV` | No | `development` | Runtime environment |
+| `PORT` | No | `3000` | Port the server listens on |
+| `LOG_LEVEL` | No | `info` | Logging verbosity |
+| `API_VERSION` | No | `v1` | API version prefix |
+| `API_PREFIX` | No | `/api` | API route prefix |
+| `PUBLIC_SUPABASE_URL` | Yes | — | Supabase project URL |
+| `PUBLIC_SUPABASE_ANON_KEY` | Yes | — | Supabase anon/public key |
+
+> **Security note:** Never bake secrets into the image. Always supply them at runtime via `-e` flags or `--env-file`. The `.env` file is excluded from the Docker image by `.dockerignore`.
+
+### Stop and Remove the Container
+
+```bash
+docker stop zizo-backend && docker rm zizo-backend
+```
+
+---
+
 ## 🧪 Testing
 
 Run tests:
