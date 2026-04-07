@@ -1,0 +1,40 @@
+# Node modules (install inside container)
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files (security)
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Docker files (optional)
+Dockerfile
+docker-compose.yml
+
+# Tests / coverage
+coverage
+*.test.js
+
+# Temp files
+tmp
+temp
+
+# Editor folders
+.vscode
+.idea
+
+# Misc
+*.md
