@@ -13,6 +13,22 @@ export const createVenueRequestSchema = z
   .strict();
 
 /**
+ * Zod schema for editing a Venue
+ */
+export const editVenueRequestSchema = z
+  .object({
+    name: z.string().min(1, { message: 'Venue name is required' }).optional(),
+    address: z.string().min(1, { message: 'Venue address is required' }).optional(),
+    city: z.string().min(1, { message: 'City is required' }).optional(),
+    google_link: z.string().url({ message: 'Google link must be a valid URL' }).optional(),
+    is_active: z.boolean().optional(),
+  })
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field is required for update',
+  });
+
+/**
  * Zod schema for Venue response
  */
 export const venueSchema = z.object({

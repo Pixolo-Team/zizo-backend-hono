@@ -24,3 +24,14 @@ export interface CreateVenueDto {
   oraganization_id?: string;
   is_active?: boolean;
 }
+
+/**
+ * Data allowed to update an existing Venue
+ */
+export interface UpdateVenueDto {
+  name?: string;
+  address?: string;
+  city?: string;
+  google_link?: string;
+  is_active?: boolean;
+}
