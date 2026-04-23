@@ -16,6 +16,23 @@ export const createCenterRequestSchema = z
   .strict();
 
 /**
+ * Zod schema for editing a Center
+ */
+export const editCenterRequestSchema = z
+  .object({
+    name: z.string().min(1, { message: 'Center name is required' }).optional(),
+    location: z.string().min(1, { message: 'Center location is required' }).optional(),
+    city: z.string().min(1, { message: 'City is required' }).optional(),
+    state: z.string().min(1, { message: 'State is required' }).optional(),
+    country: z.string().min(1, { message: 'Country is required' }).optional(),
+    is_active: z.boolean().optional(),
+  })
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field is required for update',
+  });
+
+/**
  * Zod schema for Center response
  */
 export const centerSchema = z.object({

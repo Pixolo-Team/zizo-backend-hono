@@ -26,3 +26,15 @@ export interface CreateCenterDto {
   organization_id: string;
   is_active?: boolean;
 }
+
+/**
+ * Data allowed to update an existing Center
+ */
+export interface UpdateCenterDto {
+  name?: string;
+  location?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  is_active?: boolean;
+}

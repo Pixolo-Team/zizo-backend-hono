@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 // VALIDATORS //
 import { apiResponseSchema } from '@/validators/api-response.schema';
-import { centerSchema, createCenterRequestSchema } from '@/validators/center.validator';
+import { centerSchema, createCenterRequestSchema, editCenterRequestSchema } from '@/validators/center.validator';
 
 // MIDDLEWARES //
 import { authMiddleware } from '@/middlewares/auth.middleware';
@@ -47,6 +47,77 @@ export const createCenterRoute = createRoute({
     },
     401: {
       description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    422: {
+      description: 'Validation Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
+
+/**
+ * Route definition for PATCH /centers/edit/:center_id
+ */
+export const editCenterRoute = createRoute({
+  method: 'patch',
+  path: '/centers/edit/:center_id',
+  tags: ['Centers'],
+  summary: 'Edit an existing Center',
+  middleware: [authMiddleware] as const,
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: editCenterRequestSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: 'Center updated successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(centerSchema),
+        },
+      },
+    },
+    400: {
+      description: 'Bad Request - Malformed JSON',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    404: {
+      description: 'Center not found',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.null()),
