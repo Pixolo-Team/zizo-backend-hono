@@ -8,15 +8,94 @@ import { errorResponse, successResponse } from '@/common/utils/api.util';
 import { ERROR_MESSAGES, HTTP_STATUS } from '@/constants/api';
 
 // SERVICES //
-import { createVenueService } from '@/services/venue.service';
+import { createVenueService, editVenueService } from '@/services/venue.service';
 
 // VALIDATORS //
-import { createVenueRequestSchema } from '@/validators/venue.validator';
+import { createVenueRequestSchema, editVenueRequestSchema } from '@/validators/venue.validator';
 
 /**
  * Venue Controller - Handles Venue related endpoints
  */
 export class VenueController {
+  /**
+   * PATCH /venues/edit/:venue_id
+   * Edit an existing Venue
+   */
+  async editVenue(c: Context) {
+    try {
+      const venueId = c.req.param('venue_id');
+
+      if (!venueId) {
+        return errorResponse(
+          c,
+          'Venue ID is required',
+          ERROR_MESSAGES.BAD_REQUEST,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
+
+      let body: unknown;
+
+      try {
+        body = await c.req.json();
+      } catch {
+        return errorResponse(
+          c,
+          'Malformed JSON in request body',
+          ERROR_MESSAGES.BAD_REQUEST,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
+
+      const parsed = editVenueRequestSchema.safeParse(body);
+
+      if (!parsed.success) {
+        const errorMessage = parsed.error.issues[0]?.message ?? ERROR_MESSAGES.VALIDATION_FAILED;
+        return errorResponse(
+          c,
+          errorMessage,
+          ERROR_MESSAGES.VALIDATION_FAILED,
+          HTTP_STATUS.UNPROCESSABLE_ENTITY
+        );
+      }
+
+      const user = c.get('user');
+      const { data, error } = await editVenueService(user.id, venueId, parsed.data);
+
+      if (error?.message === ERROR_MESSAGES.FORBIDDEN) {
+        return errorResponse(
+          c,
+          'User is not a member of any organization',
+          ERROR_MESSAGES.FORBIDDEN,
+          HTTP_STATUS.FORBIDDEN
+        );
+      }
+
+      if (error?.message === ERROR_MESSAGES.NOT_FOUND) {
+        return errorResponse(c, 'Venue not found', ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      }
+
+      if (error) {
+        return errorResponse(
+          c,
+          error.message,
+          ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+          HTTP_STATUS.INTERNAL_SERVER_ERROR
+        );
+      }
+
+      return successResponse(c, data, 'Venue updated successfully', HTTP_STATUS.OK);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
+      return errorResponse(
+        c,
+        errorMessage,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   /**
    * POST /venues/create
    * Create a new Venue

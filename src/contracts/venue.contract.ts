@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 // VALIDATORS //
 import { apiResponseSchema } from '@/validators/api-response.schema';
-import { createVenueRequestSchema, venueSchema } from '@/validators/venue.validator';
+import { createVenueRequestSchema, editVenueRequestSchema, venueSchema } from '@/validators/venue.validator';
 
 // MIDDLEWARES //
 import { authMiddleware } from '@/middlewares/auth.middleware';
@@ -55,6 +55,85 @@ export const createVenueRoute = createRoute({
     },
     403: {
       description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    422: {
+      description: 'Validation Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
+
+/**
+ * Route definition for PATCH /venues/edit/:venue_id
+ */
+export const editVenueRoute = createRoute({
+  method: 'patch',
+  path: '/venues/edit/:venue_id',
+  tags: ['Venues'],
+  summary: 'Edit an existing Venue',
+  middleware: [authMiddleware] as const,
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: editVenueRequestSchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: 'Venue updated successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(venueSchema),
+        },
+      },
+    },
+    400: {
+      description: 'Bad Request - Malformed JSON',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    403: {
+      description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    404: {
+      description: 'Venue not found',
       content: {
         'application/json': {
           schema: apiResponseSchema(z.null()),
