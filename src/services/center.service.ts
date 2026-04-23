@@ -66,3 +66,47 @@ export const createCenterService = async (
     };
   }
 };
+
+/**
+ * Fetch all Centers for authenticated user's organization
+ */
+export const getAllCentersService = async (
+  authId: string
+): Promise<QueryResponseData<Center[]>> => {
+  try {
+    const { data: orgMemberData, error: orgMemberError } = await supabase
+      .from(tables.ORG_MEMBERS)
+      .select('organization_id')
+      .eq('auth_id', authId)
+      .limit(1)
+      .maybeSingle();
+
+    if (orgMemberError) {
+      logger.error('Failed to fetch organization member:', orgMemberError);
+      return { data: null, error: new Error(orgMemberError.message) };
+    }
+
+    if (!orgMemberData?.organization_id) {
+      return { data: null, error: new Error(ERROR_MESSAGES.FORBIDDEN) };
+    }
+
+    const { data, error } = await supabase
+      .from(tables.CENTERS)
+      .select('*')
+      .eq('organization_id', orgMemberData.organization_id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      logger.error('Failed to fetch centers:', error);
+      return { data: null, error: new Error(error.message) };
+    }
+
+    return { data: (data as Center[]) ?? [], error: null };
+  } catch (err) {
+    logger.error('Unexpected error in getAllCentersService:', err);
+    return {
+      data: null,
+      error: err instanceof Error ? err : new Error('Unexpected error'),
+    };
+  }
+};
