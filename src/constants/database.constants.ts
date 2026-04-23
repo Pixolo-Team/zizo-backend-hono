@@ -19,6 +19,7 @@ export const tables = {
   BATCHES: 'batches',
   BATCH_PLAYER: 'batch_player',
   BATCH_MEMBER: 'batch_member',
+  VENUES: 'venues',
   SESSIONS_TEMPLATE: 'sessions_template',
   ISSUE_TICKETS: 'issue_tickets',
 } as const;
