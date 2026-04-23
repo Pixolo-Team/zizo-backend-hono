@@ -8,7 +8,7 @@ import { errorResponse, successResponse } from '@/common/utils/api.util';
 import { ERROR_MESSAGES, HTTP_STATUS } from '@/constants/api';
 
 // SERVICES //
-import { createCenterService } from '@/services/center.service';
+import { createCenterService, getAllCentersService } from '@/services/center.service';
 
 // VALIDATORS //
 import { createCenterRequestSchema } from '@/validators/center.validator';
@@ -17,6 +17,45 @@ import { createCenterRequestSchema } from '@/validators/center.validator';
  * Center Controller - Handles Center related endpoints
  */
 export class CenterController {
+  /**
+   * GET /centers
+   * Get all Centers for authenticated user's organization
+   */
+  async getAllCenters(c: Context) {
+    try {
+      const user = c.get('user');
+      const { data, error } = await getAllCentersService(user.id);
+
+      if (error?.message === ERROR_MESSAGES.FORBIDDEN) {
+        return errorResponse(
+          c,
+          'User is not a member of any organization',
+          ERROR_MESSAGES.FORBIDDEN,
+          HTTP_STATUS.FORBIDDEN
+        );
+      }
+
+      if (error) {
+        return errorResponse(
+          c,
+          error.message,
+          ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+          HTTP_STATUS.INTERNAL_SERVER_ERROR
+        );
+      }
+
+      return successResponse(c, data, 'Centers fetched successfully', HTTP_STATUS.OK);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
+      return errorResponse(
+        c,
+        errorMessage,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   /**
    * POST /centers/create
    * Create a new Center

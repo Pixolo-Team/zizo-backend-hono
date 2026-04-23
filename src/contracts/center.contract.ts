@@ -79,3 +79,48 @@ export const createCenterRoute = createRoute({
     },
   },
 });
+
+/**
+ * Route definition for GET /centers
+ */
+export const getAllCentersRoute = createRoute({
+  method: 'get',
+  path: '/centers',
+  tags: ['Centers'],
+  summary: 'Get all Centers for authenticated user organization',
+  middleware: [authMiddleware] as const,
+  responses: {
+    200: {
+      description: 'Centers fetched successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.array(centerSchema)),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    403: {
+      description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
