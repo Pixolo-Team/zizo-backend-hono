@@ -21,4 +21,5 @@ export const tables = {
   BATCH_MEMBER: 'batch_member',
   SESSIONS_TEMPLATE: 'sessions_template',
   ISSUE_TICKETS: 'issue_tickets',
+  CENTERS: 'centers',
 } as const;

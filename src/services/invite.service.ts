@@ -50,7 +50,22 @@ export const getUserInvitesService = async (
       return { data: [], error: null };
     }
 
-    return { data: invites as InviteResponse[], error: null };
+    const normalizedInvites: InviteResponse[] = invites.map((invite) => {
+      const organizationData = Array.isArray(invite.organization)
+        ? invite.organization[0]
+        : invite.organization;
+      const memberRoleData = Array.isArray(invite.member_role)
+        ? invite.member_role[0]
+        : invite.member_role;
+
+      return {
+        ...invite,
+        organization: organizationData?.name ? { name: organizationData.name } : null,
+        member_role: memberRoleData?.name ? { name: memberRoleData.name } : null,
+      } as InviteResponse;
+    });
+
+    return { data: normalizedInvites, error: null };
   } catch (err) {
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in getUserInvitesService:', err);
