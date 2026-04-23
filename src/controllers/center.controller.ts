@@ -48,7 +48,17 @@ export class CenterController {
         );
       }
 
-      const { data, error } = await createCenterService(parsed.data);
+      const user = c.get('user');
+      const { data, error } = await createCenterService(user.id, parsed.data);
+
+      if (error?.message === ERROR_MESSAGES.FORBIDDEN) {
+        return errorResponse(
+          c,
+          'User is not a member of any organization',
+          ERROR_MESSAGES.FORBIDDEN,
+          HTTP_STATUS.FORBIDDEN
+        );
+      }
 
       if (error) {
         return errorResponse(

@@ -53,6 +53,14 @@ export const createCenterRoute = createRoute({
         },
       },
     },
+    403: {
+      description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
     422: {
       description: 'Validation Error',
       content: {

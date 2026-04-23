@@ -10,8 +10,6 @@ export const createCenterRequestSchema = z
     city: z.string().min(1, { message: 'City is required' }),
     state: z.string().min(1, { message: 'State is required' }),
     country: z.string().min(1, { message: 'Country is required' }),
-    organization_id: z.string().min(1, { message: 'Organization ID is required' }),
-    is_active: z.boolean().optional(),
   })
   .strict();
 

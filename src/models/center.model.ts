@@ -15,7 +15,7 @@ export interface Center {
 }
 
 /**
- * Data required to create a Center
+ * Data required to create a Center in database
  */
 export interface CreateCenterDto {
   name: string;
@@ -23,6 +23,6 @@ export interface CreateCenterDto {
   city: string;
   state: string;
   country: string;
-  organization_id: string;
+  organization_id?: string;
   is_active?: boolean;
 }

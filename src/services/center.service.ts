@@ -10,17 +10,40 @@ import { logger } from '@/common/utils/logger.util';
 
 // CONSTANTS //
 import { tables } from '@/constants/database.constants';
+import { ERROR_MESSAGES } from '@/constants/api';
 
 /**
  * Insert a new Center into the database
  */
 export const createCenterService = async (
+  authId: string,
   createCenterDto: CreateCenterDto
 ): Promise<QueryResponseData<Center>> => {
   try {
-    const payload = {
-      ...createCenterDto,
-      is_active: createCenterDto.is_active ?? true,
+    const { data: orgMemberData, error: orgMemberError } = await supabase
+      .from(tables.ORG_MEMBERS)
+      .select('organization_id')
+      .eq('auth_id', authId)
+      .limit(1)
+      .maybeSingle();
+
+    if (orgMemberError) {
+      logger.error('Failed to fetch organization member:', orgMemberError);
+      return { data: null, error: new Error(orgMemberError.message) };
+    }
+
+    if (!orgMemberData?.organization_id) {
+      return { data: null, error: new Error(ERROR_MESSAGES.FORBIDDEN) };
+    }
+
+    const payload: CreateCenterDto = {
+      name: createCenterDto.name,
+      location: createCenterDto.location,
+      city: createCenterDto.city,
+      state: createCenterDto.state,
+      country: createCenterDto.country,
+      organization_id: orgMemberData.organization_id,
+      is_active: true,
     };
 
     const { data, error } = await supabase
