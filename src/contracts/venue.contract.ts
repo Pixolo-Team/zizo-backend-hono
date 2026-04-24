@@ -79,3 +79,48 @@ export const createVenueRoute = createRoute({
     },
   },
 });
+
+/**
+ * Route definition for GET /venues
+ */
+export const getAllVenuesRoute = createRoute({
+  method: 'get',
+  path: '/venues',
+  tags: ['Venues'],
+  summary: 'Get all Venues for authenticated user organization',
+  middleware: [authMiddleware] as const,
+  responses: {
+    200: {
+      description: 'Venues fetched successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.array(venueSchema)),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    403: {
+      description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
