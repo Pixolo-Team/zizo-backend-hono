@@ -24,3 +24,16 @@ export interface CreateBatchDto {
   assistant_coach_user_id: string;
   player_ids?: string[];
 }
+
+/**
+ * Data required to edit a Batch
+ */
+export interface EditBatchDto {
+  name?: string;
+  description?: string;
+  center_id?: string;
+  venue_id?: string;
+  head_coach_user_id?: string;
+  assistant_coach_user_id?: string;
+  player_ids?: string[];
+}
