@@ -6,7 +6,7 @@ import '@/routes/organizer.routes';
 import '@/routes/user.routes';
 import '@/routes/issue-tickets.routes';
 import '@/routes/invite.routes';
-import '@/routes/auth.routes';
+import '@/routes/session.routes';
 import { openapiApp } from '@/routes/openapi.routes';
 
 /**
