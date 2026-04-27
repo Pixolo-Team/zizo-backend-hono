@@ -8,7 +8,7 @@ import { errorResponse, successResponse } from '@/common/utils/api.util';
 import { ERROR_MESSAGES, HTTP_STATUS } from '@/constants/api';
 
 // SERVICES //
-import { createBatchService } from '@/services/batch.service';
+import { createBatchService, getBatchesService } from '@/services/batch.service';
 
 // VALIDATORS //
 import { createBatchRequestSchema } from '@/validators/batch.validator';
@@ -17,6 +17,45 @@ import { createBatchRequestSchema } from '@/validators/batch.validator';
  * Batch Controller - Handles Batch related endpoints
  */
 export class BatchController {
+  /**
+   * GET /batches
+   * Fetch all Batches for the authenticated user's organization
+   */
+  async getBatches(c: Context) {
+    try {
+      const user = c.get('user');
+      const { data, error } = await getBatchesService(user.id);
+
+      if (error?.message === ERROR_MESSAGES.FORBIDDEN) {
+        return errorResponse(
+          c,
+          'User is not a member of any organization',
+          ERROR_MESSAGES.FORBIDDEN,
+          HTTP_STATUS.FORBIDDEN
+        );
+      }
+
+      if (error) {
+        return errorResponse(
+          c,
+          error.message,
+          ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+          HTTP_STATUS.INTERNAL_SERVER_ERROR
+        );
+      }
+
+      return successResponse(c, data ?? [], 'Batches fetched successfully', HTTP_STATUS.OK);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
+      return errorResponse(
+        c,
+        errorMessage,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   /**
    * POST /batch/create
    * Create a new Batch

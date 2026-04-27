@@ -49,6 +49,48 @@ const getOwnedEntityRequest = async (
 };
 
 /**
+ * Fetch all Batches for the authenticated user's organization
+ */
+export const getBatchesService = async (authId: string): Promise<QueryResponseData<Batch[]>> => {
+  try {
+    const { data: orgMemberData, error: orgMemberError } = await supabase
+      .from(tables.ORG_MEMBERS)
+      .select('organization_id')
+      .eq('auth_id', authId)
+      .limit(1)
+      .maybeSingle();
+
+    if (orgMemberError) {
+      logger.error('Failed to fetch organization member for batches:', orgMemberError);
+      return { data: null, error: new Error(orgMemberError.message) };
+    }
+
+    if (!orgMemberData?.organization_id) {
+      return { data: null, error: new Error(ERROR_MESSAGES.FORBIDDEN) };
+    }
+
+    const { data, error } = await supabase
+      .from(tables.BATCHES)
+      .select('*')
+      .eq('organization_id', orgMemberData.organization_id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      logger.error('Failed to fetch batches:', error);
+      return { data: null, error: new Error(error.message) };
+    }
+
+    return { data: (data ?? []) as Batch[], error: null };
+  } catch (err) {
+    logger.error('Unexpected error in getBatchesService:', err);
+    return {
+      data: null,
+      error: err instanceof Error ? err : new Error('Unexpected error'),
+    };
+  }
+};
+
+/**
  * Insert a new Batch into the database
  */
 export const createBatchService = async (
