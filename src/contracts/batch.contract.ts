@@ -10,6 +10,51 @@ import { batchSchema, createBatchRequestSchema } from '@/validators/batch.valida
 import { authMiddleware } from '@/middlewares/auth.middleware';
 
 /**
+ * Route definition for GET /batches
+ */
+export const getBatchesRoute = createRoute({
+  method: 'get',
+  path: '/batches',
+  tags: ['Batches'],
+  summary: 'Fetch all Batches for the authenticated organization',
+  middleware: [authMiddleware] as const,
+  responses: {
+    200: {
+      description: 'Batches fetched successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.array(batchSchema)),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    403: {
+      description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
+
+/**
  * Route definition for POST /batch/create
  */
 export const createBatchRoute = createRoute({
