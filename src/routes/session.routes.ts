@@ -1,5 +1,5 @@
 // CONTRACTS //
-import { createSessionRoute } from '@/contracts/session.contract';
+import { createSessionRoute, editSessionRoute } from '@/contracts/session.contract';
 
 // CONTROLLERS //
 import { sessionController } from '@/controllers/session.controller';
@@ -9,3 +9,6 @@ import { openapiApp } from '@/routes/openapi.routes';
 
 // POST /session/create
 openapiApp.openapi(createSessionRoute, (c) => sessionController.createSession(c));
+
+// PATCH /session/edit/{id}
+openapiApp.openapi(editSessionRoute, (c) => sessionController.editSession(c));

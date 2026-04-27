@@ -41,3 +41,19 @@ export interface CreateSessionDto {
   status?: string;
   session_members: SessionMemberInputDto[];
 }
+
+/**
+ * Data required to edit a Session
+ */
+export interface EditSessionDto {
+  name?: string;
+  date?: string;
+  start_time?: string;
+  end_time?: string;
+  reporting_time?: string;
+  batch_id?: string;
+  venue_id?: string;
+  session_type?: string;
+  status?: string;
+  session_members?: SessionMemberInputDto[];
+}

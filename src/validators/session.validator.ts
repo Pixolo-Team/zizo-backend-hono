@@ -11,6 +11,13 @@ export const sessionMemberSchema = z
   .strict();
 
 /**
+ * Zod schema for Session route params
+ */
+export const sessionParamsSchema = z.object({
+  id: z.string().min(1, { message: 'Session ID is required' }),
+});
+
+/**
  * Zod schema for creating a Session
  */
 export const createSessionRequestSchema = z
@@ -30,6 +37,51 @@ export const createSessionRequestSchema = z
     message: 'Duplicate coach members are not allowed',
     path: ['session_members'],
   })
+  .strict();
+
+/**
+ * Zod schema for editing a Session
+ */
+export const editSessionRequestSchema = z
+  .object({
+    name: z.string().min(1, { message: 'Session name is required' }).optional(),
+    date: z.string().min(1, { message: 'Session date is required' }).optional(),
+    start_time: z.string().min(1, { message: 'Start time is required' }).optional(),
+    end_time: z.string().min(1, { message: 'End time is required' }).optional(),
+    reporting_time: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
+    batch_id: z.string().min(1, { message: 'Batch ID is required' }).optional(),
+    venue_id: z.string().min(1, { message: 'Venue ID is required' }).optional(),
+    session_type: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
+    status: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
+    session_members: z.array(sessionMemberSchema).min(1, { message: 'At least one coach is required' }).optional(),
+  })
+  .refine(
+    (data) =>
+      data.name !== undefined ||
+      data.date !== undefined ||
+      data.start_time !== undefined ||
+      data.end_time !== undefined ||
+      data.reporting_time !== undefined ||
+      data.batch_id !== undefined ||
+      data.venue_id !== undefined ||
+      data.session_type !== undefined ||
+      data.status !== undefined ||
+      data.session_members !== undefined,
+    {
+      message: 'At least one editable field is required',
+      path: ['name'],
+    }
+  )
+  .refine(
+    (data) =>
+      !data.session_members ||
+      new Set(data.session_members.map((item) => item.organization_member_id)).size ===
+        data.session_members.length,
+    {
+      message: 'Duplicate coach members are not allowed',
+      path: ['session_members'],
+    }
+  )
   .strict();
 
 /**
