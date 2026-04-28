@@ -15,6 +15,51 @@ import {
 import { authMiddleware } from '@/middlewares/auth.middleware';
 
 /**
+ * Route definition for GET /sessions
+ */
+export const getSessionsRoute = createRoute({
+  method: 'get',
+  path: '/sessions',
+  tags: ['Sessions'],
+  summary: 'Fetch all Sessions for the authenticated organization',
+  middleware: [authMiddleware] as const,
+  responses: {
+    200: {
+      description: 'Sessions fetched successfully',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.array(sessionSchema)),
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    403: {
+      description: 'Forbidden - User is not a member of any organization',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+    500: {
+      description: 'Internal Server Error',
+      content: {
+        'application/json': {
+          schema: apiResponseSchema(z.null()),
+        },
+      },
+    },
+  },
+});
+
+/**
  * Route definition for POST /session/create
  */
 export const createSessionRoute = createRoute({
