@@ -49,6 +49,51 @@ const getOwnedEntityRequest = async (
 };
 
 /**
+ * Fetch all Sessions for the authenticated user's organization
+ */
+export const getSessionsService = async (
+  authId: string
+): Promise<QueryResponseData<Session[]>> => {
+  try {
+    const { data: orgMemberData, error: orgMemberError } = await supabase
+      .from(tables.ORG_MEMBERS)
+      .select('organization_id')
+      .eq('auth_id', authId)
+      .limit(1)
+      .maybeSingle();
+
+    if (orgMemberError) {
+      logger.error('Failed to fetch organization member for sessions:', orgMemberError);
+      return { data: null, error: new Error(orgMemberError.message) };
+    }
+
+    if (!orgMemberData?.organization_id) {
+      return { data: null, error: new Error(ERROR_MESSAGES.FORBIDDEN) };
+    }
+
+    const { data, error } = await supabase
+      .from(tables.SESSIONS)
+      .select('*')
+      .eq('organization_id', orgMemberData.organization_id)
+      .order('date', { ascending: false })
+      .order('start_time', { ascending: false });
+
+    if (error) {
+      logger.error('Failed to fetch sessions:', error);
+      return { data: null, error: new Error(error.message) };
+    }
+
+    return { data: (data ?? []) as Session[], error: null };
+  } catch (err) {
+    logger.error('Unexpected error in getSessionsService:', err);
+    return {
+      data: null,
+      error: err instanceof Error ? err : new Error('Unexpected error'),
+    };
+  }
+};
+
+/**
  * Insert a new Session into the database and auto-map players from batch_player.
  */
 export const createSessionService = async (

@@ -8,7 +8,7 @@ import { errorResponse, successResponse } from '@/common/utils/api.util';
 import { ERROR_MESSAGES, HTTP_STATUS } from '@/constants/api';
 
 // SERVICES //
-import { createSessionService, editSessionService } from '@/services/session.service';
+import { createSessionService, editSessionService, getSessionsService } from '@/services/session.service';
 
 // VALIDATORS //
 import {
@@ -21,6 +21,45 @@ import {
  * Session Controller - Handles Session related endpoints
  */
 export class SessionController {
+  /**
+   * GET /sessions
+   * Fetch all Sessions for the authenticated user's organization
+   */
+  async getSessions(c: Context) {
+    try {
+      const user = c.get('user');
+      const { data, error } = await getSessionsService(user.id);
+
+      if (error?.message === ERROR_MESSAGES.FORBIDDEN) {
+        return errorResponse(
+          c,
+          'User is not a member of any organization',
+          ERROR_MESSAGES.FORBIDDEN,
+          HTTP_STATUS.FORBIDDEN
+        );
+      }
+
+      if (error) {
+        return errorResponse(
+          c,
+          error.message,
+          ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+          HTTP_STATUS.INTERNAL_SERVER_ERROR
+        );
+      }
+
+      return successResponse(c, data ?? [], 'Sessions fetched successfully', HTTP_STATUS.OK);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
+      return errorResponse(
+        c,
+        errorMessage,
+        ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   /**
    * POST /session/create
    * Create a new Session
