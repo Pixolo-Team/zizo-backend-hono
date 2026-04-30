@@ -50,7 +50,7 @@ export const getUserInvitesService = async (
       return { data: [], error: null };
     }
 
-    return { data: invites as InviteResponse[], error: null };
+    return { data: invites as unknown as InviteResponse[], error: null };
   } catch (err) {
     // Unexpected service error - request did not reach the database
     logger.error('Unexpected error in getUserInvitesService:', err);
