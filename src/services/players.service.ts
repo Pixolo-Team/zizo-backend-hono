@@ -75,7 +75,7 @@ const hasOrganizationAccess = async (authId: string, organizationId: string): Pr
     .from(tables.ORG_MEMBERS)
     .select('id')
     .eq('organization_id', organizationId)
-    .eq('auth_id', authId)
+    .eq('user_id', authId)
     .maybeSingle();
 
   if (membershipError) {
