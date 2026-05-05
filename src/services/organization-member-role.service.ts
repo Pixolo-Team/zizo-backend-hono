@@ -7,11 +7,15 @@ type RoleAccessResult = {
   error: Error | null;
 };
 
-export const hasOrganizationMemberRoleAccess = async (
+type OrganizationMemberRoleAccessResult = RoleAccessResult & {
+  organizationMemberId: string | null;
+};
+
+export const getOrganizationMemberRoleAccess = async (
   organizationId: string,
   authId: string,
   allowedRoleNames: string[]
-): Promise<RoleAccessResult> => {
+): Promise<OrganizationMemberRoleAccessResult> => {
   const { data: organizationMember, error: organizationMemberError } = await supabase
     .from(tables.ORG_MEMBERS)
     .select('id')
@@ -21,11 +25,11 @@ export const hasOrganizationMemberRoleAccess = async (
 
   if (organizationMemberError) {
     logger.error('Failed to fetch organization member for role access check:', organizationMemberError);
-    return { allowed: false, error: new Error(organizationMemberError.message) };
+    return { allowed: false, organizationMemberId: null, error: new Error(organizationMemberError.message) };
   }
 
   if (!organizationMember) {
-    return { allowed: false, error: null };
+    return { allowed: false, organizationMemberId: null, error: null };
   }
 
   const allowedRoleNamesSet = new Set(allowedRoleNames.map((roleName) => roleName.trim().toLowerCase()));
@@ -36,7 +40,11 @@ export const hasOrganizationMemberRoleAccess = async (
 
   if (memberRolesError) {
     logger.error('Failed to fetch member roles for role access check:', memberRolesError);
-    return { allowed: false, error: new Error(memberRolesError.message) };
+    return {
+      allowed: false,
+      organizationMemberId: organizationMember.id,
+      error: new Error(memberRolesError.message),
+    };
   }
 
   const allowedRoleIds = new Set(
@@ -46,7 +54,7 @@ export const hasOrganizationMemberRoleAccess = async (
   );
 
   if (allowedRoleIds.size === 0) {
-    return { allowed: false, error: null };
+    return { allowed: false, organizationMemberId: organizationMember.id, error: null };
   }
 
   const { data: assignedRoles, error: assignedRolesError } = await supabase
@@ -56,10 +64,23 @@ export const hasOrganizationMemberRoleAccess = async (
 
   if (assignedRolesError) {
     logger.error('Failed to fetch organization member role assignments for role access check:', assignedRolesError);
-    return { allowed: false, error: new Error(assignedRolesError.message) };
+    return {
+      allowed: false,
+      organizationMemberId: organizationMember.id,
+      error: new Error(assignedRolesError.message),
+    };
   }
 
   const allowed = (assignedRoles ?? []).some((assignment) => allowedRoleIds.has(assignment.member_role_id));
 
-  return { allowed, error: null };
+  return { allowed, organizationMemberId: organizationMember.id, error: null };
+};
+
+export const hasOrganizationMemberRoleAccess = async (
+  organizationId: string,
+  authId: string,
+  allowedRoleNames: string[]
+): Promise<RoleAccessResult> => {
+  const { allowed, error } = await getOrganizationMemberRoleAccess(organizationId, authId, allowedRoleNames);
+  return { allowed, error };
 };

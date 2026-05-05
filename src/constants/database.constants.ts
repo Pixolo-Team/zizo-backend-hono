@@ -16,6 +16,7 @@ export const tables = {
   PAYMENT_SUBSCRIPTION: 'payment_subscription',
   PLAYER_SUBSCRIPTIONS: 'player_subscriptions',
   SUBSCRIPTION_PLANS: 'subscription_plans',
+  CENTERS: 'centers',
   SESSIONS: 'sessions',
   SESSION_MEMBER: 'session_member',
   SESSION_PLAYER_ATTENDANCE: 'session_player_attendance',
